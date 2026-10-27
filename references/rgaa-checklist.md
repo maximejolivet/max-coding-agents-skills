@@ -3,8 +3,31 @@
 Référentiel général d'amélioration de l'accessibilité (RGAA), version 4.1.2, publié par la direction interministérielle du numérique (DINUM). Ce fichier liste les **13 thématiques et leurs 106 critères** (intitulés tels que dans le référentiel). Il ne reprend ni les tests, ni les cas particuliers, ni le glossaire : pour les vérifier, se reporter au référentiel complet.
 
 - Source : <https://accessibilite.numerique.gouv.fr/>
-- Dépôt du référentiel : <https://github.com/DISIC/rgaa_referentiel_json>
 - Chaque critère se formule en question : cocher si la réponse est « oui » (conforme) ; laisser vide si « non » ; noter « NA » si le contenu n'existe pas dans la page.
+
+## Score
+
+Après avoir coché la checklist, calculer le **taux de conformité** :
+
+```text
+taux = critères conformes / (critères conformes + critères non conformes) × 100
+```
+
+Les critères « NA » (non applicables) sont exclus du calcul. Le taux se calcule sur l'ensemble des 106 critères, et par thématique pour voir où agir.
+
+| Taux de conformité | Niveau | Lecture |
+| :----------------- | :----- | :------ |
+| ≥ 90 %             | Bon              | Quelques écarts à corriger. |
+| ≥ 50 %             | À améliorer      | Des écarts significatifs, à planifier. |
+| < 50 %             | Insuffisant      | Plus de la moitié des critères applicables échouent. |
+
+Ces seuils sont **indicatifs** (même principe que les seuils des Core Web Vitals), ils ne viennent pas du RGAA. Le statut officiel, à publier dans la déclaration d'accessibilité, est :
+
+| Situation | Statut RGAA |
+| :-------- | :---------- |
+| 100 % des critères applicables conformes | Totalement conforme |
+| Au moins un critère non conforme, mais pas tous | Partiellement conforme |
+| Aucun critère conforme | Non conforme |
 
 ## 1. Images
 
