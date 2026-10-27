@@ -191,20 +191,7 @@ claude-skills-max/
 
 ## Contributions
 
-Le flux complet et la checklist de PR sont dans [CONTRIBUTING.md](CONTRIBUTING.md). L'essentiel :
-
-- **Nouveau skill** : crée `skills/<nom>/SKILL.md` (frontmatter `name` et `description`), ajoute une ligne au tableau ci-dessus et cite-le dans la `description` de `marketplace.json`.
-- **Nouvelle techno** : ajoute-la dans `stacks/detect.sh` et crée `stacks/<techno>/INDEX.md`. Le `core` n'est écrit qu'une fois ; les skills ne sont pas modifiés.
-- **Version** : garde `version` identique dans `marketplace.json` et `plugin.json`, ainsi que le badge de ce fichier.
-
-Avant chaque commit, lance `sh tests/check.sh` (frontmatter, références, versions, détection de stack ; il tourne aussi en CI). Pour le comportement réel des skills et agents, suis `tests/SCENARIOS.md`.
-
-Pour tester en local sans réinstaller :
-
-```bash
-claude --plugin-dir ~/Sites/claude-skills-max
-/reload-plugins   # applique les modifs sans redémarrer
-```
+Le flux de contribution, les vérifications et la checklist de PR sont dans [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Licence
 
