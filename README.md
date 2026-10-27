@@ -151,6 +151,13 @@ claude-skills-max/
 │   ├── symfony/SKILL.md           # point d'entrée de développement : charge stacks/symfony/INDEX.md (dev)
 │   ├── nuxt/SKILL.md              # point d'entrée de développement : charge stacks/nuxt/INDEX.md (dev)
 │   └── react/SKILL.md             # point d'entrée de développement : charge stacks/react/INDEX.md (dev)
+├── docs/
+│   ├── getting-started.md         # du plugin installé à la première PR relue
+│   ├── skill-anatomy.md           # anatomie d'un skill (frontmatter, squelette, règles)
+│   ├── agents.md                  # les sous-agents, quand et comment ils sont lancés
+│   ├── stacks.md                  # détection de stack et ajout d'une techno
+│   └── developer-onboarding.md    # guide pour travailler sur ce dépôt
+├── CONTRIBUTING.md                # flux de contribution et checklist de PR
 ├── CLAUDE.md                      # instructions du dépôt pour Claude Code
 ├── README.md
 └── LICENSE
@@ -174,7 +181,17 @@ claude-skills-max/
 | `stacks/<x>/INDEX.md` | Les skills génériques et `symfony`, `nuxt`, `react` | Selon la nature voulue (`core` + `dev`, `review`, `security`, `test`, `deploy`). |
 | `agents/*.md`    | Le skill orchestrateur                             | En parallèle, sur un gros diff ou plusieurs domaines. |
 
+## Documentation
+
+- [Démarrer](docs/getting-started.md) : du plugin installé à la première PR relue.
+- [Anatomie d'un skill](docs/skill-anatomy.md) : frontmatter, squelette, règles.
+- [Sous-agents](docs/agents.md) : qui est lancé par quel skill, et quand.
+- [Stacks](docs/stacks.md) : détection et ajout d'une techno.
+- [Onboarding développeur](docs/developer-onboarding.md) : travailler sur ce dépôt.
+
 ## Contributions
+
+Le flux complet et la checklist de PR sont dans [CONTRIBUTING.md](CONTRIBUTING.md). L'essentiel :
 
 - **Nouveau skill** : crée `skills/<nom>/SKILL.md` (frontmatter `name` et `description`), ajoute une ligne au tableau ci-dessus et cite-le dans la `description` de `marketplace.json`.
 - **Nouvelle techno** : ajoute-la dans `stacks/detect.sh` et crée `stacks/<techno>/INDEX.md`. Le `core` n'est écrit qu'une fois ; les skills ne sont pas modifiés.
