@@ -193,9 +193,12 @@ claude-skills-max/
 - [Démarrer](docs/getting-started.md) : du plugin installé à la première PR relue.
 - [Anatomie d'un skill](docs/skill-anatomy.md) : frontmatter, squelette, règles.
 - [Sous-agents](docs/agents.md) : qui est lancé par quel skill, et quand.
+- [Agents et outils](docs/agents-tools.md) : les outils déclarés par chaque sous-agent.
+- [Skills et outils](docs/skills-tools.md) : commandes et sous-agents mobilisés par chaque skill.
 - [Stacks](docs/stacks.md) : détection et ajout d'une techno.
 - [Onboarding développeur](docs/developer-onboarding.md) : travailler sur ce dépôt.
 - [User stories](docs/user-stories.md) : écrire des stories et première série du plugin.
+- [Dépôts et outils IA](docs/depots-tools.md) : sélection de dépôts autour des agents de codage, des skills et des LLM (source : [IA.md](https://github.com/maximejolivet/maximejolivet/blob/master/IA.md)).
 
 ## Contributions
 
