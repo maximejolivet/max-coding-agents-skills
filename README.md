@@ -13,7 +13,7 @@
 Distribuée comme plugin `max` via son propre marketplace ; chaque skill s'appelle avec le préfixe `/max:`.
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
-[![Version](https://img.shields.io/badge/version-1.0.5-lightgrey)](.claude-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-1.0.6-lightgrey)](.claude-plugin/plugin.json)
 [![Licence MIT](https://img.shields.io/badge/licence-MIT-green)](LICENSE)
 [![Check](https://img.shields.io/github/actions/workflow/status/maximejolivet/claude-skills-max/check.yml?label=check)](https://github.com/maximejolivet/claude-skills-max/actions/workflows/check.yml)
 [![Dernier commit](https://img.shields.io/github/last-commit/maximejolivet/claude-skills-max)](https://github.com/maximejolivet/claude-skills-max/commits/main)
@@ -74,18 +74,15 @@ Les skills `pull-request` et `pr-review` passent par la CLI [`gh`](https://cli.g
 
 ## Cycle d'une fonctionnalité
 
-```bash
-git checkout main && git pull origin main   # partir de main à jour
-git checkout -b feat/ma-feature             # feat/<slug> ou fix/<slug>
-# développer, puis committer (/max:commit)
-```
-
 ```text
+/max:switch         # feat/<slug> ou fix/<slug> depuis main à jour
+# développer, puis committer (/max:commit)
+/max:versioning     # +0.0.1 pour la PR
 /max:review         # verdict avant la PR
 /max:pull-request   # push + PR en Draft vers main
 ```
 
-Après le merge : `git checkout main && git pull && git fetch -p && git branch -d feat/ma-feature`.
+Après le merge : `/max:switch` nettoie les branches locales mergées.
 
 `/max:pull-request` ne pousse jamais sur `main`.
 
@@ -110,6 +107,7 @@ Les skills orchestrent des sous-agents en lecture seule, lancés en parallèle (
 - `/max:security` : `dependencies-auditor`, `docker-auditor`, `actions-auditor`.
 - `/max:symfony`, `/max:nuxt`, `/max:react` : `codebase-surveyor` sur un gros projet.
 - Sur demande : `agile-planner` choisit Scrum ou Kanban d'après les stories du projet et remplit la page de méthode dans Notion (MCP Notion requis).
+- Sur demande : `docs-updater` compare les `.md` au code réel et rend les corrections à appliquer (lecture seule).
 
 ## Structure du dépôt
 
@@ -130,6 +128,7 @@ claude-skills-max/
 │   ├── standards-reviewer.md      # /max:review : standards, performance, couverture de tests
 │   ├── frontend-reviewer.md       # /max:review : ajouté si la stack a un front
 │   ├── agile-planner.md           # sur demande : Scrum ou Kanban d'après les stories, page Notion
+│   ├── docs-updater.md            # sur demande : écarts entre les .md et le code, corrections à appliquer
 │   ├── dependencies-auditor.md    # /max:security : lockfiles, avis, Dependabot
 │   ├── docker-auditor.md          # /max:security : images, privilèges, secrets, ports
 │   ├── actions-auditor.md         # /max:security : workflows GitHub Actions
@@ -148,6 +147,8 @@ claude-skills-max/
 │   ├── pull-request/SKILL.md      # commit ciblé, push, PR en Draft
 │   ├── pr-review/SKILL.md         # relit une PR existante côté reviewer
 │   ├── commit/SKILL.md            # messages de commit sémantiques
+│   ├── versioning/SKILL.md        # incrémente et aligne la version du plugin
+│   ├── switch/SKILL.md            # change de branche, crée feat/fix depuis main, nettoie
 │   ├── test/SKILL.md              # générique : détecte la stack → stacks/<x>/INDEX.md (test)
 │   ├── security/SKILL.md          # détecte la stack, puis charge stacks/<x>/INDEX.md (security)
 │   ├── docker/SKILL.md            # Dockerfile, Compose, Makefile, CI
@@ -155,13 +156,21 @@ claude-skills-max/
 │   ├── symfony/SKILL.md           # point d'entrée de développement : charge stacks/symfony/INDEX.md (dev)
 │   ├── nuxt/SKILL.md              # point d'entrée de développement : charge stacks/nuxt/INDEX.md (dev)
 │   └── react/SKILL.md             # point d'entrée de développement : charge stacks/react/INDEX.md (dev)
+├── references/                    # listes de contrôle (Core Web Vitals, RGAA)
+├── scripts/
+│   └── reinstall-plugin.sh        # réinstalle le plugin en local
 ├── docs/
 │   ├── getting-started.md         # du plugin installé à la première PR relue
 │   ├── skill-anatomy.md           # anatomie d'un skill (frontmatter, squelette, règles)
 │   ├── agents.md                  # les sous-agents, quand et comment ils sont lancés
+│   ├── agents-tools.md            # les outils déclarés par chaque sous-agent
+│   ├── skills-tools.md            # commandes et sous-agents mobilisés par chaque skill
 │   ├── stacks.md                  # détection de stack et ajout d'une techno
-│   └── developer-onboarding.md    # guide pour travailler sur ce dépôt
+│   ├── developer-onboarding.md    # guide pour travailler sur ce dépôt
+│   ├── user-stories.md            # écrire des stories, première série du plugin
+│   └── depots-tools.md            # sélection de dépôts autour des agents de codage, des skills et des LLM
 ├── CONTRIBUTING.md                # flux de contribution et checklist de PR
+├── renovate.json                  # configuration Renovate
 ├── CLAUDE.md                      # instructions du dépôt pour Claude Code
 ├── README.md
 └── LICENSE
@@ -190,9 +199,12 @@ claude-skills-max/
 - [Démarrer](docs/getting-started.md) : du plugin installé à la première PR relue.
 - [Anatomie d'un skill](docs/skill-anatomy.md) : frontmatter, squelette, règles.
 - [Sous-agents](docs/agents.md) : qui est lancé par quel skill, et quand.
+- [Agents et outils](docs/agents-tools.md) : les outils déclarés par chaque sous-agent.
+- [Skills et outils](docs/skills-tools.md) : commandes et sous-agents mobilisés par chaque skill.
 - [Stacks](docs/stacks.md) : détection et ajout d'une techno.
 - [Onboarding développeur](docs/developer-onboarding.md) : travailler sur ce dépôt.
 - [User stories](docs/user-stories.md) : écrire des stories et première série du plugin.
+- [Dépôts et outils IA](docs/depots-tools.md) : sélection de dépôts autour des agents de codage, des skills et des LLM (source : [IA.md](https://github.com/maximejolivet/maximejolivet/blob/master/IA.md)).
 
 ## Contributions
 
