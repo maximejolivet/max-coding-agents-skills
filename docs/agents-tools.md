@@ -10,6 +10,7 @@ Les outils de chaque agent sont déclarés dans le champ `tools` du frontmatter 
 | `correctness-reviewer` | Relit un diff sous l'angle de la correction : cause racine, cas limites, régressions. | `/max:review` | Read, Grep, Glob, Bash | (défaut) |
 | `dependencies-auditor` | Cherche les vulnérabilités connues : lockfiles Composer et JS, avis de la stack, alertes Dependabot. | `/max:security` | Read, Grep, Glob, Bash, WebFetch | (défaut) |
 | `docker-auditor` | Audite Docker et Compose : images de base, privilèges, socket, secrets, ports, scans d'image. | `/max:security` | Read, Grep, Glob, Bash | (défaut) |
+| `docs-updater` | Compare les `.md` au code réel et rend les corrections exactes à appliquer, sans rien modifier. | sur demande | Read, Grep, Glob, Bash | `sonnet` |
 | `frontend-reviewer` | Relit le code front : hydratation, réactivité, effets, accessibilité, taille du paquet, SEO. | `/max:review` (si front) | Read, Grep, Glob, Bash | (défaut) |
 | `security-reviewer` | Relit un diff sous l'angle applicatif : validation des entrées, accès, injections, XSS/CSRF, secrets. | `/max:review` | Read, Grep, Glob, Bash | (défaut) |
 | `standards-reviewer` | Lance les linters et relit standards, performance (N+1) et couverture de tests. | `/max:review` | Read, Grep, Glob, Bash | (défaut) |

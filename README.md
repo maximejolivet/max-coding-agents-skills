@@ -107,6 +107,7 @@ Les skills orchestrent des sous-agents en lecture seule, lancés en parallèle (
 - `/max:security` : `dependencies-auditor`, `docker-auditor`, `actions-auditor`.
 - `/max:symfony`, `/max:nuxt`, `/max:react` : `codebase-surveyor` sur un gros projet.
 - Sur demande : `agile-planner` choisit Scrum ou Kanban d'après les stories du projet et remplit la page de méthode dans Notion (MCP Notion requis).
+- Sur demande : `docs-updater` compare les `.md` au code réel et rend les corrections à appliquer (lecture seule).
 
 ## Structure du dépôt
 
@@ -127,6 +128,7 @@ claude-skills-max/
 │   ├── standards-reviewer.md      # /max:review : standards, performance, couverture de tests
 │   ├── frontend-reviewer.md       # /max:review : ajouté si la stack a un front
 │   ├── agile-planner.md           # sur demande : Scrum ou Kanban d'après les stories, page Notion
+│   ├── docs-updater.md            # sur demande : écarts entre les .md et le code, corrections à appliquer
 │   ├── dependencies-auditor.md    # /max:security : lockfiles, avis, Dependabot
 │   ├── docker-auditor.md          # /max:security : images, privilèges, secrets, ports
 │   ├── actions-auditor.md         # /max:security : workflows GitHub Actions
@@ -161,10 +163,14 @@ claude-skills-max/
 │   ├── getting-started.md         # du plugin installé à la première PR relue
 │   ├── skill-anatomy.md           # anatomie d'un skill (frontmatter, squelette, règles)
 │   ├── agents.md                  # les sous-agents, quand et comment ils sont lancés
+│   ├── agents-tools.md            # les outils déclarés par chaque sous-agent
+│   ├── skills-tools.md            # commandes et sous-agents mobilisés par chaque skill
 │   ├── stacks.md                  # détection de stack et ajout d'une techno
 │   ├── developer-onboarding.md    # guide pour travailler sur ce dépôt
-│   └── user-stories.md            # écrire des stories, première série du plugin
+│   ├── user-stories.md            # écrire des stories, première série du plugin
+│   └── depots-tools.md            # sélection de dépôts autour des agents de codage, des skills et des LLM
 ├── CONTRIBUTING.md                # flux de contribution et checklist de PR
+├── renovate.json                  # configuration Renovate
 ├── CLAUDE.md                      # instructions du dépôt pour Claude Code
 ├── README.md
 └── LICENSE
