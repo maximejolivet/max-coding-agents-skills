@@ -63,12 +63,12 @@ Pour un changement de **comportement** important d'un skill ou d'un agent, suivr
 
 ## 5. Flux de contribution
 
-1. Partir de `main` à jour : `git checkout main && git pull`.
-2. Créer `feat/<slug>` ou `fix/<slug>`.
-3. Modifier, puis `sh tests/check.sh`.
-4. Committer au format `type(scope): emoji description` (`/max:commit`).
+1. Créer `feat/<slug>` ou `fix/<slug>` depuis `main` à jour (`/max:switch`).
+2. Modifier, puis `sh tests/check.sh`.
+3. Committer au format `type(scope): emoji description` (`/max:commit`).
+4. Incrémenter la version (`/max:versioning`).
 5. `/max:review`, puis `/max:pull-request` : PR en Draft vers `main`.
-6. Après le merge : `git checkout main && git pull && git fetch -p && git branch -d <branche>`.
+6. Après le merge : nettoyer les branches mergées (`/max:switch`).
 
 ## 6. Pièges fréquents
 

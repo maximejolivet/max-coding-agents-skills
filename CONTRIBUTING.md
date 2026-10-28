@@ -11,12 +11,12 @@ Merci de contribuer à Max. Ce fichier résume le flux ; la visite guidée du d�
 
 ## Flux
 
-1. Partir de `main` à jour : `git checkout main && git pull`.
-2. Créer une branche `feat/<slug>` ou `fix/<slug>`.
-3. Modifier, puis lancer `sh tests/check.sh`.
-4. Committer au format `type(scope): emoji description`, scope obligatoire (`feat(review): ✨ …`). Le skill `/max:commit` le rédige.
-5. Ouvrir une PR en Draft vers `main` (`/max:pull-request`), avec le lien vers l'issue (`Closes #n`).
-6. Après le merge : `git checkout main && git pull && git fetch -p && git branch -d <branche>`.
+1. Créer une branche `feat/<slug>` ou `fix/<slug>` depuis `main` à jour (`/max:switch`).
+2. Modifier, puis lancer `sh tests/check.sh`.
+3. Committer au format `type(scope): emoji description`, scope obligatoire (`feat(review): ✨ …`). Le skill `/max:commit` le rédige.
+4. Ouvrir une PR en Draft vers `main` (`/max:pull-request`), avec le lien vers l'issue (`Closes #n`).
+5. Incrémenter la version de `0.0.1` (`/max:versioning`).
+6. Après le merge : nettoyer les branches mergées (`/max:switch`).
 
 Ne pas pousser directement sur `main`.
 
