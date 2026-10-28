@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "max",
   "description": "Installe la collection Max complète. Enregistre tous les skills du dossier skills/ sous le namespace max, invocables comme /max:<skill>.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "license": "MIT",
   "author": {
     "name": "Maxime",
