@@ -107,6 +107,7 @@ Les skills orchestrent des sous-agents en lecture seule, lancés en parallèle (
 - `/max:review` : `correctness-reviewer`, `security-reviewer`, `standards-reviewer`, et `frontend-reviewer` si la stack a un front.
 - `/max:security` : `dependencies-auditor`, `docker-auditor`, `actions-auditor`.
 - `/max:symfony`, `/max:nuxt`, `/max:react` : `codebase-surveyor` sur un gros projet.
+- Sur demande : `agile-planner` choisit Scrum ou Kanban d'après les stories du projet et remplit la page de méthode dans Notion (MCP Notion requis).
 
 ## Structure du dépôt
 
@@ -126,6 +127,7 @@ claude-skills-max/
 │   ├── security-reviewer.md       # /max:review : failles applicatives dans le diff
 │   ├── standards-reviewer.md      # /max:review : standards, performance, couverture de tests
 │   ├── frontend-reviewer.md       # /max:review : ajouté si la stack a un front
+│   ├── agile-planner.md           # sur demande : Scrum ou Kanban d'après les stories, page Notion
 │   ├── dependencies-auditor.md    # /max:security : lockfiles, avis, Dependabot
 │   ├── docker-auditor.md          # /max:security : images, privilèges, secrets, ports
 │   ├── actions-auditor.md         # /max:security : workflows GitHub Actions
