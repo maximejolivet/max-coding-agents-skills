@@ -4,7 +4,7 @@
 # Usage : sh detect.sh [dossier]      (dossier = racine du projet, "." par défaut)
 # Sortie : une ligne par constat, séparée par des tabulations :
 #   <catégorie>  <identifiant>  <preuve>
-# Catégories : language, framework, package-manager, test, tooling, runner, resource
+# Catégories : language, framework, package-manager, test, tooling, runner, resource, parent
 #
 # Pour un monorepo, lancer le script sur chaque sous-dossier (apps/*, packages/*, services/*).
 
