@@ -74,18 +74,15 @@ Les skills `pull-request` et `pr-review` passent par la CLI [`gh`](https://cli.g
 
 ## Cycle d'une fonctionnalité
 
-```bash
-git checkout main && git pull origin main   # partir de main à jour
-git checkout -b feat/ma-feature             # feat/<slug> ou fix/<slug>
-# développer, puis committer (/max:commit)
-```
-
 ```text
+/max:switch         # feat/<slug> ou fix/<slug> depuis main à jour
+# développer, puis committer (/max:commit)
+/max:versioning     # +0.0.1 pour la PR
 /max:review         # verdict avant la PR
 /max:pull-request   # push + PR en Draft vers main
 ```
 
-Après le merge : `git checkout main && git pull && git fetch -p && git branch -d feat/ma-feature`.
+Après le merge : `/max:switch` nettoie les branches locales mergées.
 
 `/max:pull-request` ne pousse jamais sur `main`.
 
@@ -148,6 +145,8 @@ claude-skills-max/
 │   ├── pull-request/SKILL.md      # commit ciblé, push, PR en Draft
 │   ├── pr-review/SKILL.md         # relit une PR existante côté reviewer
 │   ├── commit/SKILL.md            # messages de commit sémantiques
+│   ├── versioning/SKILL.md        # incrémente et aligne la version du plugin
+│   ├── switch/SKILL.md            # change de branche, crée feat/fix depuis main, nettoie
 │   ├── test/SKILL.md              # générique : détecte la stack → stacks/<x>/INDEX.md (test)
 │   ├── security/SKILL.md          # détecte la stack, puis charge stacks/<x>/INDEX.md (security)
 │   ├── docker/SKILL.md            # Dockerfile, Compose, Makefile, CI
@@ -155,12 +154,16 @@ claude-skills-max/
 │   ├── symfony/SKILL.md           # point d'entrée de développement : charge stacks/symfony/INDEX.md (dev)
 │   ├── nuxt/SKILL.md              # point d'entrée de développement : charge stacks/nuxt/INDEX.md (dev)
 │   └── react/SKILL.md             # point d'entrée de développement : charge stacks/react/INDEX.md (dev)
+├── references/                    # listes de contrôle (Core Web Vitals, RGAA)
+├── scripts/
+│   └── reinstall-plugin.sh        # réinstalle le plugin en local
 ├── docs/
 │   ├── getting-started.md         # du plugin installé à la première PR relue
 │   ├── skill-anatomy.md           # anatomie d'un skill (frontmatter, squelette, règles)
 │   ├── agents.md                  # les sous-agents, quand et comment ils sont lancés
 │   ├── stacks.md                  # détection de stack et ajout d'une techno
-│   └── developer-onboarding.md    # guide pour travailler sur ce dépôt
+│   ├── developer-onboarding.md    # guide pour travailler sur ce dépôt
+│   └── user-stories.md            # écrire des stories, première série du plugin
 ├── CONTRIBUTING.md                # flux de contribution et checklist de PR
 ├── CLAUDE.md                      # instructions du dépôt pour Claude Code
 ├── README.md
