@@ -68,7 +68,7 @@ Pour un changement de **comportement** important d'un skill ou d'un agent, suivr
 3. Committer au format `type(scope): emoji description` (`/max:commit`).
 4. Incrémenter la version (`/max:versioning`).
 5. `/max:review`, puis `/max:pull-request` : PR en Draft vers `main`.
-6. Après le merge : nettoyer les branches mergées (`/max:switch`).
+6. Après le merge : supprimer la branche liée (`/max:switch delete`) ou nettoyer les branches mergées (`/max:switch clean`).
 
 ## 6. Pièges fréquents
 

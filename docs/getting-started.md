@@ -24,11 +24,11 @@ Tape `/max:` pour lister les skills. Les skills `pull-request` et `pr-review` de
 | Publier              | `/max:pull-request`              | Commit ciblé, push, PR en Draft vers `main`.                            |
 | Relire une autre PR  | `/max:pr-review <url ou n°>`     | Prépare une review ; ne la poste que sur accord explicite.              |
 
-Hors cycle : `/max:security` (audit), `/max:docker`, `/max:kubernetes`, `/max:agent-workflow` (concevoir un workflow agentique).
+Hors cycle : `/max:security` (audit), `/max:docker`, `/max:kubernetes`, `/max:refactor` (refactoring par lots), `/max:debug` (bug par sa cause racine), `/max:agent-workflow` (concevoir un workflow agentique).
 
 ## 3. Branches
 
-Partir de `main` à jour, une branche par changement (`feat/<slug>` ou `fix/<slug>`), PR en Draft vers `main`. `/max:switch` crée la branche depuis `main` à jour et, après le merge, nettoie les branches mergées.
+Partir de `main` à jour, une branche par changement (`feat/<slug>` ou `fix/<slug>`), PR en Draft vers `main`. `/max:switch` crée la branche depuis `main` à jour et, après le merge, supprime la branche liée (`/max:switch delete`, avec `--remote` et `--force` si besoin) ou nettoie toutes les branches mergées (`/max:switch clean`).
 
 ## 4. Et si ma techno n'est pas fournie ?
 
