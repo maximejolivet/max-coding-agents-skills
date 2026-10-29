@@ -1,6 +1,6 @@
 ---
 name: test
-description: Écrit, exécute et diagnostique des tests automatisés - unitaires, d'intégration, fonctionnels et de bout en bout - avec un test de non-régression d'abord pour un bug, des tests déterministes et isolés, et l'analyse des échecs ou des tests instables. Indépendant de la stack - charge la section test de stacks/<stack>/INDEX.md quand elle existe. À utiliser quand l'utilisateur demande d'ajouter, d'écrire, de corriger ou de lancer des tests, d'augmenter la couverture, de comprendre un test qui échoue ou qui est instable, ou invoque /max:test.
+description: Écrit, exécute et diagnostique des tests automatisés - unitaires, d'intégration, fonctionnels et de bout en bout - avec un test de non-régression d'abord pour un bug, un mode TDD (rouge, vert, refactor) ou BDD (scénarios Given/When/Then) sur demande, des tests déterministes et isolés, et l'analyse des échecs ou des tests instables. Indépendant de la stack - charge la section test de stacks/<stack>/INDEX.md quand elle existe. À utiliser quand l'utilisateur demande d'ajouter, d'écrire, de corriger ou de lancer des tests, d'augmenter la couverture, de comprendre un test qui échoue ou qui est instable, ou invoque /max:test. Aussi quand il demande de développer en TDD ou en BDD.
 ---
 
 # Tests
@@ -50,6 +50,25 @@ Ce qui mérite un test en priorité : la logique métier, les cas limites et les
 3. Relancer : le test passe, et le reste de la suite aussi.
 
 Un test qui n'a jamais été vu rouge n'a pas prouvé qu'il détecte le bug. Le dire quand ce n'est pas possible (bug non reproductible en test) et donner des étapes de recette manuelle à la place.
+
+## TDD et BDD (sur demande)
+
+À n'appliquer que si l'utilisateur le demande ou si le projet le pratique déjà (tests écrits avant le code, fichiers `.feature`).
+
+**TDD - boucle rouge, vert, refactor**, un petit comportement à la fois :
+
+1. **Rouge** - écrire **un** test qui décrit le prochain comportement, le lancer, le voir échouer **pour la bonne raison**.
+2. **Vert** - écrire le code le plus simple qui le fait passer, le lancer, voir toute la suite verte.
+3. **Refactor** - nettoyer le code et le test avec la suite verte, la relancer ensuite.
+4. Répéter. Annoncer à chaque tour l'étape en cours et le résultat réel de l'exécution ; ne pas écrire plusieurs tests rouges d'un coup.
+
+**BDD - le comportement d'abord, en langage métier** :
+
+1. Formuler les scénarios `Given / When / Then` avec l'utilisateur (un scénario = une règle métier observable, vocabulaire du domaine, pas de détail technique) et les faire valider avant de coder.
+2. Utiliser l'outil BDD du projet (Behat, Cucumber, behave, pytest-bdd, Playwright BDD…) ; sans outil, exprimer les scénarios en tests nommés par le comportement, sans installer de dépendance sans accord.
+3. Implémenter les étapes (`steps`) puis le code, avec la même boucle rouge / vert / refactor.
+
+Les scénarios BDD se gardent peu nombreux : les cas limites techniques restent des tests unitaires.
 
 ## Lancer et lire les résultats
 
