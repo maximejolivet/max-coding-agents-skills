@@ -18,6 +18,15 @@ Un skill (`skills/<nom>/SKILL.md`) ne déclare pas de champ `tools` : il utilise
 | `/max:nuxt` | Développement Nuxt, puis renvoi vers `/max:review`. | `npm`/`yarn`/`pnpm` | `codebase-surveyor` | oui |
 | `/max:react` | Développement React, puis renvoi vers `/max:review`. | selon le projet | `codebase-surveyor` | oui |
 | `/max:refactor` | Refactoring et migration par lots, vérifiés et annulables. | linter, types, build, tests via le runner du projet | `codebase-surveyor` (cartographie, lecture seule) | oui |
+| `/max:release` | Version, changelog, tag et GitHub Release sur accord. | `git`, `gh` | – | oui |
+| `/max:hotfix` | Correctif urgent sur la version en production, backport. | `git`, `gh`, runner de tests | – | oui |
+| `/max:ci` | Workflows GitHub Actions : écriture et débogage. | `gh run`, `actionlint` si présent | – | oui |
+| `/max:rebase` | Rebase et conflits en sécurité. | `git` | – | – |
+| `/max:perf` | Optimisation mesurée. | profileurs, Lighthouse, `EXPLAIN` selon la stack | `codebase-surveyor` (lecture seule) | oui |
+| `/max:a11y` | Accessibilité RGAA / WCAG. | `axe`, `pa11y`, Lighthouse si présents | – | oui |
+| `/max:migrate-db` | Migrations de base de données sûres. | outil de migration du projet | – | oui |
+| `/max:explain` | Explication d'un dépôt, lecture seule. | `git`, `ls` | `codebase-surveyor` | oui |
+| `/max:issue` | Rédige ou découpe une issue GitHub, création sur accord. | `gh issue list`/`create` | – | oui |
 | `/max:debug` | Débogage par la cause racine : repro, isolation, bisect, test de non-régression, correctif minimal. | `git bisect`, débogueur, runner de tests du projet | `codebase-surveyor` (lecture seule) | oui |
 | `/max:agent-workflow` | Conçoit un workflow agentique (découpage, mécanisme, boucle de vérification, garde-fous, contexte). | – | – | – |
 
