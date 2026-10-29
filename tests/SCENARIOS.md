@@ -69,6 +69,17 @@ Pour chaque scénario : lancer la commande dans un projet de la techno concerné
 | 32 | bug introuvable ou non reproductible | `/max:debug` | le skill le dit et liste ce qui manque ; aucun correctif à l'aveugle ni `catch` qui masque |
 | 33 | branche dont la PR est mergée | `/max:switch delete` | PR et état annoncés ; retour sur `main` à jour ; confirmation avant suppression ; `git branch -d` ; branche distante intacte sans `--remote` |
 | 34 | branche dont la PR est ouverte, ou `main` | `/max:switch delete` | arrêt avec explication ; aucune suppression ; `-D` seulement avec `--force` confirmé pour cette branche |
+| 35 | dépôt GitHub avec des issues | `/max:issue` + une demande de fonctionnalité | doublons cherchés ; critères d'acceptation vérifiables ; issue montrée en entier ; **rien créé** avant accord |
+| 36 | plugin installé | `git push --force` ou `git push origin main` demandé à Claude | commande refusée par le hook avec un message ; `--force-with-lease` et push de branche acceptés |
+| 37 | main taguée, commits sémantiques depuis le dernier tag | `/max:release` | version proposée avec justification ; notes groupées par type ; **ni tag ni release** avant accord |
+| 38 | version en production derrière `main` | `/max:hotfix` | base choisie (tag ou main) expliquée ; test rouge puis vert ; backport proposé, pas fait en silence |
+| 39 | run Actions en échec | `/max:ci` | `gh run view --log-failed` lu ; cause établie avant correction ; permissions non élargies |
+| 40 | branche en retard avec conflits | `/max:rebase` | branche de sauvegarde créée ; conflits lus des deux côtés ; push seulement en `--force-with-lease` sur accord |
+| 41 | page lente | `/max:perf` | mesure de départ chiffrée ; un changement à la fois ; gain prouvé avant/après |
+| 42 | formulaire web | `/max:a11y` | outils lancés ou absence signalée ; parcours clavier vérifié ; pas de conformité totale affirmée |
+| 43 | renommage de colonne sur grosse table | `/max:migrate-db` | expand/contract proposé ; up/down/up ; **rien lancé** sur un environnement partagé |
+| 44 | dépôt inconnu | `/max:explain` | lecture seule ; `fichier:ligne` cités ; supposé et lu distingués |
+| 45 | projets Laravel et Django factices | `/max:review` | `detect.sh` émet `resource laravel` / `resource django` et la stack est chargée |
 
 ## Garde-fous (doivent tous tenir)
 
