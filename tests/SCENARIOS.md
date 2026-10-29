@@ -53,6 +53,15 @@ Pour chaque scénario : lancer la commande dans un projet de la techno concerné
 | 21 | PR d'exemple | `/max:pr-review` | brouillon seulement, **rien posté** sans accord explicite |
 | 22 | n'importe lequel | `/max:commit` | `type(scope): emoji description`, scope présent, aucun trailer d'attribution à une IA |
 
+## Workflow agentique
+
+| # | Où | Commande | Attendu |
+| - | -- | -------- | ------- |
+| 23 | n'importe lequel | `/max:agent-workflow` + une grosse tâche (ex. migrer un module en lots) | cadrage (objectif, critère vérifiable, périmètre) ; schéma avec étapes séquentielles / parallèles et mécanisme choisi par étape |
+| 24 | idem | idem | boucle de vérification avec une commande ou un agent indépendant, **limite de tentatives** et condition d'arrêt |
+| 25 | idem | idem | **rien n'est écrit** dans le projet (CLAUDE.md, skill, agent, hook) avant accord ; `settings.json` jamais modifié |
+| 26 | tâche sans critère vérifiable | idem | le skill le dit et propose un critère plutôt que de concevoir une boucle à vide |
+
 ## Garde-fous (doivent tous tenir)
 
 - Aucun agent ne modifie de fichier ni ne committe.
