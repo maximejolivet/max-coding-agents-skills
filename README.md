@@ -13,7 +13,7 @@
 Distribuée comme plugin `max` via son propre marketplace ; chaque skill s'appelle avec le préfixe `/max:`.
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
-[![Version](https://img.shields.io/badge/version-1.0.7-lightgrey)](.claude-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-1.0.8-lightgrey)](.claude-plugin/plugin.json)
 [![Licence MIT](https://img.shields.io/badge/licence-MIT-green)](LICENSE)
 [![Check](https://img.shields.io/github/actions/workflow/status/maximejolivet/claude-skills-max/check.yml?label=check)](https://github.com/maximejolivet/claude-skills-max/actions/workflows/check.yml)
 [![Dernier commit](https://img.shields.io/github/last-commit/maximejolivet/claude-skills-max)](https://github.com/maximejolivet/claude-skills-max/commits/main)
@@ -31,7 +31,7 @@ Distribuée comme plugin `max` via son propre marketplace ; chaque skill s'appel
 
 ## À propos
 
-Max est un plugin [Claude Code](https://claude.com/claude-code) qui regroupe treize skills pour suivre un changement de bout en bout, de la première ligne de code au merge : développer, committer, relire, tester, ouvrir la pull request, relire celle des autres et auditer la sécurité du projet. Il est pensé pour des projets hébergés sur GitHub (CLI `gh`, GitHub Actions).
+Max est un plugin [Claude Code](https://claude.com/claude-code) qui regroupe quatorze skills pour suivre un changement de bout en bout, de la première ligne de code au merge : développer, committer, relire, tester, ouvrir la pull request, relire celle des autres et auditer la sécurité du projet. Il est pensé pour des projets hébergés sur GitHub (CLI `gh`, GitHub Actions).
 
 - **Un cycle complet.** Du développement à la revue, chaque étape a son skill et renvoie vers la suivante : `/max:symfony`, `/max:nuxt` ou `/max:react` finissent par `/max:review`, qui prépare `/max:pull-request`.
 - **Adapté à ta techno.** Les skills génériques détectent la stack du projet (langage, framework, outils de test, Docker, Kubernetes, Actions) puis chargent les règles de la techno concernée. Symfony, Nuxt et React sont fournis ; une stack inconnue fonctionne avec des valeurs par défaut.
@@ -71,6 +71,7 @@ Les skills `pull-request` et `pr-review` passent par la CLI [`gh`](https://cli.g
 | `/max:symfony`      | Développement Symfony (6.4, 7.x, 8.x), puis renvoi vers `/max:review`.                                              |
 | `/max:nuxt`         | Développement Nuxt (3 et 4), puis renvoi vers `/max:review`.                                                        |
 | `/max:react`        | Développement React (18 et 19), puis renvoi vers `/max:review`.                                                     |
+| `/max:agent-workflow` | Conçoit un workflow agentique : découpage, skill/agent/hook/MCP, boucle de vérification, garde-fous, contexte.   |
 
 ## Cycle d'une fonctionnalité
 
@@ -155,7 +156,8 @@ claude-skills-max/
 │   ├── kubernetes/SKILL.md        # manifestes, Kustomize, Helm
 │   ├── symfony/SKILL.md           # point d'entrée de développement : charge stacks/symfony/INDEX.md (dev)
 │   ├── nuxt/SKILL.md              # point d'entrée de développement : charge stacks/nuxt/INDEX.md (dev)
-│   └── react/SKILL.md             # point d'entrée de développement : charge stacks/react/INDEX.md (dev)
+│   ├── react/SKILL.md             # point d'entrée de développement : charge stacks/react/INDEX.md (dev)
+│   └── agent-workflow/SKILL.md    # conçoit un workflow agentique (découpage, orchestration, vérification, garde-fous)
 ├── references/                    # listes de contrôle (Core Web Vitals, RGAA)
 ├── scripts/
 │   └── reinstall-plugin.sh        # réinstalle le plugin en local
