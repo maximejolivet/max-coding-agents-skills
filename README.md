@@ -13,7 +13,7 @@
 Distribuée comme plugin `max` via son propre marketplace ; chaque skill s'appelle avec le préfixe `/max:`.
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
-[![Version](https://img.shields.io/badge/version-1.0.6-lightgrey)](.claude-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-1.0.7-lightgrey)](.claude-plugin/plugin.json)
 [![Licence MIT](https://img.shields.io/badge/licence-MIT-green)](LICENSE)
 [![Check](https://img.shields.io/github/actions/workflow/status/maximejolivet/claude-skills-max/check.yml?label=check)](https://github.com/maximejolivet/claude-skills-max/actions/workflows/check.yml)
 [![Dernier commit](https://img.shields.io/github/last-commit/maximejolivet/claude-skills-max)](https://github.com/maximejolivet/claude-skills-max/commits/main)
@@ -168,7 +168,8 @@ claude-skills-max/
 │   ├── stacks.md                  # détection de stack et ajout d'une techno
 │   ├── developer-onboarding.md    # guide pour travailler sur ce dépôt
 │   ├── user-stories.md            # écrire des stories, première série du plugin
-│   └── depots-tools.md            # sélection de dépôts autour des agents de codage, des skills et des LLM
+│   ├── depots-tools.md            # sélection de dépôts autour des agents de codage, des skills et des LLM
+│   └── claude-commands.md         # référence des commandes Claude Code et des commandes /max:*
 ├── CONTRIBUTING.md                # flux de contribution et checklist de PR
 ├── renovate.json                  # configuration Renovate
 ├── CLAUDE.md                      # instructions du dépôt pour Claude Code
@@ -205,6 +206,7 @@ claude-skills-max/
 - [Onboarding développeur](docs/developer-onboarding.md) : travailler sur ce dépôt.
 - [User stories](docs/user-stories.md) : écrire des stories et première série du plugin.
 - [Dépôts et outils IA](docs/depots-tools.md) : sélection de dépôts autour des agents de codage, des skills et des LLM (source : [IA.md](https://github.com/maximejolivet/maximejolivet/blob/master/IA.md)).
+- [Commandes Claude Code](docs/claude-commands.md) : référence des commandes Claude Code et des commandes `/max:*`, avec exemples.
 
 ## Contributions
 

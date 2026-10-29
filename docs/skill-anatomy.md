@@ -16,6 +16,34 @@ description: Relit un changement de code avant le merge - … À utiliser quand 
 
 `tests/check.sh` refuse un skill sans ces deux champs.
 
+### Champs facultatifs
+
+Claude Code accepte d'autres champs (source : [doc des skills](https://code.claude.com/docs/en/skills.md), section « Frontmatter reference »).
+
+| Champ | Effet | Exemple |
+| :--- | :--- | :--- |
+| `when_to_use` | Contexte de déclenchement en plus de `description` (nom avec underscore). | `when_to_use: Use when the user says "ship it"` |
+| `argument-hint` | Indice d'autocomplétion pour les arguments. | `argument-hint: [n° ou URL de PR]` |
+| `arguments` | Noms d'arguments positionnels, substitués par `$nom`. | `arguments: [issue, branch]` |
+| `allowed-tools` | Outils utilisables sans demande de permission pendant le tour qui invoque le skill. Ne restreint pas les autres. | `allowed-tools: Bash(git add *) Bash(git commit *)` |
+| `disallowed-tools` | Outils retirés à Claude pendant le skill. | `disallowed-tools: AskUserQuestion` |
+| `disable-model-invocation` | `true` : seul l'utilisateur lance le skill, via `/max:<nom>`. | `disable-model-invocation: true` |
+| `user-invocable` | `false` : masque le skill du menu `/`, seul Claude peut l'invoquer. | `user-invocable: false` |
+| `model` | Modèle pour le tour courant, ou `inherit`. | `model: inherit` |
+| `effort` | Niveau d'effort : `low`, `medium`, `high`, `xhigh`, `max`. | `effort: high` |
+| `context` | `fork` : exécute le skill dans un sous-agent, sans l'historique. | `context: fork` |
+| `agent` | Type de sous-agent si `context: fork`. | `agent: Explore` |
+| `background` | Avec `context: fork` : `false` attend le résultat dans le tour. | `background: false` |
+| `hooks` | Hooks enregistrés à l'invocation du skill. | voir la doc des hooks |
+| `paths` | Globs qui limitent le chargement automatique aux fichiers correspondants. | `paths: "src/**/*.ts"` |
+| `shell` | Shell des blocs `` !`commande` `` : `bash` (défaut) ou `powershell`. | `shell: powershell` |
+
+À savoir :
+
+- Un champ inconnu est ignoré sans erreur : une faute de frappe ne fait rien, sans message.
+- Si le YAML ne se parse pas, le skill se charge sans aucun champ.
+- Hors Claude Code (upload sur claude.ai, API Skills), seuls `name`, `description`, `license`, `compatibility`, `metadata` et `allowed-tools` sont acceptés ; toute autre clé provoque une erreur.
+
 ## Corps
 
 Les skills de ce dépôt suivent le même squelette :
