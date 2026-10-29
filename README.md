@@ -13,7 +13,7 @@
 Distribuée comme plugin `max` via son propre marketplace ; chaque skill s'appelle avec le préfixe `/max:`.
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
-[![Version](https://img.shields.io/badge/version-1.0.10-lightgrey)](.claude-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-1.0.11-lightgrey)](.claude-plugin/plugin.json)
 [![Licence MIT](https://img.shields.io/badge/licence-MIT-green)](LICENSE)
 [![Check](https://img.shields.io/github/actions/workflow/status/maximejolivet/claude-skills-max/check.yml?label=check)](https://github.com/maximejolivet/claude-skills-max/actions/workflows/check.yml)
 [![Dernier commit](https://img.shields.io/github/last-commit/maximejolivet/claude-skills-max)](https://github.com/maximejolivet/claude-skills-max/commits/main)
@@ -63,7 +63,7 @@ Les skills `pull-request` et `pr-review` passent par la CLI [`gh`](https://cli.g
 | `/max:pr-review`    | Relit la PR de quelqu'un d'autre (issue liée, checks Actions) et prépare la review ; ne poste que sur accord.       |
 | `/max:commit`       | Rédige des messages de commit sémantiques : `type(scope): emoji description`.                                       |
 | `/max:versioning`   | Incrémente la version (+0.0.1 par PR) et l'aligne dans `plugin.json`, `marketplace.json` et le badge du README.    |
-| `/max:switch`       | Change de branche sans perdre de travail, crée `feat/` ou `fix/` depuis `main` à jour, nettoie les branches mergées. |
+| `/max:switch`       | Change de branche sans perdre de travail, crée `feat/` ou `fix/` depuis `main` à jour, nettoie ou supprime les branches mergées. |
 | `/max:test`         | Écrit, lance et diagnostique les tests ; non-régression d'abord pour un bug ; mode TDD / BDD sur demande.          |
 | `/max:security`     | Audite dépendances, Docker et workflows GitHub Actions ; classe les failles selon le risque réel.                   |
 | `/max:docker`       | Dockerfile, Compose, Makefile et CI : builds reproductibles, images minimales, sécurité.                            |
@@ -79,13 +79,14 @@ Les skills `pull-request` et `pr-review` passent par la CLI [`gh`](https://cli.g
 
 ```text
 /max:switch         # feat/<slug> ou fix/<slug> depuis main à jour
+/max:switch delete  # après le merge : supprime la branche liée (--remote, --force)
 # développer, puis committer (/max:commit)
 /max:versioning     # +0.0.1 pour la PR
 /max:review         # verdict avant la PR
 /max:pull-request   # push + PR en Draft vers main
 ```
 
-Après le merge : `/max:switch` nettoie les branches locales mergées.
+Après le merge : `/max:switch delete` supprime la branche liée (`clean` pour toutes les branches mergées).
 
 `/max:pull-request` ne pousse jamais sur `main`.
 
