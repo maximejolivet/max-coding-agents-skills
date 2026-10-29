@@ -22,7 +22,7 @@ Aucun skill ne change.
 
 ## Formes d'un dossier de techno
 
-- **Forme 1** : un seul `INDEX.md` découpé en sections (Symfony, Nuxt et React l'utilisent). Commencer par là.
+- **Forme 1** : un seul `INDEX.md` découpé en sections (toutes les stacks fournies l'utilisent : Symfony, Nuxt, React, Next.js, Vue, Laravel, Django). Commencer par là.
 - **Forme 2** : `INDEX.md` (dispatcher) + `CORE.md`, `DEV.md`, `REVIEW.md`, `SECURITY.md`, `TEST.md`, `DEPLOY.md`, quand une section devient trop longue.
 
 ## Sections et natures

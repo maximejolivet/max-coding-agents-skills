@@ -13,7 +13,7 @@
 Distribuée comme plugin `max` via son propre marketplace ; chaque skill s'appelle avec le préfixe `/max:`.
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
-[![Version](https://img.shields.io/badge/version-1.0.12-lightgrey)](.claude-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-1.0.14-lightgrey)](.claude-plugin/plugin.json)
 [![Licence MIT](https://img.shields.io/badge/licence-MIT-green)](LICENSE)
 [![Check](https://img.shields.io/github/actions/workflow/status/maximejolivet/claude-skills-max/check.yml?label=check)](https://github.com/maximejolivet/claude-skills-max/actions/workflows/check.yml)
 [![Dernier commit](https://img.shields.io/github/last-commit/maximejolivet/claude-skills-max)](https://github.com/maximejolivet/claude-skills-max/commits/main)
@@ -31,10 +31,10 @@ Distribuée comme plugin `max` via son propre marketplace ; chaque skill s'appel
 
 ## À propos
 
-Max est un plugin [Claude Code](https://claude.com/claude-code) qui regroupe seize skills pour suivre un changement de bout en bout, de la première ligne de code au merge : développer, committer, relire, tester, ouvrir la pull request, relire celle des autres et auditer la sécurité du projet. Il est pensé pour des projets hébergés sur GitHub (CLI `gh`, GitHub Actions).
+Max est un plugin [Claude Code](https://claude.com/claude-code) qui regroupe vingt-cinq skills pour suivre un changement de bout en bout, de la première ligne de code au merge : développer, committer, relire, tester, ouvrir la pull request, relire celle des autres et auditer la sécurité du projet. Il est pensé pour des projets hébergés sur GitHub (CLI `gh`, GitHub Actions).
 
 - **Un cycle complet.** Du développement à la revue, chaque étape a son skill et renvoie vers la suivante : `/max:symfony`, `/max:nuxt` ou `/max:react` finissent par `/max:review`, qui prépare `/max:pull-request`.
-- **Adapté à ta techno.** Les skills génériques détectent la stack du projet (langage, framework, outils de test, Docker, Kubernetes, Actions) puis chargent les règles de la techno concernée. Symfony, Nuxt et React sont fournis ; une stack inconnue fonctionne avec des valeurs par défaut.
+- **Adapté à ta techno.** Les skills génériques détectent la stack du projet (langage, framework, outils de test, Docker, Kubernetes, Actions) puis chargent les règles de la techno concernée. Symfony, Nuxt, React, Next.js, Vue, Laravel et Django sont fournis ; une stack inconnue fonctionne avec des valeurs par défaut.
 - **Des relectures en parallèle.** Sur un gros diff, `/max:review` confie la correction, la sécurité, les standards et le front à des sous-agents en lecture seule ; `/max:security` fait de même par domaine (dépendances, Docker, Actions).
 - **Prudent par défaut.** Les PR sont ouvertes en Draft, jamais de push sur `main`, une review n'est postée que sur accord explicite, et le cluster Kubernetes reste en lecture seule.
 - **Vérifié.** Un contrôle de cohérence (`tests/check.sh`) tourne en CI à chaque PR, et des scénarios manuels couvrent le comportement réel des skills.
@@ -72,6 +72,15 @@ Les skills `pull-request` et `pr-review` passent par la CLI [`gh`](https://cli.g
 | `/max:nuxt`         | Développement Nuxt (3 et 4), puis renvoi vers `/max:review`.                                                        |
 | `/max:react`        | Développement React (18 et 19), puis renvoi vers `/max:review`.                                                     |
 | `/max:refactor`       | Refactoring et migration à grande échelle par lots : tests d'abord, vérification et commit par lot.                |
+| `/max:release`        | Prépare une release : version d'après les commits, changelog, tag et GitHub Release sur accord.                    |
+| `/max:hotfix`         | Correctif urgent sur la version en production : base du tag, test d'abord, backport.                               |
+| `/max:ci`             | Écrit et débogue les workflows GitHub Actions : logs en échec, cache, matrices, permissions minimales.             |
+| `/max:rebase`         | Rebase ou fusion en sécurité : sauvegarde, conflits compris côté par côté, force-with-lease sur accord.           |
+| `/max:perf`           | Optimise en mesurant : métrique, goulot prouvé, un changement à la fois, avant/après chiffrés.                     |
+| `/max:a11y`           | Audite et corrige l'accessibilité (RGAA / WCAG) : sémantique, clavier, contrastes, formulaires.                    |
+| `/max:migrate-db`     | Migrations de base sûres : réversibles, sans verrou long, expand/contract, plan de retour.                        |
+| `/max:explain`        | Explique un dépôt inconnu en lecture seule : carte, flux, commandes, zones à risque.                               |
+| `/max:issue`          | Rédige ou découpe une issue GitHub : critères d'acceptation vérifiables, création avec `gh` sur accord.            |
 | `/max:debug`          | Diagnostique un bug par sa cause racine : repro, hypothèses, bisect, test de non-régression, correctif minimal.   |
 | `/max:agent-workflow` | Conçoit un workflow agentique : découpage, skill/agent/hook/MCP, boucle de vérification, garde-fous, contexte.   |
 
@@ -92,6 +101,10 @@ Après le merge : `/max:switch delete` supprime la branche liée (`clean` pour t
 
 ## Fonctionnement
 
+### Garde-fou git
+
+Le plugin enregistre un hook `PreToolUse` sur Bash (`hooks/hooks.json` → `scripts/guard-git.sh`) qui refuse `git push --force` / `-f` et tout push direct vers `main` ou `master`. `--force-with-lease` et les pushes de branche passent. Sans `python3`, le hook laisse tout passer. Il s'applique à toute session où le plugin est installé.
+
 ### Détection de la stack
 
 Les skills génériques (`review`, `security`, `pr-review`, `test`, `docker`, `kubernetes`) ne codent aucune techno en dur. Ils détectent la stack avec `stacks/detect.sh` (lecture seule, rien n'est lancé ni installé) selon la procédure de `stacks/DETECT.md`, puis chargent `stacks/<techno>/INDEX.md` avec la nature voulue : `core` + `dev`, `review`, `security`, `test` ou `deploy`. Une stack sans ressource dans `stacks/` fonctionne avec des valeurs par défaut par langage.
@@ -101,7 +114,7 @@ Un dossier de techno prend une de ces formes :
 - **Forme 1** : un seul `INDEX.md`, découpé en sections.
 - **Forme 2** : `INDEX.md` (dispatcher) + `CORE.md`, `DEV.md`, `REVIEW.md`, `SECURITY.md`, `TEST.md`, `DEPLOY.md`.
 
-Stacks fournies : Symfony, Nuxt, React.
+Stacks fournies : Symfony, Nuxt, React, Next.js, Vue, Laravel, Django.
 
 ### Sous-agents
 
@@ -162,9 +175,21 @@ claude-skills-max/
 │   ├── react/SKILL.md             # point d'entrée de développement : charge stacks/react/INDEX.md (dev)
 │   ├── agent-workflow/SKILL.md    # conçoit un workflow agentique (découpage, orchestration, vérification, garde-fous)
 │   ├── refactor/SKILL.md          # refactoring et migration par lots, vérifiés et annulables
-│   └── debug/SKILL.md             # débogage par la cause racine : repro, bisect, test de non-régression
+│   ├── debug/SKILL.md             # débogage par la cause racine : repro, bisect, test de non-régression
+│   ├── issue/SKILL.md             # rédige ou découpe une issue GitHub, création sur accord
+│   ├── release/SKILL.md           # version, changelog, tag et GitHub Release sur accord
+│   ├── hotfix/SKILL.md            # correctif urgent sur la version en production, backport
+│   ├── ci/SKILL.md                # workflows GitHub Actions : écriture, logs en échec, vitesse
+│   ├── rebase/SKILL.md            # rebase et conflits en sécurité
+│   ├── perf/SKILL.md              # optimisation mesurée, avant/après
+│   ├── a11y/SKILL.md              # accessibilité RGAA / WCAG
+│   ├── migrate-db/SKILL.md        # migrations de base de données sûres
+│   └── explain/SKILL.md           # comprendre un dépôt inconnu, lecture seule
 ├── references/                    # listes de contrôle (Core Web Vitals, RGAA)
+├── hooks/
+│   └── hooks.json                 # garde-fou git : enregistre scripts/guard-git.sh (PreToolUse sur Bash)
 ├── scripts/
+│   ├── guard-git.sh               # hook : bloque git push --force et push direct vers main/master
 │   └── reinstall-plugin.sh        # réinstalle le plugin en local
 ├── docs/
 │   ├── getting-started.md         # du plugin installé à la première PR relue
