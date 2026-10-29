@@ -13,7 +13,7 @@
 Distribuée comme plugin `max` via son propre marketplace ; chaque skill s'appelle avec le préfixe `/max:`.
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
-[![Version](https://img.shields.io/badge/version-1.0.9-lightgrey)](.claude-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-1.0.10-lightgrey)](.claude-plugin/plugin.json)
 [![Licence MIT](https://img.shields.io/badge/licence-MIT-green)](LICENSE)
 [![Check](https://img.shields.io/github/actions/workflow/status/maximejolivet/claude-skills-max/check.yml?label=check)](https://github.com/maximejolivet/claude-skills-max/actions/workflows/check.yml)
 [![Dernier commit](https://img.shields.io/github/last-commit/maximejolivet/claude-skills-max)](https://github.com/maximejolivet/claude-skills-max/commits/main)
@@ -31,7 +31,7 @@ Distribuée comme plugin `max` via son propre marketplace ; chaque skill s'appel
 
 ## À propos
 
-Max est un plugin [Claude Code](https://claude.com/claude-code) qui regroupe quinze skills pour suivre un changement de bout en bout, de la première ligne de code au merge : développer, committer, relire, tester, ouvrir la pull request, relire celle des autres et auditer la sécurité du projet. Il est pensé pour des projets hébergés sur GitHub (CLI `gh`, GitHub Actions).
+Max est un plugin [Claude Code](https://claude.com/claude-code) qui regroupe seize skills pour suivre un changement de bout en bout, de la première ligne de code au merge : développer, committer, relire, tester, ouvrir la pull request, relire celle des autres et auditer la sécurité du projet. Il est pensé pour des projets hébergés sur GitHub (CLI `gh`, GitHub Actions).
 
 - **Un cycle complet.** Du développement à la revue, chaque étape a son skill et renvoie vers la suivante : `/max:symfony`, `/max:nuxt` ou `/max:react` finissent par `/max:review`, qui prépare `/max:pull-request`.
 - **Adapté à ta techno.** Les skills génériques détectent la stack du projet (langage, framework, outils de test, Docker, Kubernetes, Actions) puis chargent les règles de la techno concernée. Symfony, Nuxt et React sont fournis ; une stack inconnue fonctionne avec des valeurs par défaut.
@@ -72,6 +72,7 @@ Les skills `pull-request` et `pr-review` passent par la CLI [`gh`](https://cli.g
 | `/max:nuxt`         | Développement Nuxt (3 et 4), puis renvoi vers `/max:review`.                                                        |
 | `/max:react`        | Développement React (18 et 19), puis renvoi vers `/max:review`.                                                     |
 | `/max:refactor`       | Refactoring et migration à grande échelle par lots : tests d'abord, vérification et commit par lot.                |
+| `/max:debug`          | Diagnostique un bug par sa cause racine : repro, hypothèses, bisect, test de non-régression, correctif minimal.   |
 | `/max:agent-workflow` | Conçoit un workflow agentique : découpage, skill/agent/hook/MCP, boucle de vérification, garde-fous, contexte.   |
 
 ## Cycle d'une fonctionnalité
@@ -107,7 +108,7 @@ Les skills orchestrent des sous-agents en lecture seule, lancés en parallèle (
 
 - `/max:review` : `correctness-reviewer`, `security-reviewer`, `standards-reviewer`, et `frontend-reviewer` si la stack a un front.
 - `/max:security` : `dependencies-auditor`, `docker-auditor`, `actions-auditor`.
-- `/max:symfony`, `/max:nuxt`, `/max:react` : `codebase-surveyor` sur un gros projet.
+- `/max:symfony`, `/max:nuxt`, `/max:react`, `/max:refactor`, `/max:debug` : `codebase-surveyor` sur un gros projet.
 - Sur demande : `agile-planner` choisit Scrum ou Kanban d'après les stories du projet et remplit la page de méthode dans Notion (MCP Notion requis).
 - Sur demande : `docs-updater` compare les `.md` au code réel et rend les corrections à appliquer (lecture seule).
 
@@ -134,7 +135,7 @@ claude-skills-max/
 │   ├── dependencies-auditor.md    # /max:security : lockfiles, avis, Dependabot
 │   ├── docker-auditor.md          # /max:security : images, privilèges, secrets, ports
 │   ├── actions-auditor.md         # /max:security : workflows GitHub Actions
-│   └── codebase-surveyor.md       # symfony, nuxt, react : exploration d'un gros projet
+│   └── codebase-surveyor.md       # symfony, nuxt, react, refactor, debug : exploration d'un gros projet
 ├── stacks/                        # connaissances propres à chaque techno, chargées à la demande
 │   ├── DETECT.md                  # procédure commune de détection + valeurs par défaut par langage
 │   ├── detect.sh                  # script de détection (lecture seule)
@@ -159,7 +160,8 @@ claude-skills-max/
 │   ├── nuxt/SKILL.md              # point d'entrée de développement : charge stacks/nuxt/INDEX.md (dev)
 │   ├── react/SKILL.md             # point d'entrée de développement : charge stacks/react/INDEX.md (dev)
 │   ├── agent-workflow/SKILL.md    # conçoit un workflow agentique (découpage, orchestration, vérification, garde-fous)
-│   └── refactor/SKILL.md          # refactoring et migration par lots, vérifiés et annulables
+│   ├── refactor/SKILL.md          # refactoring et migration par lots, vérifiés et annulables
+│   └── debug/SKILL.md             # débogage par la cause racine : repro, bisect, test de non-régression
 ├── references/                    # listes de contrôle (Core Web Vitals, RGAA)
 ├── scripts/
 │   └── reinstall-plugin.sh        # réinstalle le plugin en local

@@ -6,7 +6,7 @@ Les outils de chaque agent sont déclarés dans le champ `tools` du frontmatter 
 | :--- | :--- | :--- | :--- | :--- |
 | `actions-auditor` | Audite les workflows GitHub Actions : actions non épinglées, permissions du token, déclencheurs dangereux, injection de script, secrets. | `/max:security` | Read, Grep, Glob, Bash | (défaut) |
 | `agile-planner` | Choisit Scrum ou Kanban d'après les user stories et remplit la page de gestion de projet dans Notion. | sur demande | Read, Grep, Glob, Bash + 7 outils Notion (ci-dessous) | `sonnet` |
-| `codebase-surveyor` | Explore le code existant avant un changement : structure, éléments réutilisables, idiomes locaux, risques. | `/max:symfony`, `/max:nuxt`, `/max:react` | Read, Grep, Glob, Bash | `sonnet` |
+| `codebase-surveyor` | Explore le code existant avant un changement : structure, éléments réutilisables, idiomes locaux, risques. | `/max:symfony`, `/max:nuxt`, `/max:react`, `/max:refactor`, `/max:debug` | Read, Grep, Glob, Bash | `sonnet` |
 | `correctness-reviewer` | Relit un diff sous l'angle de la correction : cause racine, cas limites, régressions. | `/max:review` | Read, Grep, Glob, Bash | (défaut) |
 | `dependencies-auditor` | Cherche les vulnérabilités connues : lockfiles Composer et JS, avis de la stack, alertes Dependabot. | `/max:security` | Read, Grep, Glob, Bash, WebFetch | (défaut) |
 | `docker-auditor` | Audite Docker et Compose : images de base, privilèges, socket, secrets, ports, scans d'image. | `/max:security` | Read, Grep, Glob, Bash | (défaut) |
