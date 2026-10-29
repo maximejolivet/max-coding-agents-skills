@@ -65,6 +65,8 @@ Pour chaque scénario : lancer la commande dans un projet de la techno concerné
 | 28 | zone sans tests | `/max:refactor` | tests de caractérisation écrits d'abord, ou lots réduits avec recette manuelle ; aucun test supprimé ou ignoré |
 | 29 | projet avec un outil de test | `/max:test` en TDD | un seul test rouge à la fois, **vu rouge**, puis vert, puis refactor ; étape annoncée à chaque tour |
 | 30 | idem | `/max:test` en BDD | scénarios Given/When/Then validés avant le code ; aucune dépendance installée sans accord |
+| 31 | projet avec un bug reproductible | `/max:debug` + message d'erreur | repro minimale obtenue avant tout correctif ; cause racine expliquée avec `fichier:ligne` ; test vu rouge puis vert |
+| 32 | bug introuvable ou non reproductible | `/max:debug` | le skill le dit et liste ce qui manque ; aucun correctif à l'aveugle ni `catch` qui masque |
 
 ## Garde-fous (doivent tous tenir)
 
