@@ -84,7 +84,7 @@ Dans l'ordre d'une fonctionnalité, de la branche à la PR.
 
 | Étape | Commande | À quoi ça sert | Exemple |
 | :---: | :--- | :--- | :--- |
-| 1 | `/max:switch` | Crée `feat/<slug>` ou `fix/<slug>` depuis `main` à jour, change de branche, nettoie les branches mergées ; `delete [--remote] [--force]` supprime la branche liée | `/max:switch feat/ma-feature`, `/max:switch delete --remote` |
+| 1 | `/max:switch` | Crée `feat/<slug>` ou `fix/<slug>` depuis `main` à jour, change de branche, nettoie les branches mergées ; `delete [<branche>|#PR] [--remote] [--force]` supprime la branche liée (ou celle indiquée), `clean` supprime toutes les branches mergées | `/max:switch feat/ma-feature`, `/max:switch delete --remote` |
 | 2 | `/max:commit` | Message `type(scope): emoji description`, scope obligatoire | `/max:commit` |
 | 3 | `/max:versioning` | +0.0.1, aligné dans `plugin.json`, `marketplace.json` et le badge, puis `tests/check.sh` | `/max:versioning` |
 | 4 | `/max:review` | Relit le changement : correction, sécurité, performance, standards, tests. Verdict classé par gravité | `/max:review` |
