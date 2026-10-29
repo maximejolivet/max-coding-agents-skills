@@ -67,6 +67,8 @@ Pour chaque scénario : lancer la commande dans un projet de la techno concerné
 | 30 | idem | `/max:test` en BDD | scénarios Given/When/Then validés avant le code ; aucune dépendance installée sans accord |
 | 31 | projet avec un bug reproductible | `/max:debug` + message d'erreur | repro minimale obtenue avant tout correctif ; cause racine expliquée avec `fichier:ligne` ; test vu rouge puis vert |
 | 32 | bug introuvable ou non reproductible | `/max:debug` | le skill le dit et liste ce qui manque ; aucun correctif à l'aveugle ni `catch` qui masque |
+| 33 | branche dont la PR est mergée | `/max:switch delete` | PR et état annoncés ; retour sur `main` à jour ; confirmation avant suppression ; `git branch -d` ; branche distante intacte sans `--remote` |
+| 34 | branche dont la PR est ouverte, ou `main` | `/max:switch delete` | arrêt avec explication ; aucune suppression ; `-D` seulement avec `--force` confirmé pour cette branche |
 
 ## Garde-fous (doivent tous tenir)
 
