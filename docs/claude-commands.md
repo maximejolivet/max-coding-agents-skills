@@ -101,6 +101,7 @@ Le passage en « Ready for review » et le merge restent à faire par l'utilisat
 | `/max:test` | Écrit, lance et diagnostique des tests (non-régression d'abord pour un bug) | `/max:test le test UserServiceTest est instable` |
 | `/max:docker` | Dockerfile, Compose, Makefile, CI de build | `/max:docker` |
 | `/max:kubernetes` | Manifestes, Kustomize, Helm, déploiement Actions | `/max:kubernetes` |
+| `/max:agent-workflow` | Conçoit un workflow agentique : découpage, skill/agent/hook/MCP, boucle de vérification, garde-fous | `/max:agent-workflow découpe la migration en lots` |
 
 ### Développement par stack
 
