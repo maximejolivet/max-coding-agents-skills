@@ -24,7 +24,7 @@ Tape `/max:` pour lister les skills. Les skills `pull-request` et `pr-review` de
 | Publier              | `/max:pull-request`              | Commit ciblé, push, PR en Draft vers `main`.                            |
 | Relire une autre PR  | `/max:pr-review <url ou n°>`     | Prépare une review ; ne la poste que sur accord explicite.              |
 
-Hors cycle : `/max:security` (audit), `/max:docker`, `/max:kubernetes`.
+Hors cycle : `/max:security` (audit), `/max:docker`, `/max:kubernetes`, `/max:agent-workflow` (concevoir un workflow agentique).
 
 ## 3. Branches
 
