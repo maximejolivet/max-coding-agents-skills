@@ -61,6 +61,10 @@ Pour chaque scénario : lancer la commande dans un projet de la techno concerné
 | 24 | idem | idem | boucle de vérification avec une commande ou un agent indépendant, **limite de tentatives** et condition d'arrêt |
 | 25 | idem | idem | **rien n'est écrit** dans le projet (CLAUDE.md, skill, agent, hook) avant accord ; `settings.json` jamais modifié |
 | 26 | tâche sans critère vérifiable | idem | le skill le dit et propose un critère plutôt que de concevoir une boucle à vide |
+| 27 | gros projet avec une suite verte | `/max:refactor` + un renommage répandu | suite lancée et verte **avant** ; plan en lots ; accord demandé avant exécution ; un commit par lot seulement sur demande |
+| 28 | zone sans tests | `/max:refactor` | tests de caractérisation écrits d'abord, ou lots réduits avec recette manuelle ; aucun test supprimé ou ignoré |
+| 29 | projet avec un outil de test | `/max:test` en TDD | un seul test rouge à la fois, **vu rouge**, puis vert, puis refactor ; étape annoncée à chaque tour |
+| 30 | idem | `/max:test` en BDD | scénarios Given/When/Then validés avant le code ; aucune dépendance installée sans accord |
 
 ## Garde-fous (doivent tous tenir)
 
