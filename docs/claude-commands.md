@@ -102,6 +102,15 @@ Le passage en « Ready for review » et le merge restent à faire par l'utilisat
 | `/max:docker` | Dockerfile, Compose, Makefile, CI de build | `/max:docker` |
 | `/max:kubernetes` | Manifestes, Kustomize, Helm, déploiement Actions | `/max:kubernetes` |
 | `/max:refactor` | Refactoring ou migration à grande échelle, par lots, tests d'abord | `/max:refactor remplace moment par date-fns` |
+| `/max:release` | Prépare une release : version, changelog, tag, GitHub Release | `/max:release` |
+| `/max:hotfix` | Correctif urgent sur la version en production, avec backport | `/max:hotfix le paiement est cassé en prod` |
+| `/max:ci` | Écrit ou débogue un workflow GitHub Actions | `/max:ci le job test échoue` |
+| `/max:rebase` | Rebase ou fusion en sécurité, conflits compris | `/max:rebase ma branche sur main` |
+| `/max:perf` | Optimise en mesurant, avant/après chiffrés | `/max:perf la page liste est lente` |
+| `/max:a11y` | Audit et correctifs d'accessibilité (RGAA / WCAG) | `/max:a11y le formulaire d'inscription` |
+| `/max:migrate-db` | Migration de base sûre (réversible, sans verrou long) | `/max:migrate-db renomme la colonne email` |
+| `/max:explain` | Explique un dépôt ou un flux, en lecture seule | `/max:explain comment fonctionne la commande` |
+| `/max:issue` | Rédige ou découpe une issue GitHub avec critères d'acceptation | `/max:issue ajoute l'export CSV des commandes` |
 | `/max:debug` | Diagnostique un bug par sa cause racine, test de non-régression d'abord | `/max:debug le paiement échoue pour les montants à 0` |
 | `/max:agent-workflow` | Conçoit un workflow agentique : découpage, skill/agent/hook/MCP, boucle de vérification, garde-fous | `/max:agent-workflow découpe la migration en lots` |
 

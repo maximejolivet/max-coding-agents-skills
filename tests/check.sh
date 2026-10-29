@@ -36,7 +36,7 @@ done
 
 section "Références max:<nom>"
 known=$( { ls skills; for f in agents/*.md; do basename "$f" .md; done; } | sort -u)
-refs=$(grep -rhoE 'max:[a-z][a-z-]*' skills agents stacks README.md CLAUDE.md .claude-plugin 2>/dev/null | sort -u | sed 's/^max://')
+refs=$(grep -rhoE 'max:[a-z][a-z0-9-]*' skills agents stacks README.md CLAUDE.md .claude-plugin 2>/dev/null | sort -u | sed 's/^max://')
 for r in $refs; do
   case "$r" in review|pr-review|security|test|docker|kubernetes|commit|pull-request|symfony|nuxt|react) ;; esac
   echo "$known" | grep -qx "$r" && ok "max:$r" || ko "max:$r est référencé mais n'existe ni comme skill ni comme agent"
