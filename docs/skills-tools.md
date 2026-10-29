@@ -5,7 +5,7 @@ Un skill (`skills/<nom>/SKILL.md`) ne déclare pas de champ `tools` : il utilise
 | Skill | Rôle | Commandes | Sous-agents | `stacks/` |
 | :--- | :--- | :--- | :--- | :---: |
 | `/max:commit` | Rédige un message de commit sémantique. | `git` | – | – |
-| `/max:switch` | Change de branche sans perdre de travail, nettoie les branches mergées. | `git` | – | – |
+| `/max:switch` | Change de branche sans perdre de travail, nettoie ou supprime les branches mergées (`delete`, `clean`). | `git`, `gh` | – | – |
 | `/max:versioning` | Incrémente et aligne la version du plugin. | `git`, `sh tests/check.sh` | – | – |
 | `/max:pull-request` | Branche, commit ciblé, push, PR en Draft. | `git`, `gh` | – | – |
 | `/max:pr-review` | Relit la PR de quelqu'un d'autre et prépare la review. | `gh`, `jq`, `make`, `docker compose` | – | oui |
