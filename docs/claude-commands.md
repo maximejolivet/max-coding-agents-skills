@@ -102,6 +102,7 @@ Le passage en « Ready for review » et le merge restent à faire par l'utilisat
 | `/max:docker` | Dockerfile, Compose, Makefile, CI de build | `/max:docker` |
 | `/max:kubernetes` | Manifestes, Kustomize, Helm, déploiement Actions | `/max:kubernetes` |
 | `/max:refactor` | Refactoring ou migration à grande échelle, par lots, tests d'abord | `/max:refactor remplace moment par date-fns` |
+| `/max:debug` | Diagnostique un bug par sa cause racine, test de non-régression d'abord | `/max:debug le paiement échoue pour les montants à 0` |
 | `/max:agent-workflow` | Conçoit un workflow agentique : découpage, skill/agent/hook/MCP, boucle de vérification, garde-fous | `/max:agent-workflow découpe la migration en lots` |
 
 ### Développement par stack

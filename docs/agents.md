@@ -11,7 +11,7 @@ Les agents (`agents/<nom>.md`) sont des relecteurs et auditeurs **en lecture seu
 | `dependencies-auditor`  | `/max:security`                    | Lockfiles, avis de sécurité, alertes Dependabot.                      |
 | `docker-auditor`        | `/max:security`                    | Images de base, privilèges, secrets, ports.                           |
 | `actions-auditor`       | `/max:security`                    | Workflows GitHub Actions (actions non épinglées, permissions, injection). |
-| `codebase-surveyor`     | `/max:symfony`, `/max:nuxt`, `/max:react` | Explore un gros projet avant un changement.                    |
+| `codebase-surveyor`     | `/max:symfony`, `/max:nuxt`, `/max:react`, `/max:refactor`, `/max:debug` | Explore un gros projet avant un changement.                    |
 | `agile-planner`         | Sur demande                        | Choisit Scrum ou Kanban d'après les stories, remplit la page Notion (écrit dans Notion uniquement). |
 | `docs-updater`          | Sur demande                        | Détecte les écarts entre les `.md` et le code, rend les corrections à appliquer. |
 
