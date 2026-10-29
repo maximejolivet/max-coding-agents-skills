@@ -17,6 +17,8 @@ Un skill (`skills/<nom>/SKILL.md`) ne déclare pas de champ `tools` : il utilise
 | `/max:symfony` | Développement Symfony, puis renvoi vers `/max:review`. | `composer`, `make`, `docker compose` | `codebase-surveyor` | oui |
 | `/max:nuxt` | Développement Nuxt, puis renvoi vers `/max:review`. | `npm`/`yarn`/`pnpm` | `codebase-surveyor` | oui |
 | `/max:react` | Développement React, puis renvoi vers `/max:review`. | selon le projet | `codebase-surveyor` | oui |
+| `/max:refactor` | Refactoring et migration par lots, vérifiés et annulables. | linter, types, build, tests via le runner du projet | `codebase-surveyor` (cartographie, lecture seule) | oui |
+| `/max:agent-workflow` | Conçoit un workflow agentique (découpage, mécanisme, boucle de vérification, garde-fous, contexte). | – | – | – |
 
 ## À retenir
 
