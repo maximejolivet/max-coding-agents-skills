@@ -1,47 +1,43 @@
 ---
 name: rebase
-description: Rebase ou fusionne une branche sur main en sécurité - sauvegarde de la branche d'abord, résolution des conflits fichier par fichier en comprenant les deux côtés, vérification après chaque étape, push avec force-with-lease seulement sur accord. À utiliser quand l'utilisateur veut mettre sa branche à jour, rebaser, résoudre des conflits, squasher ou réordonner des commits, ou invoque /max:rebase.
+description: "Met une branche à jour par rebase ou fusion sans perdre de travail - branche de sauvegarde, conflits résolus fichier par fichier en lisant les deux côtés, vérification, puis push en force-with-lease sur accord. À utiliser quand Maxime veut mettre sa branche à jour, rebaser, résoudre des conflits, squasher ou réordonner des commits, ou invoque /max:rebase."
 ---
 
-# Rebase et conflits sans risque
+# Rebase et conflits
 
-Remettre une branche à niveau **sans rien perdre**. Réécrire l'historique est délicat : on sauvegarde d'abord, on vérifie ensuite, on ne pousse qu'avec accord.
+## Préalables
 
-## Préparation
+1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session. Elle donne la branche par défaut (`<défaut>`).
+2. Lancer `git status -sb` : l'arbre doit être propre. Sinon `/max:commit`, ou un stash par `/max:switch`.
+3. Lancer `git log origin/<branche>..` et `gh pr view` : savoir si quelqu'un d'autre travaille sur la branche.
 
-1. `git status -sb` : l'arbre doit être propre. Sinon, committer (`/max:commit`) ou mettre de côté (`/max:switch`).
-2. S'assurer que la branche n'est **pas partagée** : `git log origin/<branche>..` et la PR (`gh pr view`). Rebaser une branche sur laquelle d'autres travaillent suppose leur accord.
-3. **Sauvegarde** : `git branch backup/<branche>-<date>` avant toute réécriture. Ne la supprimer qu'une fois tout vérifié et poussé.
-4. `git fetch origin`, puis choisir la méthode :
-   - **rebase** (`git rebase origin/main`) : historique linéaire, à privilégier pour une branche de PR personnelle ;
-   - **merge** (`git merge origin/main`) : quand la branche est partagée ou que l'historique des commits compte.
+## Étapes
 
-## Résoudre les conflits
+1. Sauvegarder : `git branch backup/<branche>-<date>`.
+2. `git fetch origin`, puis choisir :
 
-1. `git status` liste les fichiers en conflit ; les traiter un par un.
-2. Pour chacun, **comprendre les deux côtés** : `git log -p origin/main -- <fichier>` montre ce qui a bougé sur `main`, à comparer à ses propres commits. Jamais de `--ours` / `--theirs` en bloc sans avoir lu.
-3. Fichiers générés et lockfiles : ne pas les fusionner à la main ; les régénérer avec l'outil du projet une fois les sources résolues.
-4. Une fois résolu : supprimer tous les marqueurs (`grep -rn '<<<<<<<\|>>>>>>>'`), `git add <fichier>`, `git rebase --continue`.
-5. Passer linter, types et tests **à la fin**, et après chaque étape si le rebase est long.
-6. En cas de blocage : `git rebase --abort` restaure l'état initial sans dommage.
+   | Méthode | Commande | Quand |
+   | :-- | :-- | :-- |
+   | Rebase | `git rebase origin/<défaut>` | Branche de PR personnelle |
+   | Fusion | `git merge origin/<défaut>` | Branche partagée, ou historique à préserver |
 
-## Squasher ou réordonner
+3. Résoudre un conflit à la fois. Lire les deux côtés : `git log -p origin/<défaut> -- <fichier>`, puis ses propres commits.
+4. Régénérer les lockfiles et les fichiers générés avec l'outil du projet, une fois les sources résolues.
+5. Vérifier qu'il ne reste aucun marqueur (`grep -rn '<<<<<<<\|>>>>>>>'`), puis `git add <fichier>` et `git rebase --continue`.
+6. Lancer linter, types et tests. Montrer `git log --oneline origin/<défaut>..`.
+7. Proposer `git push --force-with-lease origin <branche>` et attendre l'accord. Supprimer la sauvegarde une fois tout poussé et vérifié.
 
-`git rebase -i` n'est pas utilisable ici (mode interactif). Employer `git reset --soft <base>` puis un nouveau commit (`/max:commit`), ou `git rebase --onto` pour déplacer une série. Annoncer le plan avant de réécrire.
+Squasher ou réordonner : `git rebase -i` n'est pas disponible. Utiliser `git reset --soft <base>` puis un nouveau commit (`/max:commit`), ou `git rebase --onto`. Annoncer le plan avant de réécrire.
 
-## Publier
+## Points d'arrêt
 
-La branche a été réécrite : un push simple sera rejeté. Proposer `git push --force-with-lease origin <branche>` et **attendre l'accord**. Jamais de `--force` nu, jamais sur `main`.
+- La branche est partagée : un rebase demande l'accord des autres.
+- L'intention d'un des deux côtés d'un conflit n'est pas claire : poser la question.
+- Blocage : `git rebase --abort` rend l'état initial.
+- Les tests échouent après le rebase : ne pas pousser.
 
-## Forme de la réponse
+## Ce qu'il ne fait pas
 
-1. Méthode retenue et branche de sauvegarde créée.
-2. Conflits : fichiers, résolution choisie et raison.
-3. Vérification réelle (linter, tests) et résultat de `git log --oneline origin/main..`.
-4. Reste à faire : push (force-with-lease) en attente d'accord, suppression de la sauvegarde.
-
-## Limites
-
-- Jamais de `git push --force`, `git reset --hard`, `git clean` ni de suppression de branche (`-D`, distante) sans accord explicite.
-- Ne pas rebaser `main` ni une branche protégée.
-- Un conflit dont l'intention échappe ne se tranche pas : poser la question.
+- `--ours` ou `--theirs` en bloc sans avoir lu.
+- `git push --force`, `git reset --hard`, `git clean`, `git branch -D`.
+- Rebaser `<défaut>` ou une branche protégée.

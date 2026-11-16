@@ -1,69 +1,69 @@
-# Stack : Next.js - spécificités
+# Next.js
 
-Point d'entrée des particularités de Next.js (Forme 1 : un fichier unique découpé en sections). Le skill appelant lit `## core` puis la section correspondant à sa nature. Next.js repose sur React : lire aussi `stacks/react/INDEX.md` (le parent). Si une section grossit trop, la promouvoir en fichier voisin (Forme 2).
+```bash
+grep -E '"(next|react|typescript)"' package.json
+ls next.config.* app pages middleware.* proxy.* 2>/dev/null
+```
 
-Nature → sections :
-
-| Appelant                           | Sections        |
-| ---------------------------------- | --------------- |
-| `/max:review`, `/max:pr-review`    | core + review   |
-| `/max:security`                    | core + security |
-| `/max:test`                        | core + test     |
-| `/max:docker`, `/max:kubernetes`   | core + deploy   |
-| `/max:debug`, `/max:refactor`, `/max:perf`, `/max:migrate-db`, `/max:a11y` | core + dev |
+Lire `## core`, puis la section de la nature (tableau : `stacks/DETECT.md`), puis `stacks/react/INDEX.md` (parent).
 
 ---
 
 ## core
 
-- **Détection** : dépendance `next` dans `package.json`, `next.config.*`. Routeur : `app/` (App Router) ou `pages/` (Pages Router) ; ne pas mélanger les conventions, suivre celui du projet. Vérifier la version dans le lockfile et lire le guide de migration de la version visée avant d'affirmer qu'une API existe.
-- **Composants serveur par défaut** (App Router) : un composant reste un Server Component tant qu'il ne porte pas `'use client'`. Placer `'use client'` le plus bas possible dans l'arbre (état, effets, API du navigateur, gestionnaires d'événements).
-- **Fichiers spéciaux** : `layout`, `page`, `loading`, `error`, `not-found`, `route` (handlers), `middleware` ou `proxy` selon la version.
-- **Données et cache** : le comportement du cache varie selon la version (`fetch`, `revalidate`, `use cache`) ; lire la documentation de la version du projet sans rien supposer.
-- **Commandes** : scripts de `package.json` (`dev`, `build`, `start`, `lint`), avec le gestionnaire du lockfile.
+- Signaux : dépendance `next`, `next.config.*`.
+- Routeur : `app/` (App Router) ou `pages/` (Pages Router). Suivre celui du projet, sans mélanger.
+- App Router : un composant est serveur tant qu'il n'a pas `'use client'`. Le placer le plus bas possible dans l'arbre.
+- Le cache (`fetch`, `revalidate`, `use cache`) et le fichier `middleware` ou `proxy` changent selon la version : lire la documentation de la version du lockfile, ne rien supposer.
+- Commandes : scripts de `package.json`, avec le gestionnaire du lockfile.
 
 ---
 
 ## dev
 
-- **Chargement de données** dans les Server Components (`async`), en parallèle quand les requêtes sont indépendantes (`Promise.all`) ; `Suspense` et `loading.tsx` pour le streaming.
-- **Mutations** : Server Actions (`'use server'`) ou route handlers ; toujours **valider et autoriser côté serveur** (une Server Action est un point d'entrée public).
-- **Frontière client/serveur** : ne transmettre aux composants client que des données sérialisables ; jamais de code serveur ni de secret importé dans un composant client.
-- **Images, polices, métadonnées** : `next/image` (dimensions), `next/font`, `generateMetadata` ; liens via `next/link`.
-- **Variables d'environnement** : seules celles préfixées `NEXT_PUBLIC_` partent au navigateur.
-- **Qualité** : `next lint` / ESLint, `tsc --noEmit` et `next build` doivent passer.
+- Données dans les Server Components `async`, en `Promise.all` quand les requêtes sont indépendantes ; `Suspense` et `loading.tsx` pour le streaming.
+- Une Server Action (`'use server'`) est un point d'entrée public : valider et autoriser côté serveur.
+- Seules des données sérialisables passent à un composant client. Aucun code serveur ni secret importé côté client.
+- Seules les variables `NEXT_PUBLIC_` partent au navigateur.
+- `next/image` avec dimensions, `next/font`, `generateMetadata`, `next/link`.
+
+Vérifier : `next lint` ou ESLint, `tsc --noEmit`, `next build`.
 
 ---
 
 ## review
 
-- **`'use client'` placé trop haut** : page entière en client pour un seul bouton, bundle gonflé.
-- **Secrets** : variable sans `NEXT_PUBLIC_` lue côté client (échec) ou, pire, secret préfixé `NEXT_PUBLIC_`.
-- **Server Actions** sans validation ni contrôle d'accès, données de formulaire utilisées brutes.
-- **Données** : cascade de requêtes séquentielles, `fetch` dans un composant client alors que le serveur suffit, cache implicite non voulu.
-- **Hydratation** : rendu dépendant de `window`, de la date ou de `Math.random` ; `useEffect` pour une donnée disponible côté serveur.
-- **Images et SEO** : `<img>` brut sans dimensions, métadonnées absentes, pas de page `not-found` ni `error`.
+- `'use client'` trop haut : une page entière en client pour un bouton.
+- Secret préfixé `NEXT_PUBLIC_`, ou variable non préfixée lue côté client.
+- Server Action sans validation ni contrôle d'accès.
+- Requêtes séquentielles, `fetch` côté client alors que le serveur suffit, cache implicite non voulu.
+- Rendu qui dépend de `window`, de la date ou de `Math.random` ; `useEffect` pour une donnée disponible côté serveur.
+
+Aussi : `<img>` sans dimensions, métadonnées absentes, pas de `not-found` ni de `error`.
 
 ---
 
 ## security
 
-- **Mises à jour** : `npm audit` ou l'équivalent du gestionnaire ; suivre les avis de sécurité officiels de Next.js et les alertes Dependabot, en particulier sur le `middleware` et les Server Actions.
-- **Autorisation** : ne pas compter sur le seul `middleware` pour protéger une donnée ; revérifier la session dans la route, l'action ou le composant serveur.
-- **En-têtes** : CSP, `X-Frame-Options`, `Referrer-Policy` via `next.config` ou le middleware ; cookies `HttpOnly`, `Secure`, `SameSite`.
-- **Entrées** : valider (Zod) paramètres de route, de requête et corps ; pas de `dangerouslySetInnerHTML` avec un contenu non assaini ; attention à la SSRF sur les URL passées à `fetch` côté serveur.
+- Audit du lockfile ; avis officiels de Next.js, surtout sur le `middleware` et les Server Actions.
+- Le `middleware` seul ne protège pas une donnée : revérifier la session dans la route, l'action ou le composant serveur.
+- Entrées validées (Zod) : paramètres de route, de requête, corps.
+- URL fournie à un `fetch` serveur : valider l'hôte (SSRF).
+- En-têtes par `next.config` ou le middleware : CSP, `X-Frame-Options`, `Referrer-Policy` ; cookies `HttpOnly`, `Secure`, `SameSite`.
 
 ---
 
 ## test
 
-- **Outils** : Vitest ou Jest avec Testing Library pour les composants ; Playwright pour les parcours. Les Server Components asynchrones se testent mieux en bout en bout.
-- **Règles** : tester le comportement visible, simuler le réseau (MSW) plutôt que les modules internes ; `next build` sert aussi de contrôle des types et des routes.
+- Vitest ou Jest avec Testing Library ; Playwright pour les parcours.
+- Les Server Components asynchrones se testent en bout en bout.
+- Réseau simulé par MSW. `next build` vérifie aussi les types et les routes.
 
 ---
 
 ## deploy
 
-- **Sortie** : `output: 'standalone'` pour une image Docker minimale ; `next build`, puis `node server.js` (ou `next start`).
-- **Image** : multi-étapes, utilisateur non root, variables `NEXT_PUBLIC_*` fournies **au build**, autres secrets à l'exécution ; cache d'images (`.next/cache`) persistant si possible.
-- **Plateforme** : sur Vercel, les skills Vercel s'appliquent (`vercel:nextjs`, `vercel:deploy`).
+- `output: 'standalone'`, puis `node server.js`.
+- Les variables `NEXT_PUBLIC_*` sont fixées au build, les autres secrets à l'exécution.
+- `.next/cache` persistant si possible.
+- Sur Vercel : les skills `vercel:nextjs` et `vercel:deploy` s'appliquent.

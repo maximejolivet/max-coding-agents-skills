@@ -1,35 +1,48 @@
 # CLAUDE.md
 
-Ce dépôt est le plugin Claude Code `max` : ses skills s'appellent par `/max:<skill>` et il est distribué par un marketplace GitHub. Tout est rédigé en français, hors noms techniques. Le catalogue des skills se trouve dans `README.md`.
+```bash
+sh tests/check.sh                               # à lancer avant chaque commit
+claude --plugin-dir ~/Sites/claude-skills-max   # essayer les skills en place
+/reload-plugins                                 # après chaque modification
+```
 
-## Organisation du dépôt
+Ce dépôt est le plugin Claude Code `max` : l'environnement de développement de Maxime, développeur freelance qui travaille seul sur les dépôts GitHub de plusieurs clients. Aucun build. Version courante : `1.0.16`.
 
-- `.claude-plugin/marketplace.json` déclare le marketplace et le plugin `max` ; `.claude-plugin/plugin.json` est le manifeste (utilisé en développement local avec `--plugin-dir`).
-- `skills/<nom>/SKILL.md` : un dossier par skill, frontmatter `name` + `description` obligatoire, puis le corps.
-- `agents/<nom>.md` : sous-agents en lecture seule, appelés sous `max:<nom>`. Le skill les orchestre et les lance en parallèle ; aucun agent n'en lance d'autre.
-- `stacks/DETECT.md` et `stacks/detect.sh` : détection de stack partagée par tous les skills (`detect.sh` ne fait que lire).
-- `stacks/<techno>/` : connaissances propres à une techno, lues à la demande.
-  - Forme 1 : un `INDEX.md` découpé en sections.
-  - Forme 2 : `INDEX.md` (aiguillage) avec `CORE.md`, `DEV.md`, `REVIEW.md`, `SECURITY.md`, `TEST.md`, `DEPLOY.md`.
-- `tests/check.sh` vérifie la cohérence ; `tests/SCENARIOS.md` liste les scénarios à jouer à la main.
+## Structure
+
+| Chemin | Rôle |
+| :-- | :-- |
+| `skills/<nom>/SKILL.md` | Un skill par dossier, appelé `/max:<nom>`. Il porte le déroulé. |
+| `agents/<nom>.md` | Sous-agents en lecture seule, appelés `max:<nom>`. Ils portent les listes de contrôle. |
+| `stacks/DETECT.md`, `stacks/detect.sh`, `stacks/<techno>/INDEX.md` | Détection de la stack et savoir de chaque techno. |
+| `references/regles.md` | Règles communes, lues par chaque skill avant sa première étape. |
+| `tests/check.sh`, `tests/SCENARIOS.md` | Contrôle de cohérence et scénarios manuels. |
+
+Manifestes : `.claude-plugin/marketplace.json` et `.claude-plugin/plugin.json`. Garde-fou git : `hooks/hooks.json` et `scripts/guard-git.sh`.
 
 ## Règles de conception
 
-- Les skills transverses (`review`, `security`, `pr-review`, `test`, `docker`, `kubernetes`) n'écrivent aucune techno : ils détectent la stack, puis lisent `stacks/<techno>/INDEX.md` pour la nature voulue (`core` + `dev`, ou `review`, `security`, `test`, `deploy`).
-- Le `core` d'une techno est écrit une seule fois ; `review`, `security` et `pr-review` s'y réfèrent sans le recopier.
-- Pour une nouvelle techno : l'ajouter à `detect.sh` et créer `stacks/<techno>/INDEX.md`. Aucun skill n'est modifié.
-- Pour un nouveau skill : créer `skills/<nom>/SKILL.md`, ajouter une ligne au tableau du `README.md` et le citer dans la `description` de `marketplace.json`.
-- La `version` doit être la même dans `marketplace.json`, `plugin.json` et le badge du `README.md`. Chaque PR l'augmente de `0.0.1` (skill `versioning`), faute de quoi Claude Code ne propose pas la mise à jour. Version courante : `1.0.15`.
-- Cible : GitHub (`gh`, Actions). Branches `feat/<slug>` ou `fix/<slug>` créées depuis un `main` à jour, commits `type(scope): emoji description` (skill `commit`), PR en Draft vers `main`, nettoyage local une fois mergée.
+- Trois couches : le skill porte le déroulé, l'agent fait la lecture, la stack apporte le savoir de la techno. Une règle vit dans une seule couche ; les autres y renvoient.
+- Aucune techno en dur dans un skill transverse. Ajouter une techno : `stacks/detect.sh` et `stacks/<techno>/INDEX.md`, rien d'autre.
+- Les agents restent en lecture seule et n'en lancent aucun autre.
+- Prudence par défaut : PR en Draft, revue postée sur accord, cluster en lecture seule, aucun contrôle déclaré passé sans avoir tourné.
+- Les conventions du dépôt client priment sur les défauts de Max. Aucun nom de client, secret ni donnée réelle dans le dépôt.
 
-## Travailler sur le dépôt
+## Écrire un fichier `.md`
 
-Aucun build.
+- Français, phrases courtes, impératif. Noms techniques tels quels.
+- Un skill suit le plan de `docs/skill-anatomy.md` : préalables, étapes, points d'arrêt, ce qu'il ne fait pas. Sa première ligne utile est une action.
+- Tout déroulé est numéroté. Cinq éléments au plus par liste ou par groupe, sauf inventaire qui doit rester complet.
+- Ni phrase d'annonce, ni résumé final. Un skill ne décrit que ce que Claude ne ferait pas correctement seul.
+- Les consignes de réponse à Maxime s'écrivent dans `references/regles.md`, jamais dans un skill.
 
-```bash
-claude --plugin-dir ~/Sites/claude-skills-max   # charge les skills depuis le dépôt
-/reload-plugins                                 # prend en compte les modifications
-```
+## Contraintes de `tests/check.sh`
 
-- `sh tests/check.sh` contrôle le frontmatter des skills et agents, les références `max:<nom>` et `stacks/<id>/INDEX.md`, l'égalité des versions et la détection de stack sur des projets factices. Il tourne aussi en CI (`.github/workflows/check.yml`) ; à exécuter avant chaque commit.
-- Après un changement de comportement notable d'un skill ou d'un agent, rejouer les scénarios concernés de `tests/SCENARIOS.md` dans une vraie session.
+- Skill : `name` égal au nom du dossier, `description` non vide, cité `/max:<nom>` dans le README et dans `marketplace.json`.
+- Agent : `name`, `description` et `tools` présents, aucun outil d'écriture.
+- Tout `max:<nom>` et tout `stacks/<id>/INDEX.md` cités existent.
+- Même version dans `plugin.json` et `marketplace.json`. Chaque PR ajoute `0.0.1` (`/max:versioning`), y compris dans le badge du README et ici.
+
+## Flux
+
+Branche `feat/<slug>` ou `fix/<slug>` depuis `main` à jour, commits `type(scope): emoji description` en anglais (`/max:commit`), PR en Draft vers `main`. Un changement de comportement d'un skill ou d'un agent se rejoue dans `tests/SCENARIOS.md`.

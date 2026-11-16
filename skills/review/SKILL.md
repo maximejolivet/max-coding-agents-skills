@@ -1,124 +1,96 @@
 ---
 name: review
-description: Relit un changement de code avant le merge - bugs de correction, sécurité, performance, standards de code, couverture de tests - et rend un verdict structuré, classé par gravité, avec des actions concrètes. Indépendant de la stack - s'adapte au projet (ex. Symfony) en chargeant sa ressource dans stacks/ ; workflow orienté GitHub. À utiliser quand l'utilisateur demande de relire un diff, une branche, un correctif ou un changement avant de préparer une pull request, ou invoque /max:review.
+description: "Relit un changement de code avant le merge - correction, sécurité, performance, standards, tests - et rend un verdict classé par gravité avec le correctif exact de chaque constat. Dernière vérification avant livraison au client. À utiliser quand Maxime demande de relire un diff, une branche, un correctif ou une PR avant de l'ouvrir, ou invoque /max:review."
+argument-hint: "[numéro ou URL de PR | branche | fichier]"
 ---
 
 # Revue de code
 
-Relire un changement précis et rendre un verdict que l'auteur peut appliquer tel quel. Viser la qualité et la correction, pas les remarques de style gratuites. Rester direct : ce qui ne va pas, pourquoi, et le correctif exact.
+## Préalables
 
-## Délimiter ce qu'on relit
+1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session. Elle donne la branche par défaut (`<défaut>`).
+2. Fixer le périmètre, dans cet ordre :
 
-Déterminer le périmètre dans cet ordre :
+   | Donné par Maxime | Commande |
+   | :-- | :-- |
+   | Une PR (URL ou numéro) | `gh pr view <n> -R <owner>/<repo>`, `gh pr diff <n> -R …`, `gh pr checks <n> -R …` |
+   | Un diff, un fichier, une branche | celui-là |
+   | Rien, sur une branche | `git diff <défaut>...HEAD` |
+   | Rien, sur `<défaut>` | `git diff`, `git diff --cached` |
 
-1. **Une PR GitHub (URL ou numéro)** donnée par l'utilisateur. La récupérer avec `gh`, sans copier-coller :
-   ```bash
-   gh pr view <numéro> -R <owner>/<repo>    # titre, description, branches, issue liée
-   gh pr diff <numéro> -R <owner>/<repo>    # le diff à relire
-   gh pr checks <numéro> -R <owner>/<repo>  # GitHub Actions / checks de statut
-   ```
-   Le `-R` vient de l'URL (`https://github.com/<owner>/<repo>/pull/<numéro>`) ; sur GitHub Enterprise, définir `GH_HOST=<hôte>`.
-2. Un diff, un fichier ou une branche que l'utilisateur désigne.
-3. À défaut, la branche courante comparée à sa base (`git diff <base>...HEAD`, base généralement `main`).
-4. À défaut, le diff de l'arbre de travail (`git diff` / `git diff --cached`).
+3. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **review**.
+4. Mesurer : `git diff --shortstat <défaut>...HEAD`, ou la liste des fichiers de la PR.
 
-Lire les lignes modifiées **et** assez de code autour pour les juger (la fonction, ses appelants, le formulaire, la route ou le service concerné). Jamais un hunk isolé quand le bug peut se cacher dans son contexte.
+## Étapes
 
-## Détecter la stack
+1. Choisir le mode et l'annoncer en une ligne. Un mode demandé par Maxime (« passe rapide », « revue approfondie ») prime.
 
-Ce skill est indépendant de la stack ; la checklist propre à la techno vient d'une ressource chargée à la demande. Appliquer `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md` : lancer `stacks/detect.sh`, annoncer la stack, puis lire `stacks/<stack>/INDEX.md` pour la nature **review** (qui inclut `core` + `review`). Si le changement touche plusieurs technos (backend et front), charger chacune et n'appliquer à chaque fichier que les règles de la sienne.
+   | Changement | Mode |
+   | :-- | :-- |
+   | Jusqu'à 150 lignes environ, sur 3 fichiers au plus | Passe unique |
+   | Au-delà, ou plusieurs préoccupations mêlées (données, accès, interface) | Délégation |
 
-**Repli** : si la stack n'a pas de ressource (ligne `resource` à `aucune`) ou si son `INDEX.md` n'expose pas de section `review` / `core`, appliquer les dimensions génériques ci-dessous avec les indices de `DETECT.md` et **le dire** dans le verdict (« pas de resource review pour la stack `<x>` - dimensions génériques uniquement »). Ne jamais `Read` une ressource inexistante, ne jamais échouer en silence.
+2. **Passe unique.** Lire la section `## Contrôles` de chaque agent concerné dans `${CLAUDE_SKILL_DIR}/../../agents/`, puis l'appliquer au diff et à son contexte : fonction, appelants, route, formulaire.
+3. **Délégation.** Lancer les agents retenus dans le même tour, avec l'outil Agent et le brief de l'annexe.
 
-## Choisir le mode
+   | Agent (`subagent_type`) | Lancer quand |
+   | :-- | :-- |
+   | `max:correctness-reviewer` | toujours |
+   | `max:security-reviewer` | toujours |
+   | `max:standards-reviewer` | toujours |
+   | `max:frontend-reviewer` | la stack a un framework front et le diff touche des fichiers front (`.vue`, `.tsx`, `.jsx`, styles) |
 
-Mesurer d'abord le changement (`git diff --shortstat <base>...HEAD`, ou la liste des fichiers de la PR) :
+4. Lancer ce qui peut l'être par le runner : `make lint`, sinon `docker compose exec <svc> <linter> <chemin>`. Si la PR a des résultats GitHub Actions, les lire au lieu de les rejouer.
+5. Fusionner : dédoublonner à la gravité la plus haute, revérifier dans le code chaque Bloquant et chaque Majeur, écarter ce qui ne se reproduit pas à la lecture.
+6. Rendre le verdict au format de l'annexe.
 
-- **Petit changement** : jusqu'à ~150 lignes modifiées sur 3 fichiers au plus. Le relire soi-même en **une seule passe** avec les dimensions ci-dessous.
-- **Gros changement** : au-delà, ou dès que plusieurs préoccupations se mêlent (modèle de données + accès + interface). **Déléguer** aux agents de relecture ci-dessous, puis fusionner. Indiquer le mode choisi en une ligne.
+## Points d'arrêt
 
-Chaque agent coûte des jetons et du temps : ne lancer que ceux dont le périmètre est réellement touché (colonne « Lancer quand »), jamais les quatre par réflexe.
+- Aucune ressource pour la stack : le dire dans le verdict (« pas de resource review pour la stack `<x>` - dimensions génériques uniquement »).
+- Un agent échoue ou ne répond pas : le dire et couvrir sa dimension en une passe.
+- Un contrôle prévu n'a pas tourné : pas de verdict « livrable » sans nommer ce qui reste non vérifié.
+- Un secret ou une donnée client dans le diff : constat Bloquant, valeur jamais recopiée.
 
-L'utilisateur peut imposer un mode (« passe rapide », « review approfondie ») ; cela prime sur la règle de taille.
+## Ce qu'il ne fait pas
 
-## Déléguer aux agents de relecture
+- Modifier le code : il donne le correctif, Maxime décide.
+- Réécrire l'architecture à partir d'un diff.
+- Signaler ce que le changement n'a pas introduit : une ligne en hors-scope.
+- Ouvrir la PR : quand le verdict est livrable, renvoyer vers `/max:pull-request`.
+- Auditer les dépendances ou l'infrastructure : `/max:security`.
 
-Lancer les agents retenus **dans le même tour** pour qu'ils tournent en parallèle, chacun via l'outil Agent :
+## Annexe
 
-| Agent (`subagent_type`) | Couvre | Lancer quand |
-| --- | --- | --- |
-| `max:correctness-reviewer` | Correction, cause racine, régressions | toujours en mode délégué |
-| `max:security-reviewer` | Sécurité applicative du code modifié | toujours en mode délégué |
-| `max:standards-reviewer` | Standards (linters), performance, tests, checks CI | toujours en mode délégué |
-| `max:frontend-reviewer` | Hydratation, état et effets, composants, accessibilité, paquet | la détection remonte un framework front (nuxt, vue, react, nextjs, angular, svelte) **et** le diff touche des fichiers front (`.vue`, `.tsx`, `.jsx`, composants, styles) |
+### Brief des agents
 
-Donner à chaque agent le même brief, court et précis (liste des fichiers modifiés plutôt que « tout le dépôt »), car aucun ne voit cette conversation :
+Aucun agent ne voit la conversation. Donner à chacun :
 
-1. Le diff, ou la commande exacte qui l'affiche (`git diff <base>...HEAD`, `gh pr diff <numéro> -R <owner>/<repo>`), et l'intention de la PR ou de l'issue en quelques lignes.
-2. Le chemin absolu de la ressource `stacks/<stack>/INDEX.md` chargée (ou « pas de ressource de stack »).
-3. Le runner du projet (`make` / `docker compose`) quand il est connu.
-4. Qu'il est en **lecture seule** : aucune modification, aucun commit, aucun push.
+1. Le diff, ou la commande exacte qui l'affiche, et l'intention en quelques lignes.
+2. Le chemin absolu de la ressource de stack, ou « pas de ressource de stack ».
+3. Le runner du projet, s'il est connu.
+4. Le rappel : lecture seule.
 
-Ensuite, **fusionner** soi-même leurs réponses : les agents rapportent, c'est toi qui tranches.
+### Gravité et verdict
 
-- Dédoublonner : un même défaut vu par deux agents devient un seul constat, à la gravité la plus haute attribuée.
-- Revérifier dans le code chaque constat Bloquant et Majeur avant de le garder. Écarter ce qui ne se reproduit pas à la lecture, et le mentionner si cela compte.
-- Appliquer les règles de **Gravité** et de **Maîtrise du bruit** ci-dessous, ainsi que le **Format de sortie**. Le verdict se calcule sur la liste fusionnée, pas agent par agent.
-- Rassembler les lignes `Vérifié` / `Non vérifié` / `Checks` de chaque agent dans un seul résumé de vérification. Un check n'est « passé » que si un agent l'a réellement exécuté.
-- Si un agent échoue ou ne renvoie rien, le dire et couvrir soi-même sa dimension en une passe, au lieu de la déclarer saine.
+| Niveau | Sens |
+| :-- | :-- |
+| Bloquant | À corriger avant le merge : perte de données, faille, fonctionnalité cassée |
+| Majeur | À corriger : bug de correction ou de performance, contrôle d'accès absent |
+| Mineur | Utile : cas limite, cache faible, hypothèse fragile |
+| Détail | Facultatif : style, nommage |
 
-## Dimensions de revue
+Verdict : un Bloquant ou un Majeur donne **modifications nécessaires** ; seulement Mineur ou Détail, **livrable avec détails** ; rien, **livrable**. Il se calcule sur la liste fusionnée.
 
-Ce sont celles d'une **passe unique**, et la référence que les agents se partagent. Évaluer chacune et ne rapporter que ce qui s'applique :
+Maîtrise du bruit :
 
-- **Correction** : le changement fait-il ce que dit l'issue ou l'intention ? Suivre le flux de contrôle réel. Pour une régression, confirmer que la cause racine est traitée et pas seulement un symptôme. Quand c'est possible, **vérifier empiriquement** (construire le formulaire, appeler le service, exécuter le chemin) plutôt qu'affirmer.
-- **Sécurité** : validation des entrées, contrôles d'accès, SQL/XSS/CSRF, secrets, frontières de privilèges. Signaler tout ce qui élargit la surface d'attaque.
-- **Performance et cache** : appliquer la checklist de la stack chargée (ex. la couche HTTP/cache du framework, requêtes N+1). En général : travail inutile sur les chemins chauds, cache absent, motifs N+1.
-- **Standards** : respecter l'**idiome local** du fichier (ne pas imposer l'injection de dépendances à un module entièrement procédural, par exemple) et le standard de code de la stack. Lancer les linters (voir plus bas) plutôt que d'estimer à l'œil.
-- **Tests** : la logique nouvelle est-elle couverte ? Si le projet n'a aucune infrastructure de tests, le dire et la recommander (ne pas fabriquer un test isolé inutilisable) ; documenter plutôt des étapes de recette manuelle.
+- Aucun constat sans conséquence nommée.
+- Bloc `Pourquoi` / `Action` pour Bloquant et Majeur seulement.
+- Un Mineur tient en une ligne.
+- Les Détails se replient sur une ligne finale, dépliée seulement sur demande.
 
-## Exécuter ce qui peut l'être
+### Format de sortie
 
-Préférer les signaux réels à l'opinion. Préfixer linters et sondes rapides par le runner du projet (`make`, puis `docker compose`). La commande exacte du linter vient de la stack chargée (ex. `php -l`, `phpcs`, `phpstan`, `eslint`), lancée via ce runner :
-
-```bash
-make lint                                   # si le projet l'expose
-docker compose exec <svc> <linter> <chemin> # sinon
-```
-
-Si la PR a déjà des résultats GitHub Actions, les lire (`gh pr checks`) plutôt que de relancer ce que la CI couvre, et traiter un check rouge comme un constat.
-
-Ne déclarer un check « passé » qu'après l'avoir réellement exécuté. Si un outil est absent, écrire « (indispo) », jamais qu'il est passé.
-
-## Gravité
-
-Étiqueter chaque constat d'un niveau ; le verdict en découle mécaniquement :
-
-- **Bloquant** : à corriger avant le merge (perte de données, faille de sécurité, fonctionnalité cassée).
-- **Majeur** : à corriger (bug de correction ou de performance, contrôle d'accès manquant).
-- **Mineur** : utile à corriger (cas limite, cache faible, hypothèse fragile).
-- **Détail** : facultatif (style, nommage).
-
-Verdict : au moins un Bloquant/Majeur → **modifications nécessaires** ; seulement Mineur/Détail → **livrable avec détails** ; rien → **livrable**.
-
-**Maîtrise du bruit** : rapporter le signal, pas chaque observation.
-
-- Les **Détails** sont _repliés par défaut_ : les regrouper sur une ligne finale (`Détails : <a> ; <b> ; <c>`), ou les omettre si le changement est propre. Ne les déplier que si l'utilisateur demande une passe complète.
-- Un **Mineur** tient en une ligne (symptôme + correctif en ligne) : pas de bloc `Pourquoi` / `Action`.
-- Réserver le bloc complet `Pourquoi` / `Action` aux seuls **Bloquant/Majeur**.
-- Ne pas meubler : aucun constat sans conséquence concrète. Si on ne peut pas nommer ce qui casse, c'est au mieux un Détail.
-
-## Format de sortie
-
-Ouvrir par le verdict en une ligne (livrable / livrable avec détails / modifications nécessaires). Rester concis : ne montrer que ce qui informe.
-
-**Tableau des dimensions** : ne lister que les dimensions ⚠️/❌ ; regrouper toutes les dimensions saines sur une seule ligne sous le tableau (`✅ Sécurité, Cache, Tests`). Si _tout_ passe, sauter le tableau et ne donner que le verdict.
-
-| Dimension                          | Verdict               |
-| ---------------------------------- | --------------------- |
-| <uniquement les dimensions ⚠️/❌> | ⚠️ / ❌ + une ligne |
-
-Puis les constats, du plus grave au plus léger. Bloc complet pour **Bloquant/Majeur** ; une ligne pour **Mineur** ; **Détails** repliés sur une dernière ligne (voir Maîtrise du bruit) :
+Verdict en première ligne. Tableau limité aux dimensions ⚠️ ou ❌ ; les dimensions saines sur une ligne (`✅ Sécurité, Tests`). Si tout passe : le verdict seul.
 
 ```
 - [Bloquant|Majeur] <symptôme> (<fichier>:<ligne>)
@@ -128,10 +100,4 @@ Puis les constats, du plus grave au plus léger. Bloc complet pour **Bloquant/Ma
 Détails : <a> ; <b> ; <c>
 ```
 
-Conclure seulement s'il y a quelque chose à ajouter : notes **Hors-scope** (problèmes latents pour une issue séparée) et **étapes de recette manuelle** quand c'est pertinent. Omettre une section vide plutôt que d'écrire « aucun ». Quand le verdict est livrable ou livrable avec détails, orienter l'auteur vers `/max:pull-request` pour ouvrir la PR.
-
-## Limites
-
-- Ne pas réécrire l'architecture à partir d'un diff : recommander, cadrer, laisser l'auteur décider.
-- Ne pas signaler un comportement antérieur que le changement n'a pas introduit : le noter comme hors-scope.
-- Ne pas approuver ce qui n'a pas pu être vérifié ; dire ce qui ne l'est pas.
+Puis, seulement s'il y a matière : `Vérifié` (ce qui a réellement tourné), `Non vérifié`, `Hors-scope`, étapes de recette manuelle.
