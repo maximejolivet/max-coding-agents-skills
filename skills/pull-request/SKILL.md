@@ -5,57 +5,57 @@ description: Prépare une pull request GitHub - une branche `feat/…` créée d
 
 # Préparer une pull request
 
-Transformer un changement terminé en pull request GitHub propre et relisible. Action visible de l'extérieur : créer la PR en **Draft** par défaut, et ne jamais la passer en « Ready for review » ni la merger sans accord explicite de l'utilisateur.
+Faire d'un changement terminé une pull request GitHub propre et facile à relire. L'action est visible de l'extérieur : la PR est créée en **Draft** par défaut, et ne passe jamais en « Ready for review » ni ne se merge sans accord explicite de l'utilisateur.
 
-## Cycle de vie d'une fonctionnalité
+## Place dans le cycle d'une fonctionnalité
 
-Une branche = une fonctionnalité ou un correctif, de la création au nettoyage :
+Une branche = une fonctionnalité ou un correctif, de sa création à son nettoyage :
 
-1. **Démarrer** depuis `main` à jour, sur une nouvelle branche.
+1. **Démarrer** depuis un `main` à jour, sur une nouvelle branche.
 2. **Développer** et committer.
-3. **Publier** : push de la branche, puis ouverture de la PR (ce skill).
-4. **Merger** (par l'utilisateur, sur GitHub).
-5. **Nettoyer** le local après le merge (voir la dernière section).
+3. **Publier** : pousser la branche puis ouvrir la PR (ce skill).
+4. **Merger**, à la main sur GitHub.
+5. **Nettoyer** le dépôt local après le merge (dernière section).
 
 Ce skill couvre surtout les étapes 1 à 3 et rappelle la 5.
 
-## Avant de commencer
+## Préparatifs
 
-1. **Partir de `main`** - Se mettre sur `main` et récupérer les dernières modifications avant de créer la branche, sauf si la branche existe déjà avec du travail :
+1. **Partir de `main`** : se placer sur `main` et récupérer les derniers changements avant de créer la branche, sauf si la branche existe déjà avec du travail :
    ```bash
    git checkout main
    git pull origin main
    git checkout -b feat/<slug>
    ```
-2. **Branche** - Toujours sur une branche dédiée, jamais sur `main`. Convention : `<type>/<slug-en-minuscules>`, où `<type>` est le type de commit (voir `max:commit`) : `feat/ma-nouvelle-feature`, `fix/erreur-de-login`. Un numéro d'issue peut précéder le slug (`feat/42-ma-nouvelle-feature`) ; il n'est pas obligatoire.
-3. **Branche de base** - `main`. Ne viser une autre base (ex. `develop`) que si le dépôt l'utilise réellement : le vérifier d'après les branches et les PR existantes.
-4. **Index propre** - N'ajouter à l'index que les fichiers de ce changement. Inspecter `git status` et exclure explicitement les modifications sans rapport de l'arbre de travail (les laisser hors de l'index - jamais de `git add .` ni de `git add -A` à l'aveugle).
-5. **Réutiliser la revue** - Si `/max:review` vient de tourner, reprendre son verdict, ses checks **Vérification ✅** et ses notes **Hors-scope** directement dans la description de la PR plutôt que de les redériver.
+2. **Branche** : toujours une branche dédiée, jamais `main`. Convention `<type>/<slug-en-minuscules>`, où `<type>` est le type de commit (voir `max:commit`) : `feat/ma-nouvelle-feature`, `fix/erreur-de-login`. Un numéro d'issue peut précéder le slug (`feat/42-ma-nouvelle-feature`), sans obligation.
+3. **Branche de base** : `main`. Ne viser une autre base (par exemple `develop`) que si le dépôt l'utilise vraiment, ce que montrent ses branches et PR existantes.
+4. **Index propre** : n'ajouter à l'index que les fichiers de ce changement. Examiner `git status` et laisser hors de l'index les modifications sans rapport (jamais de `git add .` ni de `git add -A` à l'aveugle).
+5. **Réutiliser la revue** : si `/max:review` vient de tourner, reprendre son verdict, ses contrôles **Vérification ✅** et ses notes **Hors-scope** dans la description de la PR plutôt que de les recalculer.
 
 ## Commit
 
-Un seul commit ciblé. Le message suit le skill **`max:commit`** - à charger pour écrire le message :
+Un seul commit ciblé, rédigé selon le skill **`max:commit`**, à charger pour écrire le message :
 
 ```
 type(scope): <emoji> <description en anglais, à l'impératif>
 
-<corps : ce qui n'allait pas, la cause racine, et ce que fait le correctif - ~72 colonnes>
+<corps : ce qui n'allait pas, la cause racine, ce que fait le correctif - ~72 colonnes>
 
 Closes #<issue>
 ```
 
-Rappel : `type` ∈ feat / fix / refactor / perf / docs / style / test / build / ci / chore / revert / security ; le `(scope)` est obligatoire ; la description est en anglais, sans majuscule ni point final. Le numéro d'issue va en trailer (`Closes #42` ou `Refs #42`), jamais dans le scope. Vérifier l'index avant de committer :
+Rappel : `type` ∈ feat / fix / refactor / perf / docs / style / test / build / ci / chore / revert / security ; le `(scope)` est obligatoire ; la description est en anglais, sans majuscule ni point final. Le numéro d'issue va en trailer (`Closes #42` ou `Refs #42`), jamais dans le scope. Contrôler l'index avant de committer :
 
 ```bash
-git diff --cached --name-only   # ne doit contenir que les fichiers voulus
+git diff --cached --name-only   # ne doit lister que les fichiers voulus
 ```
 
 ## Push et création de la PR
 
 ```bash
 git push -u origin <branche>
-gh auth status                              # confirme l'authentification (+ hôte pour GitHub Enterprise : GH_HOST=<hôte>)
-gh pr list --head <branche> --state open    # s'arrêter si une PR existe déjà - la mettre à jour, ne pas dupliquer
+gh auth status                              # vérifie l'authentification (et l'hôte pour GitHub Enterprise : GH_HOST=<hôte>)
+gh pr list --head <branche> --state open    # s'arrêter si une PR existe déjà : la mettre à jour, ne pas dupliquer
 
 DESC=$(cat <<'EOF'
 <le modèle de description ci-dessous, rempli>
@@ -70,11 +70,11 @@ gh pr create \
   --draft
 ```
 
-**Le titre et la description de la PR sont rédigés en français** (langue de l'équipe) - `--title` comme `$DESC`. Le titre reprend le préfixe `type(scope):` du commit avec une description en français ; seuls le code et les messages de commit restent en anglais. Construire `$DESC` avec le heredoc ci-dessus pour que le markdown multiligne survive au shell. `--draft` est le drapeau Draft canonique (ne pas le simuler avec un préfixe `Draft:` dans le titre). Si `gh pr list` montre une PR ouverte pour la branche, la mettre à jour (`gh pr edit`) au lieu d'en créer une seconde.
+**Titre et description de la PR sont rédigés en français** (langue de l'équipe), aussi bien `--title` que `$DESC`. Le titre reprend le préfixe `type(scope):` du commit suivi d'une description en français ; seuls le code et les messages de commit restent en anglais. Construire `$DESC` avec le heredoc ci-dessus pour que le markdown multiligne traverse le shell. `--draft` est le drapeau officiel (ne pas simuler un Draft avec un préfixe `Draft:` dans le titre). Si `gh pr list` révèle une PR ouverte pour cette branche, la mettre à jour (`gh pr edit`) au lieu d'en créer une seconde.
 
 ## Modèle de description
 
-Remplit `$DESC` ci-dessus. Il est le même que `.github/pull_request_template.md` du dépôt, qui sert aux PR ouvertes à la main : si le projet cible a son propre modèle, l'utiliser à la place. Lier l'issue avec un mot-clé de fermeture (`Closes #42`) pour que GitHub la ferme au merge, ou avec une simple référence (`Refs #42`) quand la PR ne traite le sujet qu'en partie. Structure :
+C'est le contenu de `$DESC`. Il est identique à `.github/pull_request_template.md` du dépôt, qui sert aux PR ouvertes à la main : si le projet visé a son propre modèle, l'utiliser à la place. Relier l'issue avec un mot-clé de fermeture (`Closes #42`) pour que GitHub la ferme au merge, ou par une simple référence (`Refs #42`) quand la PR ne traite le sujet qu'en partie. Structure :
 
 ```markdown
 ## Contexte
@@ -91,7 +91,7 @@ Closes #<issue> - <problème posé, en un paragraphe>
 
 ## Vérification
 
-- ✅ <check empirique qui a tourné>
+- ✅ <contrôle empirique exécuté>
 - ✅ linter / tests / CI (GitHub Actions) selon le cas
 
 ### UAT manuelle
@@ -103,28 +103,28 @@ Closes #<issue> - <problème posé, en un paragraphe>
 <code mort / problèmes latents pour une issue séparée>
 ```
 
-## Pour finir
+## Pour conclure
 
-Renvoyer l'URL de la PR. Dire clairement que c'est un **Draft** et que la recette (UAT), le passage en « Ready for review » et le merge reviennent à l'utilisateur. Si le dépôt a GitHub Actions, rapporter l'état des checks (`gh pr checks <numéro>`) et signaler s'ils sont encore en cours ou en échec. Indiquer ce qui a été committé et ce qui a été volontairement exclu, puis rappeler le nettoyage ci-dessous.
+Donner l'URL de la PR. Préciser que c'est un **Draft** et que la recette (UAT), le passage en « Ready for review » et le merge reviennent à l'utilisateur. Si le dépôt a GitHub Actions, rapporter l'état des checks (`gh pr checks <numéro>`) et signaler s'ils sont en cours ou en échec. Dire ce qui a été committé et ce qui a été volontairement écarté, puis rappeler le nettoyage ci-dessous.
 
-## Après le merge - nettoyage
+## Après le merge : nettoyer
 
-Une fois la PR fusionnée sur GitHub (et la branche supprimée, à la main ou par l'option « Automatically delete head branches » du dépôt), le dépôt local ne le sait pas encore. Le synchroniser :
+Une fois la PR fusionnée sur GitHub (et la branche supprimée, à la main ou par l'option « Automatically delete head branches »), le dépôt local l'ignore encore. Le resynchroniser :
 
 ```bash
 git checkout main
 git pull origin main        # récupère le merge
 git fetch -p                # retire les références aux branches supprimées sur GitHub
-git branch -d <branche>     # supprime la branche locale, devenue inutile
+git branch -d <branche>     # supprime la branche locale devenue inutile
 ```
 
 Version courte : `git checkout main && git pull && git fetch -p && git branch -d <branche>`.
 
-`git branch -d` refuse de supprimer une branche non fusionnée : c'est voulu. Ne jamais forcer avec `-D` sans l'accord de l'utilisateur, car le travail non fusionné serait perdu.
+`git branch -d` refuse de supprimer une branche non fusionnée, et c'est voulu. Ne jamais forcer avec `-D` sans l'accord de l'utilisateur : le travail non fusionné serait perdu.
 
-## Hors périmètre
+## Limites
 
-- Jamais de `git add .` ni de `git add -A` par-dessus des changements sans rapport ; ne committer que le changement en cours.
+- Jamais de `git add .` ni de `git add -A` par-dessus des changements étrangers ; ne committer que le changement en cours.
 - Jamais de passage en « Ready for review » (`gh pr ready`), d'approbation ni de merge sans instruction explicite.
 - Jamais de push direct sur `main`.
-- Jamais de `git branch -D`, `git push --force` ni de suppression de branche distante sans accord explicite.
+- Jamais de `git branch -D`, de `git push --force` ni de suppression de branche distante sans accord explicite.

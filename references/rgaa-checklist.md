@@ -1,31 +1,31 @@
-# RGAA 4.1.2 : checklist des 106 critères
+# RGAA 4.1.2 : liste des 106 critères
 
-Référentiel général d'amélioration de l'accessibilité (RGAA), version 4.1.2, publié par la direction interministérielle du numérique (DINUM). Ce fichier liste les **13 thématiques et leurs 106 critères** (intitulés tels que dans le référentiel). Il ne reprend ni les tests, ni les cas particuliers, ni le glossaire : pour les vérifier, se reporter au référentiel complet.
+Le RGAA (Référentiel général d'amélioration de l'accessibilité), publié par la DINUM, est décliné ici dans sa version 4.1.2 : **13 thématiques, 106 critères**. Les intitulés ci-dessous sont ceux du référentiel, volontairement non reformulés pour ne pas en altérer le sens. Les tests détaillés, les cas particuliers et le glossaire n'y figurent pas : pour valider un critère, consulter le référentiel complet.
 
 - Source : <https://accessibilite.numerique.gouv.fr/>
-- Chaque critère se formule en question : cocher si la réponse est « oui » (conforme) ; laisser vide si « non » ; noter « NA » si le contenu n'existe pas dans la page.
+- Chaque critère est une question. Répondre « oui » = conforme (cocher) ; « non » = non conforme (laisser vide) ; « NA » = le contenu concerné n'existe pas sur la page.
 
-## Score
+## Calculer un score
 
-Après avoir coché la checklist, calculer le **taux de conformité** :
+Une fois la liste remplie, le **taux de conformité** s'obtient ainsi :
 
 ```text
 taux = critères conformes / (critères conformes + critères non conformes) × 100
 ```
 
-Les critères « NA » (non applicables) sont exclus du calcul. Le taux se calcule sur l'ensemble des 106 critères, et par thématique pour voir où agir.
+Les « NA » sont écartés. Le calcul se fait sur les 106 critères pris ensemble, puis thématique par thématique pour voir où agir en priorité.
 
-| Taux de conformité | Niveau | Lecture |
-| :----------------- | :----- | :------ |
-| ≥ 90 %             | Bon              | Quelques écarts à corriger. |
-| ≥ 50 %             | À améliorer      | Des écarts significatifs, à planifier. |
-| < 50 %             | Insuffisant      | Plus de la moitié des critères applicables échouent. |
+| Taux | Niveau | Interprétation |
+| :--- | :----- | :------------- |
+| ≥ 90 % | Bon | Peu d'écarts, à corriger. |
+| ≥ 50 % | À améliorer | Écarts notables, à planifier. |
+| < 50 % | Insuffisant | Plus de la moitié des critères applicables échouent. |
 
-Ces seuils sont **indicatifs** (même principe que les seuils des Core Web Vitals), ils ne viennent pas du RGAA. Le statut officiel, à publier dans la déclaration d'accessibilité, est :
+Ces paliers sont des **repères maison**, comme ceux des Core Web Vitals : le RGAA n'en définit pas. Pour la déclaration d'accessibilité, seul le statut officiel compte :
 
 | Situation | Statut RGAA |
 | :-------- | :---------- |
-| 100 % des critères applicables conformes | Totalement conforme |
+| Tous les critères applicables sont conformes | Totalement conforme |
 | Au moins un critère non conforme, mais pas tous | Partiellement conforme |
 | Aucun critère conforme | Non conforme |
 

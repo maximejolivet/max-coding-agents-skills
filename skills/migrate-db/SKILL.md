@@ -3,49 +3,49 @@ name: migrate-db
 description: Conçoit et vérifie des migrations de base de données sûres - réversibles, sans verrou long, en expand/contract pour les changements incompatibles, avec sauvegarde, essai sur une copie et plan de retour. Indépendant de la stack - charge stacks/<stack>/INDEX.md (core + dev). À utiliser quand l'utilisateur écrit ou relit une migration (Doctrine, Prisma, Alembic, Laravel, SQL), change un schéma, renomme ou supprime une colonne, migre des données, ou invoque /max:migrate-db.
 ---
 
-# Migrations de base de données sûres
+# Migrations de base de données sans casse
 
-Un schéma change **sans interrompre le service** et sans perdre de données. Une migration est du code de production : réversible, testée, relue.
+Faire évoluer un schéma **sans couper le service** ni perdre de données. Une migration est du code de production : elle doit être réversible, testée et relue.
 
-## Détecter la stack
+## Stack
 
-Suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md` (lancer `stacks/detect.sh`), annoncer la stack et l'outil de migration (Doctrine Migrations, Prisma, Alembic/Django, Laravel, Flyway…), puis charger `stacks/<stack>/INDEX.md` pour la nature **dev** (qui tire `core`). Sans ressource, s'en tenir aux conventions lues dans le projet. Ne jamais `Read` une ressource inexistante.
+Appliquer `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md` (lancer `stacks/detect.sh`), annoncer la stack et l'outil de migration (Doctrine Migrations, Prisma, Alembic/Django, Laravel, Flyway…), puis lire `stacks/<stack>/INDEX.md` pour la nature **dev** (qui inclut `core`). Sans ressource, s'en tenir aux conventions lues dans le projet. Ne jamais `Read` une ressource inexistante.
 
 ## Cadrer
 
-1. **Le changement** : ce qui doit exister avant/après, en une phrase.
-2. **La base cible** : moteur et version, taille des tables touchées (`SELECT count(*)`, taille sur disque), trafic, environnements (dev, recette, production).
-3. **Compatibilité** : l'ancien code tourne-t-il encore pendant le déploiement ? Si oui, le changement doit être compatible avec les deux versions.
+1. **Le changement** : l'état avant et après, en une phrase.
+2. **La base visée** : moteur et version, taille des tables concernées (`SELECT count(*)`, poids sur disque), trafic, environnements (dev, recette, production).
+3. **Compatibilité** : l'ancien code continue-t-il de tourner pendant le déploiement ? Si oui, le changement doit convenir aux deux versions.
 
 ## Règles de sûreté
 
-- **Réversible** : fournir le `down` (ou dire pourquoi c'est impossible, par exemple une suppression de données).
-- **Petit et atomique** : une migration = un changement logique ; ne pas mélanger schéma et grosse migration de données.
-- **Verrous** : sur une grosse table, éviter les opérations qui bloquent (ajout de colonne avec défaut non constant, `ALTER` de type, index sans `CONCURRENTLY` sous PostgreSQL). Consulter la documentation du moteur et de la version.
+- **Réversible** : écrire le `down`, ou expliquer pourquoi c'est impossible (suppression de données, par exemple).
+- **Petite et atomique** : une migration = un changement logique ; ne pas mêler schéma et gros transfert de données.
+- **Verrous** : sur une grosse table, éviter les opérations bloquantes (colonne ajoutée avec défaut non constant, `ALTER` de type, index sans `CONCURRENTLY` sous PostgreSQL). Vérifier dans la documentation du moteur et de sa version.
 - **Expand / contract** pour tout changement incompatible (renommer, supprimer, changer un type) :
-  1. *expand* : ajouter la nouvelle structure, écrire dans les deux ;
+  1. *expand* : ajouter la nouvelle structure et écrire dans les deux ;
   2. *migrer* les données par lots ;
-  3. basculer la lecture sur la nouvelle structure ;
-  4. *contract* : supprimer l'ancienne structure dans un déploiement **ultérieur**.
-- **Données** : migration par lots, idempotente, reprenable ; jamais de `UPDATE` sans `WHERE` borné sur une grosse table.
-- **Contraintes** : `NOT NULL` et clés étrangères ajoutées en dernier, après remplissage des données.
+  3. basculer la lecture vers la nouvelle structure ;
+  4. *contract* : retirer l'ancienne structure lors d'un déploiement **ultérieur**.
+- **Données** : par lots, idempotente, reprenable ; jamais d'`UPDATE` sans `WHERE` borné sur une grosse table.
+- **Contraintes** : `NOT NULL` et clés étrangères en dernier, une fois les données remplies.
 
 ## Vérifier
 
-1. Lancer la migration **sur une copie** des données réalistes ; mesurer la durée et les verrous.
-2. Lancer `up`, puis `down`, puis `up` : le schéma final est identique.
-3. Lancer la suite de tests contre le nouveau schéma (`/max:test`).
-4. Écrire le **plan de retour** : sauvegarde nommée, commande de retour, point de non-retour.
+1. Jouer la migration **sur une copie** de données réalistes ; mesurer durée et verrous.
+2. Enchaîner `up`, `down`, `up` : le schéma final doit être identique.
+3. Lancer la suite de tests sur le nouveau schéma (`/max:test`).
+4. Rédiger le **plan de retour** : sauvegarde nommée, commande de retour, point de non-retour.
 
-## Format de la réponse
+## Forme de la réponse
 
-1. Le changement, la base cible et l'outil de migration.
-2. Le plan (une ou plusieurs migrations, ordre de déploiement) et pourquoi.
+1. Le changement, la base visée et l'outil de migration.
+2. Le plan (une ou plusieurs migrations, ordre de déploiement) et sa justification.
 3. Les risques : verrous, durée estimée, compatibilité avec l'ancien code.
-4. La vérification réelle (up/down/up, tests) et le plan de retour.
+4. La vérification réellement effectuée (up/down/up, tests) et le plan de retour.
 
-## Hors périmètre
+## Limites
 
-- Jamais de migration lancée sur la production ou un environnement partagé, ni de `DROP`, `TRUNCATE` ou `DELETE` massif, sans accord explicite et sauvegarde vérifiée.
-- Ne pas modifier une migration déjà appliquée ailleurs : en écrire une nouvelle.
+- Aucune migration sur la production ou un environnement partagé, aucun `DROP`, `TRUNCATE` ou `DELETE` massif sans accord explicite et sauvegarde vérifiée.
+- Une migration déjà appliquée ailleurs ne se modifie pas : en écrire une nouvelle.
 - La relecture relève de `/max:review`, les tests de `/max:test`.

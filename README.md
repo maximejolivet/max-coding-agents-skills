@@ -8,9 +8,9 @@
 
 # Max
 
-**Des skills Claude Code pour développer, relire, tester, publier et sécuriser son code sur GitHub.**
+**Un plugin Claude Code qui accompagne un changement de la première ligne jusqu'au merge.**
 
-Distribuée comme plugin `max` via son propre marketplace ; chaque skill s'appelle avec le préfixe `/max:`.
+Vingt-cinq skills appelés par `/max:<nom>`, installés en deux commandes.
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 [![Version](https://img.shields.io/badge/version-1.0.14-lightgrey)](.claude-plugin/plugin.json)
@@ -29,220 +29,132 @@ Distribuée comme plugin `max` via son propre marketplace ; chaque skill s'appel
 
 </div>
 
-## À propos
+## Pourquoi Max
 
-Max est un plugin [Claude Code](https://claude.com/claude-code) qui regroupe vingt-cinq skills pour suivre un changement de bout en bout, de la première ligne de code au merge : développer, committer, relire, tester, ouvrir la pull request, relire celle des autres et auditer la sécurité du projet. Il est pensé pour des projets hébergés sur GitHub (CLI `gh`, GitHub Actions).
+Claude Code sait coder ; Max lui apprend **ta façon de livrer**. Chaque skill encode une étape précise du travail : brancher, développer, tester, committer, relire, ouvrir la PR, auditer. Les consignes sont écrites une fois, en français, et réutilisées dans tous tes projets GitHub.
 
-- **Un cycle complet.** Du développement à la revue, chaque étape a son skill et renvoie vers la suivante : `/max:symfony`, `/max:nuxt` ou `/max:react` finissent par `/max:review`, qui prépare `/max:pull-request`.
-- **Adapté à ta techno.** Les skills génériques détectent la stack du projet (langage, framework, outils de test, Docker, Kubernetes, Actions) puis chargent les règles de la techno concernée. Symfony, Nuxt, React, Next.js, Vue, Laravel et Django sont fournis ; une stack inconnue fonctionne avec des valeurs par défaut.
-- **Des relectures en parallèle.** Sur un gros diff, `/max:review` confie la correction, la sécurité, les standards et le front à des sous-agents en lecture seule ; `/max:security` fait de même par domaine (dépendances, Docker, Actions).
-- **Prudent par défaut.** Les PR sont ouvertes en Draft, jamais de push sur `main`, une review n'est postée que sur accord explicite, et le cluster Kubernetes reste en lecture seule.
-- **Vérifié.** Un contrôle de cohérence (`tests/check.sh`) tourne en CI à chaque PR, et des scénarios manuels couvrent le comportement réel des skills.
+Ce qui le distingue :
 
-Tout est en français, sauf les noms techniques, et se distribue via son propre marketplace : une installation, puis chaque skill s'appelle avec le préfixe `/max:`.
+- **Il suit le flux.** Un skill de développement conclut en renvoyant vers `/max:review`, qui débouche sur `/max:pull-request`. Tu n'as pas à te rappeler l'ordre.
+- **Il s'adapte au projet.** Les skills transverses repèrent la techno (langage, framework, runner, Docker, Actions) puis lisent les règles correspondantes. Sans règles pour ta stack, ils se rabattent sur des valeurs par défaut et le précisent.
+- **Il délègue la lecture.** Pour un gros diff ou un audit large, des sous-agents en lecture seule travaillent en parallèle ; le skill fusionne leurs constats.
+- **Il demande avant d'agir dehors.** Draft par défaut, aucun push sur `main`, revue postée seulement après ton feu vert, cluster Kubernetes en lecture seule.
 
-## Installation
+## Installer
 
 ```bash
 /plugin marketplace add maximejolivet/claude-skills-max
 /plugin install max@max
 ```
 
-Depuis un clone local : `/plugin marketplace add ~/Sites/claude-skills-max`, puis la même commande `install`.
+- Depuis un clone : `/plugin marketplace add ~/Sites/claude-skills-max`, puis `install` comme ci-dessus.
+- Mise à jour : `/plugin marketplace update max`, puis `/plugin install max@max`.
+- Prérequis pour `pull-request`, `pr-review`, `issue`, `release` : la CLI [`gh`](https://cli.github.com), connectée via `gh auth login`.
 
-Pour mettre à jour : `/plugin marketplace update max`, puis `/plugin install max@max`.
+Tape ensuite `/max:` : la liste des skills s'affiche.
 
-Les skills `pull-request` et `pr-review` passent par la CLI [`gh`](https://cli.github.com) : installe-la et connecte-toi avec `gh auth login`.
+## Les 25 skills
 
-## Les skills
+### Brancher, committer, publier
 
-| Commande            | Rôle                                                                                                                |
-| :------------------ | :------------------------------------------------------------------------------------------------------------------ |
-| `/max:review`       | Relit un diff avant le merge et rend un verdict classé par gravité (bugs, sécurité, performance, standards, tests). |
-| `/max:pull-request` | Prépare une PR en Draft : commit ciblé, push, `gh pr create` avec lien vers l'issue.                                |
-| `/max:pr-review`    | Relit la PR de quelqu'un d'autre (issue liée, checks Actions) et prépare la review ; ne poste que sur accord.       |
-| `/max:commit`       | Rédige des messages de commit sémantiques : `type(scope): emoji description`.                                       |
-| `/max:versioning`   | Incrémente la version (+0.0.1 par PR) et l'aligne dans `plugin.json`, `marketplace.json` et le badge du README.    |
-| `/max:switch`       | Change de branche sans perdre de travail, crée `feat/` ou `fix/` depuis `main` à jour, nettoie ou supprime les branches mergées. |
-| `/max:test`         | Écrit, lance et diagnostique les tests ; non-régression d'abord pour un bug ; mode TDD / BDD sur demande.          |
-| `/max:security`     | Audite dépendances, Docker et workflows GitHub Actions ; classe les failles selon le risque réel.                   |
-| `/max:docker`       | Dockerfile, Compose, Makefile et CI : builds reproductibles, images minimales, sécurité.                            |
-| `/max:kubernetes`   | Manifestes, Kustomize, Helm et déploiement Actions ; lecture seule par défaut sur le cluster.                       |
-| `/max:symfony`      | Développement Symfony (6.4, 7.x, 8.x), puis renvoi vers `/max:review`.                                              |
-| `/max:nuxt`         | Développement Nuxt (3 et 4), puis renvoi vers `/max:review`.                                                        |
-| `/max:react`        | Développement React (18 et 19), puis renvoi vers `/max:review`.                                                     |
-| `/max:refactor`       | Refactoring et migration à grande échelle par lots : tests d'abord, vérification et commit par lot.                |
-| `/max:release`        | Prépare une release : version d'après les commits, changelog, tag et GitHub Release sur accord.                    |
-| `/max:hotfix`         | Correctif urgent sur la version en production : base du tag, test d'abord, backport.                               |
-| `/max:ci`             | Écrit et débogue les workflows GitHub Actions : logs en échec, cache, matrices, permissions minimales.             |
-| `/max:rebase`         | Rebase ou fusion en sécurité : sauvegarde, conflits compris côté par côté, force-with-lease sur accord.           |
-| `/max:perf`           | Optimise en mesurant : métrique, goulot prouvé, un changement à la fois, avant/après chiffrés.                     |
-| `/max:a11y`           | Audite et corrige l'accessibilité (RGAA / WCAG) : sémantique, clavier, contrastes, formulaires.                    |
-| `/max:migrate-db`     | Migrations de base sûres : réversibles, sans verrou long, expand/contract, plan de retour.                        |
-| `/max:explain`        | Explique un dépôt inconnu en lecture seule : carte, flux, commandes, zones à risque.                               |
-| `/max:issue`          | Rédige ou découpe une issue GitHub : critères d'acceptation vérifiables, création avec `gh` sur accord.            |
-| `/max:debug`          | Diagnostique un bug par sa cause racine : repro, hypothèses, bisect, test de non-régression, correctif minimal.   |
-| `/max:agent-workflow` | Conçoit un workflow agentique : découpage, skill/agent/hook/MCP, boucle de vérification, garde-fous, contexte.   |
+| Commande            | Ce qu'il fait                                                                                           |
+| :------------------ | :------------------------------------------------------------------------------------------------------ |
+| `/max:switch`       | Change de branche sans rien perdre, crée `feat/` ou `fix/` depuis `main` à jour, supprime les branches mergées. |
+| `/max:commit`       | Écrit le message au format `type(scope): emoji description`.                                            |
+| `/max:versioning`   | Monte la version de 0.0.1 et l'aligne dans `plugin.json`, `marketplace.json` et le badge.               |
+| `/max:pull-request` | Commit ciblé, push, puis `gh pr create` en Draft vers `main`, avec le lien de l'issue.                  |
+| `/max:rebase`       | Rebase ou fusion avec sauvegarde préalable ; `--force-with-lease` seulement si tu l'acceptes.           |
+| `/max:release`      | Choisit la version d'après les commits, rédige le changelog, pose le tag et la GitHub Release sur accord. |
+| `/max:hotfix`       | Part du tag en production, écrit le test d'abord, corrige, puis rétroporte.                             |
+| `/max:issue`        | Rédige ou découpe une issue avec critères d'acceptation vérifiables ; création via `gh` sur accord.     |
 
-## Cycle d'une fonctionnalité
+### Développer et comprendre
 
-```text
-/max:switch         # feat/<slug> ou fix/<slug> depuis main à jour
-/max:switch delete  # après le merge : supprime la branche liée (--remote, --force)
-# développer, puis committer (/max:commit)
-/max:versioning     # +0.0.1 pour la PR
-/max:review         # verdict avant la PR
-/max:pull-request   # push + PR en Draft vers main
-```
+| Commande              | Ce qu'il fait                                                                                         |
+| :-------------------- | :---------------------------------------------------------------------------------------------------- |
+| `/max:symfony`        | Développement Symfony 6.4, 7.x et 8.x, puis renvoi vers `/max:review`.                                |
+| `/max:nuxt`           | Développement Nuxt 3 et 4, puis renvoi vers `/max:review`.                                            |
+| `/max:react`          | Développement React 18 et 19, puis renvoi vers `/max:review`.                                         |
+| `/max:debug`          | Remonte à la cause racine : reproduction, hypothèses, bisect, test de non-régression, correctif minimal. |
+| `/max:refactor`       | Refactoring ou migration massive, lot par lot, tests d'abord, un commit par lot.                      |
+| `/max:perf`           | Mesure avant de toucher : goulot prouvé, un changement à la fois, gain chiffré.                       |
+| `/max:a11y`           | Audit et corrections RGAA / WCAG : sémantique, clavier, contrastes, formulaires.                      |
+| `/max:migrate-db`     | Migrations réversibles, sans verrou long, en expand/contract, avec plan de retour.                    |
+| `/max:explain`        | Décrit un dépôt inconnu en lecture seule : carte, flux, commandes, zones fragiles.                    |
 
-Après le merge : `/max:switch delete` supprime la branche liée (`clean` pour toutes les branches mergées).
+### Vérifier et sécuriser
 
-`/max:pull-request` ne pousse jamais sur `main`.
+| Commande            | Ce qu'il fait                                                                                           |
+| :------------------ | :------------------------------------------------------------------------------------------------------ |
+| `/max:test`         | Écrit, lance et diagnostique les tests ; mode TDD ou BDD sur demande.                                  |
+| `/max:review`       | Relit ton diff avant la PR et classe les constats par gravité.                                          |
+| `/max:pr-review`    | Relit la PR d'un autre, lit l'issue et les checks, rédige un brouillon de revue ; ne poste que si tu dis oui. |
+| `/max:security`     | Audite dépendances, Docker et workflows Actions, et hiérarchise selon le risque réellement exploitable. |
 
-## Fonctionnement
+### Infrastructure et méthode
 
-### Garde-fou git
+| Commande              | Ce qu'il fait                                                                                       |
+| :-------------------- | :-------------------------------------------------------------------------------------------------- |
+| `/max:docker`         | Dockerfile, Compose, Makefile et build CI : reproductible, minimal, durci.                          |
+| `/max:kubernetes`     | Manifestes, Kustomize, Helm, déploiement par Actions ; cluster en lecture seule par défaut.         |
+| `/max:ci`             | Écrit ou répare un workflow : logs d'un run raté, cache, matrices, permissions réduites.            |
+| `/max:agent-workflow` | Conçoit un workflow agentique : découpe, choix skill/agent/hook/MCP, boucle de contrôle, garde-fous. |
 
-Le plugin enregistre un hook `PreToolUse` sur Bash (`hooks/hooks.json` → `scripts/guard-git.sh`) qui refuse `git push --force` / `-f` et tout push direct vers `main` ou `master`. `--force-with-lease` et les pushes de branche passent. Sans `python3`, le hook laisse tout passer. Il s'applique à toute session où le plugin est installé.
-
-### Détection de la stack
-
-Les skills génériques (`review`, `security`, `pr-review`, `test`, `docker`, `kubernetes`) ne codent aucune techno en dur. Ils détectent la stack avec `stacks/detect.sh` (lecture seule, rien n'est lancé ni installé) selon la procédure de `stacks/DETECT.md`, puis chargent `stacks/<techno>/INDEX.md` avec la nature voulue : `core` + `dev`, `review`, `security`, `test` ou `deploy`. Une stack sans ressource dans `stacks/` fonctionne avec des valeurs par défaut par langage.
-
-Un dossier de techno prend une de ces formes :
-
-- **Forme 1** : un seul `INDEX.md`, découpé en sections.
-- **Forme 2** : `INDEX.md` (dispatcher) + `CORE.md`, `DEV.md`, `REVIEW.md`, `SECURITY.md`, `TEST.md`, `DEPLOY.md`.
-
-Stacks fournies : Symfony, Nuxt, React, Next.js, Vue, Laravel, Django.
-
-### Sous-agents
-
-Les skills orchestrent des sous-agents en lecture seule, lancés en parallèle (`agents/`, invoqués sous `max:<nom>`) :
-
-- `/max:review` : `correctness-reviewer`, `security-reviewer`, `standards-reviewer`, et `frontend-reviewer` si la stack a un front.
-- `/max:security` : `dependencies-auditor`, `docker-auditor`, `actions-auditor`.
-- `/max:symfony`, `/max:nuxt`, `/max:react`, `/max:refactor`, `/max:debug` : `codebase-surveyor` sur un gros projet.
-- Sur demande : `agile-planner` choisit Scrum ou Kanban d'après les stories du projet et remplit la page de méthode dans Notion (MCP Notion requis).
-- Sur demande : `docs-updater` compare les `.md` au code réel et rend les corrections à appliquer (lecture seule).
-
-## Structure du dépôt
+## Un cycle typique
 
 ```text
-claude-skills-max/
-├── .claude-plugin/
-│   ├── marketplace.json           # déclare le marketplace "max" et le plugin "max"
-│   └── plugin.json                # manifeste du plugin (nom, version), lu en développement local
-├── .github/
-│   ├── pull_request_template.md   # modèle de description des pull requests
-│   └── workflows/check.yml        # lance tests/check.sh à chaque PR
-├── tests/
-│   ├── check.sh                   # contrôle de cohérence du plugin
-│   └── SCENARIOS.md               # scénarios de vérification manuelle
-├── agents/                        # sous-agents en lecture seule, lancés en parallèle par les skills
-│   ├── correctness-reviewer.md    # /max:review : bugs, cause racine, cas limites
-│   ├── security-reviewer.md       # /max:review : failles applicatives dans le diff
-│   ├── standards-reviewer.md      # /max:review : standards, performance, couverture de tests
-│   ├── frontend-reviewer.md       # /max:review : ajouté si la stack a un front
-│   ├── agile-planner.md           # sur demande : Scrum ou Kanban d'après les stories, page Notion
-│   ├── docs-updater.md            # sur demande : écarts entre les .md et le code, corrections à appliquer
-│   ├── dependencies-auditor.md    # /max:security : lockfiles, avis, Dependabot
-│   ├── docker-auditor.md          # /max:security : images, privilèges, secrets, ports
-│   ├── actions-auditor.md         # /max:security : workflows GitHub Actions
-│   └── codebase-surveyor.md       # symfony, nuxt, react, refactor, debug : exploration d'un gros projet
-├── stacks/                        # connaissances propres à chaque techno, chargées à la demande
-│   ├── DETECT.md                  # procédure commune de détection + valeurs par défaut par langage
-│   ├── detect.sh                  # script de détection (lecture seule)
-│   ├── nuxt/
-│   │   └── INDEX.md               # Forme 1 : un seul fichier découpé en sections
-│   ├── react/
-│   │   └── INDEX.md               # Forme 1 : un seul fichier découpé en sections
-│   └── symfony/
-│       └── INDEX.md               # Forme 1 : un seul fichier découpé en sections
-├── skills/
-│   ├── review/SKILL.md            # détecte la stack, puis charge stacks/<x>/INDEX.md (review)
-│   ├── pull-request/SKILL.md      # commit ciblé, push, PR en Draft
-│   ├── pr-review/SKILL.md         # relit une PR existante côté reviewer
-│   ├── commit/SKILL.md            # messages de commit sémantiques
-│   ├── versioning/SKILL.md        # incrémente et aligne la version du plugin
-│   ├── switch/SKILL.md            # change de branche, crée feat/fix depuis main, nettoie
-│   ├── test/SKILL.md              # générique : détecte la stack → stacks/<x>/INDEX.md (test)
-│   ├── security/SKILL.md          # détecte la stack, puis charge stacks/<x>/INDEX.md (security)
-│   ├── docker/SKILL.md            # Dockerfile, Compose, Makefile, CI
-│   ├── kubernetes/SKILL.md        # manifestes, Kustomize, Helm
-│   ├── symfony/SKILL.md           # point d'entrée de développement : charge stacks/symfony/INDEX.md (dev)
-│   ├── nuxt/SKILL.md              # point d'entrée de développement : charge stacks/nuxt/INDEX.md (dev)
-│   ├── react/SKILL.md             # point d'entrée de développement : charge stacks/react/INDEX.md (dev)
-│   ├── agent-workflow/SKILL.md    # conçoit un workflow agentique (découpage, orchestration, vérification, garde-fous)
-│   ├── refactor/SKILL.md          # refactoring et migration par lots, vérifiés et annulables
-│   ├── debug/SKILL.md             # débogage par la cause racine : repro, bisect, test de non-régression
-│   ├── issue/SKILL.md             # rédige ou découpe une issue GitHub, création sur accord
-│   ├── release/SKILL.md           # version, changelog, tag et GitHub Release sur accord
-│   ├── hotfix/SKILL.md            # correctif urgent sur la version en production, backport
-│   ├── ci/SKILL.md                # workflows GitHub Actions : écriture, logs en échec, vitesse
-│   ├── rebase/SKILL.md            # rebase et conflits en sécurité
-│   ├── perf/SKILL.md              # optimisation mesurée, avant/après
-│   ├── a11y/SKILL.md              # accessibilité RGAA / WCAG
-│   ├── migrate-db/SKILL.md        # migrations de base de données sûres
-│   └── explain/SKILL.md           # comprendre un dépôt inconnu, lecture seule
-├── references/                    # listes de contrôle (Core Web Vitals, RGAA)
-├── hooks/
-│   └── hooks.json                 # garde-fou git : enregistre scripts/guard-git.sh (PreToolUse sur Bash)
-├── scripts/
-│   ├── guard-git.sh               # hook : bloque git push --force et push direct vers main/master
-│   └── reinstall-plugin.sh        # réinstalle le plugin en local
-├── docs/
-│   ├── getting-started.md         # du plugin installé à la première PR relue
-│   ├── skill-anatomy.md           # anatomie d'un skill (frontmatter, squelette, règles)
-│   ├── agents.md                  # les sous-agents, quand et comment ils sont lancés
-│   ├── agents-tools.md            # les outils déclarés par chaque sous-agent
-│   ├── skills-tools.md            # commandes et sous-agents mobilisés par chaque skill
-│   ├── stacks.md                  # détection de stack et ajout d'une techno
-│   ├── developer-onboarding.md    # guide pour travailler sur ce dépôt
-│   ├── user-stories.md            # écrire des stories, première série du plugin
-│   ├── depots-tools.md            # sélection de dépôts autour des agents de codage, des skills et des LLM
-│   └── claude-commands.md         # référence des commandes Claude Code et des commandes /max:*
-├── CONTRIBUTING.md                # flux de contribution et checklist de PR
-├── renovate.json                  # configuration Renovate
-├── CLAUDE.md                      # instructions du dépôt pour Claude Code
-├── README.md
-└── LICENSE
+/max:switch          # nouvelle branche depuis main à jour
+/max:symfony …       # ou /max:nuxt, /max:react : développer
+/max:test            # tests
+/max:commit          # message sémantique
+/max:versioning      # version +0.0.1
+/max:review          # verdict avant la PR
+/max:pull-request    # push et PR en Draft
+/max:switch delete   # après le merge : retire la branche
 ```
 
-### Ce que contrôle `tests/check.sh`
+La sortie du passage en « Ready for review » et le merge te reviennent.
 
-| Contrôle                | Détail                                                                         |
-| :---------------------- | :----------------------------------------------------------------------------- |
-| Frontmatter             | `name` et `description` présents dans chaque skill et chaque agent.            |
-| Références              | Les `max:<nom>` et `stacks/<id>/INDEX.md` cités existent bien.                 |
-| Versions                | `version` identique dans `marketplace.json` et `plugin.json`.                  |
-| Détection de la stack   | `detect.sh` testé sur des projets factices.                                    |
+## Sous le capot
 
-### Qui charge quoi
+**Détection de stack.** Les skills transverses lancent `stacks/detect.sh`, qui ne fait que lire le projet, puis suivent `stacks/DETECT.md`. Ils chargent alors `stacks/<techno>/INDEX.md` pour la nature voulue : `core` + `dev`, `review`, `security`, `test` ou `deploy`. Stacks livrées : Symfony, Nuxt, React, Next.js, Vue, Laravel, Django.
 
-| Élément          | Chargé par                                         | Quand                                          |
-| :--------------- | :------------------------------------------------- | :--------------------------------------------- |
-| `SKILL.md`       | Claude Code                                        | À l'appel de `/max:<skill>`.                   |
-| `stacks/DETECT.md` | `review`, `security`, `pr-review`, `test`, `docker`, `kubernetes` | Au début, pour repérer la stack.   |
-| `stacks/<x>/INDEX.md` | Les skills génériques et `symfony`, `nuxt`, `react` | Selon la nature voulue (`core` + `dev`, `review`, `security`, `test`, `deploy`). |
-| `agents/*.md`    | Le skill orchestrateur                             | En parallèle, sur un gros diff ou plusieurs domaines. |
+**Sous-agents.** Dix agents en lecture seule vivent dans `agents/` : quatre relecteurs pour `/max:review`, trois auditeurs pour `/max:security`, un explorateur de code (`codebase-surveyor`) et, sur demande seulement, `agile-planner` et `docs-updater`.
 
-## Documentation
+**Garde-fou git.** Un hook `PreToolUse` sur Bash (`hooks/hooks.json` → `scripts/guard-git.sh`) bloque `git push --force` et tout push direct vers `main` ou `master`. `--force-with-lease` et les pushes de branche passent. Sans `python3`, le hook s'efface.
 
-- [Démarrer](docs/getting-started.md) : du plugin installé à la première PR relue.
-- [Anatomie d'un skill](docs/skill-anatomy.md) : frontmatter, squelette, règles.
-- [Sous-agents](docs/agents.md) : qui est lancé par quel skill, et quand.
-- [Agents et outils](docs/agents-tools.md) : les outils déclarés par chaque sous-agent.
-- [Skills et outils](docs/skills-tools.md) : commandes et sous-agents mobilisés par chaque skill.
-- [Stacks](docs/stacks.md) : détection et ajout d'une techno.
-- [Onboarding développeur](docs/developer-onboarding.md) : travailler sur ce dépôt.
-- [User stories](docs/user-stories.md) : écrire des stories et première série du plugin.
-- [Dépôts et outils IA](docs/depots-tools.md) : sélection de dépôts autour des agents de codage, des skills et des LLM (source : [IA.md](https://github.com/maximejolivet/maximejolivet/blob/master/IA.md)).
-- [Commandes Claude Code](docs/claude-commands.md) : référence des commandes Claude Code et des commandes `/max:*`, avec exemples.
+**Contrôle de cohérence.** `sh tests/check.sh` vérifie le frontmatter, les références croisées, l'alignement des versions et la détection sur des projets factices. Il tourne en CI à chaque PR ; `tests/SCENARIOS.md` complète avec des scénarios à jouer à la main.
 
-## Contributions
+## Carte du dépôt
 
-Le flux de contribution, les vérifications et la checklist de PR sont dans [CONTRIBUTING.md](CONTRIBUTING.md).
+| Dossier               | Contenu                                                                    |
+| :-------------------- | :------------------------------------------------------------------------- |
+| `skills/`             | Un dossier par skill, avec son `SKILL.md`.                                 |
+| `agents/`             | Les dix sous-agents en lecture seule.                                      |
+| `stacks/`             | `DETECT.md`, `detect.sh` et un dossier par techno.                         |
+| `references/`         | Listes de contrôle : Core Web Vitals, RGAA.                                |
+| `hooks/`, `scripts/`  | Le garde-fou git et le script de réinstallation locale.                    |
+| `tests/`              | `check.sh` et les scénarios manuels.                                       |
+| `docs/`               | Guides détaillés (ci-dessous).                                             |
+| `.claude-plugin/`     | `plugin.json` et `marketplace.json`.                                       |
+| `.github/`            | Workflow de contrôle et modèle de PR.                                      |
+
+## Aller plus loin
+
+| Guide | Pour quoi faire |
+| :---- | :-------------- |
+| [Démarrer](docs/getting-started.md) | Passer de l'installation à une première PR relue. |
+| [Commandes](docs/claude-commands.md) | Retrouver les commandes Claude Code et `/max:*`, avec exemples. |
+| [Anatomie d'un skill](docs/skill-anatomy.md) | Écrire ou modifier un skill. |
+| [Sous-agents](docs/agents.md) | Savoir qui lance quel agent, et quand. |
+| [Outils des agents](docs/agents-tools.md) | Consulter les outils autorisés pour chaque agent. |
+| [Outils des skills](docs/skills-tools.md) | Voir ce que chaque skill exécute. |
+| [Stacks](docs/stacks.md) | Comprendre la détection et brancher une nouvelle techno. |
+| [Onboarding](docs/developer-onboarding.md) | Contribuer au dépôt. |
+| [User stories](docs/user-stories.md) | Rédiger des stories ; première série du plugin. |
+| [Dépôts IA](docs/depots-tools.md) | Parcourir une sélection de projets autour des agents de code. |
+
+Pour contribuer : [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Licence
 

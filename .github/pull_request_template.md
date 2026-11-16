@@ -1,24 +1,24 @@
 ## Contexte
 
-Closes #<numéro de l'issue> - <problème posé, en un paragraphe>
+Closes #<numéro> - <le besoin ou le problème, en quelques lignes>
 
 ## Cause racine
 
-<la cause racine ; nommer les commits, routes ou services concernés>
+<d'où vient le problème ; citer les commits, routes ou services en cause>
 
 ## Correctif
 
-<ce qui a changé et pourquoi c'est correct ; ce qui reste volontairement inchangé>
+<ce qui change et pourquoi c'est juste ; ce qui est volontairement laissé tel quel>
 
 ## Vérification
 
-- [ ] <check empirique qui a tourné>
-- [ ] linter / tests / CI (GitHub Actions) au vert
+- [ ] <contrôle concret exécuté, avec son résultat>
+- [ ] linter, tests et CI (GitHub Actions) au vert
 
 ### UAT manuelle
 
-<étapes exactes qu'un humain suit pour confirmer>
+<le parcours exact à suivre pour constater que ça fonctionne>
 
 ## Hors-scope
 
-<code mort / problèmes latents pour une issue séparée>
+<dette ou problèmes latents repérés, à traiter dans une issue séparée>
