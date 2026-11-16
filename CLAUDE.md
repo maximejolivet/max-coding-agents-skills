@@ -6,7 +6,7 @@ claude --plugin-dir ~/Sites/claude-skills-max   # essayer les skills en place
 /reload-plugins                                 # après chaque modification
 ```
 
-Ce dépôt est le plugin Claude Code `max` : l'environnement de développement de Maxime, développeur freelance qui travaille seul sur les dépôts GitHub de plusieurs clients. Aucun build. Version courante : `1.0.15`.
+Ce dépôt est le plugin Claude Code `max` : l'environnement de développement de Maxime, développeur freelance qui travaille seul sur les dépôts GitHub de plusieurs clients. Aucun build. Version courante : `1.0.16`.
 
 ## Structure
 
