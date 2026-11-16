@@ -1,46 +1,47 @@
 ---
 name: a11y
-description: Audite et corrige l'accessibilité d'une interface web selon le RGAA et les WCAG - sémantique, clavier et focus, contrastes, formulaires, alternatives textuelles, ARIA, outils automatiques puis vérification manuelle. Indépendant de la stack - charge stacks/<stack>/INDEX.md (dev). À utiliser quand l'utilisateur veut auditer ou corriger l'accessibilité, vérifier la conformité RGAA/WCAG, rendre un composant utilisable au clavier ou au lecteur d'écran, ou invoque /max:a11y.
+description: "Audite et corrige l'accessibilité d'une interface web selon le RGAA et les WCAG - sémantique, clavier et focus, alternatives, formulaires, contrastes, ARIA, contenu dynamique - par les outils automatiques puis une vérification manuelle. À utiliser quand Maxime veut auditer ou corriger l'accessibilité, vérifier la conformité RGAA ou WCAG, rendre un composant utilisable au clavier ou au lecteur d'écran, ou invoque /max:a11y."
+argument-hint: "[page ou composant]"
 ---
 
-# Accessibilité web (RGAA / WCAG)
+# Accessibilité
 
-Rendre une interface utilisable par tous : au clavier, au lecteur d'écran, en zoom, avec des contrastes suffisants. Les outils automatiques ne trouvent qu'environ un tiers des défauts : le contrôle manuel n'est pas optionnel.
+## Préalables
 
-## Stack
+1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+2. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **dev**.
+3. Fixer le périmètre (pages, composants) et le référentiel : RGAA 4.1 et WCAG 2.2 niveau AA par défaut.
+4. Lire `${CLAUDE_SKILL_DIR}/../../references/rgaa-checklist.md` pour les critères.
 
-Appliquer `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md` (lancer `stacks/detect.sh`), annoncer la stack, puis lire `stacks/<stack>/INDEX.md` pour la nature **dev** : composants, gabarits et bibliothèques d'interface. Sans ressource, suivre les conventions du projet. Ne jamais `Read` une ressource inexistante.
+## Étapes
 
-## Cadrage
+1. Lancer les outils présents dans le projet (`axe`, `pa11y`, Lighthouse) et relever les nombres réels. Ils trouvent environ un tiers des défauts.
+2. Vérifier à la main : parcours complet au clavier, zoom à 200 %, lecteur d'écran sur les parcours clés, contrastes.
+3. Passer les sept familles de contrôles de l'annexe.
+4. Classer les constats par gravité, chacun avec `fichier:ligne`, le critère RGAA ou WCAG et le correctif.
+5. Corriger par ordre d'impact (parcours impossible d'abord) et refaire la vérification après chaque lot.
+6. Rendre compte : outils lancés et résultats, parcours manuels faits, ce qui n'a pas pu être vérifié.
 
-- **Périmètre** : pages ou composants visés, référentiel retenu (RGAA 4.1, WCAG 2.2 niveau AA par défaut).
-- Critères de référence : `${CLAUDE_SKILL_DIR}/../../references/rgaa-checklist.md`.
+## Points d'arrêt
 
-## Points de contrôle
+- Aucun outil automatique dans le projet : le dire, ne rien installer, poursuivre à la main.
+- Pas de lecteur d'écran ni d'appareil de test disponible : le noter non vérifié.
+- Un taux de conformité est demandé : ne le donner que s'il est réellement calculable.
 
-1. **Sémantique** : titres hiérarchisés (un seul `h1`, pas de saut de niveau), repères (`header`, `nav`, `main`, `footer`), vraies listes et vrais tableaux, `button` pour une action et `a` pour une navigation, `lang` sur `html`.
-2. **Clavier et focus** : tout est atteignable et actionnable au clavier, dans un ordre logique, avec un focus **visible**, sans piège ; à l'ouverture d'une modale le focus y entre, à la fermeture il revient ; lien d'évitement présent.
-3. **Alternatives** : `alt` pertinent (vide pour une image décorative), légendes, transcriptions pour audio et vidéo.
-4. **Formulaires** : un `label` lié à chaque champ, erreurs annoncées et rattachées au champ, champs obligatoires signalés autrement que par la couleur, autocomplétion adaptée.
-5. **Couleurs et lisibilité** : contraste ≥ 4,5:1 (texte) et 3:1 (grand texte, composants), information jamais portée par la seule couleur, zoom à 200 % et reflux sans perte.
-6. **ARIA** : seulement quand le HTML natif ne suffit pas ; rôles, états et propriétés cohérents ; un ARIA fautif nuit plus qu'une absence d'ARIA.
-7. **Contenu dynamique** : zones `aria-live` pour les messages, états de chargement annoncés, respect de `prefers-reduced-motion`.
+## Ce qu'il ne fait pas
 
-## Méthode
+- Déclarer une conformité totale : elle demande un auditeur et des tests utilisateurs.
+- Masquer un défaut par un ARIA de façade, `eslint-disable` ou `axe-disable`.
+- Refondre l'interface au-delà des correctifs d'accessibilité.
 
-1. **Automatique** : `axe`, `pa11y` ou Lighthouse s'ils sont présents dans le projet (les lancer ; rien n'est installé sans accord), et rapporter les chiffres réels.
-2. **Manuel** : parcours complet au clavier, zoom, lecteur d'écran sur les parcours clés, mesure des contrastes.
-3. **Corriger** par ordre d'impact (bloquants, puis majeurs, puis mineurs) et refaire la vérification après chaque lot.
+## Annexe : contrôles
 
-## Forme de la réponse
-
-1. Périmètre et référentiel.
-2. Constats par gravité, chacun avec `fichier:ligne`, le critère RGAA/WCAG et le correctif.
-3. Vérification réelle : outils lancés, résultats, parcours manuels effectués.
-4. Ce qui n'a pu être vérifié (lecteur d'écran, appareils), et un taux de conformité uniquement s'il est réellement calculable.
-
-## Limites
-
-- Aucune conformité totale ne se déclare : un audit complet suppose un auditeur et des tests utilisateurs.
-- Ne pas masquer un défaut par un ARIA de façade ou une règle `eslint-disable` / `axe-disable`.
-- Aucune dépendance installée sans accord ; la relecture relève de `/max:review`.
+| Famille | À vérifier |
+| :-- | :-- |
+| Sémantique | Un seul `h1`, aucun saut de niveau ; `header`, `nav`, `main`, `footer` ; vraies listes et vrais tableaux ; `button` pour une action, `a` pour une navigation ; `lang` sur `html` |
+| Clavier et focus | Tout est atteignable et actionnable ; ordre logique ; focus visible ; aucun piège ; focus placé dans une modale à l'ouverture, rendu à la fermeture ; lien d'évitement |
+| Alternatives | `alt` pertinent, vide pour une image décorative ; légendes ; transcriptions |
+| Formulaires | `label` lié à chaque champ ; erreur annoncée et rattachée au champ ; champ obligatoire signalé autrement que par la couleur ; autocomplétion |
+| Couleurs | Contraste d'au moins 4,5:1 pour le texte, 3:1 pour le grand texte et les composants ; aucune information portée par la seule couleur ; reflux sans perte à 200 % |
+| ARIA | Seulement quand le HTML ne suffit pas ; rôles, états et propriétés cohérents |
+| Contenu dynamique | Zones `aria-live` ; chargement annoncé ; `prefers-reduced-motion` respecté |

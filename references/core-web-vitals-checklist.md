@@ -1,35 +1,20 @@
-# Core Web Vitals : seuils et points de contrôle
+# Core Web Vitals : seuils et contrôles
 
-Google retient trois métriques pour juger l'expérience d'une page : la vitesse d'affichage (LCP), la réactivité (INP) et la stabilité visuelle (CLS). Ce fichier fournit les **seuils officiels** puis, pour chaque métrique, une liste de **points à contrôler**. Ces points sont des pratiques courantes, pas des exigences normatives ; la documentation fait foi.
+Mesurer d'abord : PageSpeed Insights, Chrome DevTools (Performance, Lighthouse), Search Console, bibliothèque `web-vitals`. Source : <https://web.dev/articles/vitals>.
 
-- Source : <https://web.dev/articles/vitals>
-- Mesurer avec : PageSpeed Insights, Chrome DevTools (Performance, Lighthouse), Search Console (rapport Core Web Vitals), bibliothèque `web-vitals`.
-- Les données **terrain** (vrais utilisateurs, CrUX) tranchent ; les données **labo** (Lighthouse) aident à comprendre. L'INP n'existe qu'en terrain : en labo, on lit le TBT à la place.
+Les données terrain (CrUX) tranchent ; les données labo (Lighthouse) servent à diagnostiquer. L'INP n'existe qu'en terrain : en labo, lire le TBT.
 
 ## Seuils
 
-Une métrique est réussie quand son **75ᵉ centile** tombe dans la zone « bon », mobile et desktop évalués séparément.
+Une métrique est réussie quand son 75ᵉ centile est « bon », mobile et desktop séparés. La page est réussie quand les trois le sont.
 
-| Métrique | Ce qu'elle mesure | Bon | À améliorer | Mauvais |
-| :------- | :---------------- | :-- | :---------- | :------ |
-| **LCP** (Largest Contentful Paint) | Temps d'affichage du plus gros élément visible | ≤ 2,5 s | ≤ 4 s | > 4 s |
-| **INP** (Interaction to Next Paint) | Délai de réponse aux interactions | ≤ 200 ms | ≤ 500 ms | > 500 ms |
-| **CLS** (Cumulative Layout Shift) | Décalages inattendus de la mise en page | ≤ 0,1 | ≤ 0,25 | > 0,25 |
+| Métrique | Mesure | Bon | À améliorer | Mauvais |
+| :-- | :-- | :-- | :-- | :-- |
+| **LCP** | Affichage du plus gros élément visible | ≤ 2,5 s | ≤ 4 s | > 4 s |
+| **INP** | Délai de réponse aux interactions | ≤ 200 ms | ≤ 500 ms | > 500 ms |
+| **CLS** | Décalages de mise en page | ≤ 0,1 | ≤ 0,25 | > 0,25 |
 
-| Cas | Statut de la page |
-| :-- | :---------------- |
-| Les trois métriques sont « bon » au 75ᵉ centile | Réussi |
-| Au moins une métrique sort de « bon » | Non réussi |
-
-### Suivre l'avancement de la liste
-
-Pour chiffrer la progression, calculer un taux de couverture par métrique, puis global :
-
-```text
-taux = points cochés / (points cochés + points non cochés) × 100
-```
-
-Les points « NA » (sans objet pour la page) ne comptent pas. Ce taux est un repère : seuls les seuils ci-dessus décident de la réussite.
+Les points ci-dessous sont des pratiques courantes, pas des exigences. Cocher ce qui est fait, noter « NA » ce qui ne s'applique pas. Seuls les seuils décident de la réussite.
 
 ## 1. LCP : vitesse d'affichage
 

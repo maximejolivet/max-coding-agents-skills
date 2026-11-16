@@ -1,40 +1,47 @@
 ---
 name: explain
-description: Explique un dépôt ou une zone de code inconnue - structure, point d'entrée, flux principaux, conventions, commandes pour lancer et tester, zones à risque - sans rien modifier. Indépendant de la stack - charge stacks/<stack>/INDEX.md (core). À utiliser quand l'utilisateur découvre un projet, veut comprendre comment un module fonctionne, prépare un onboarding, demande « comment ça marche » ou « où est-ce que… », ou invoque /max:explain.
+description: "Explique un dépôt ou une zone de code inconnue, en lecture seule - ce que fait le projet, sa carte, ses flux, ses conventions, les commandes pour le lancer et le tester, ses zones à risque. À utiliser quand Maxime découvre le dépôt d'un client, veut comprendre un module ou un flux, demande « comment ça marche » ou « où est-ce que », ou invoque /max:explain."
+argument-hint: "[dépôt, module ou flux]"
 ---
 
-# Découvrir un code inconnu
+# Expliquer un code inconnu
 
-Rendre un projet compréhensible en quelques minutes, **en lecture seule**. L'explication repose sur ce que le code contient, pas sur des suppositions : chaque affirmation renvoie à un `fichier:ligne`.
+## Préalables
 
-## Stack
+1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session. Ce skill en est l'exception prévue : l'explication est complète, avec des titres, sans préambule ni formule finale.
+2. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **core**.
+3. Fixer la question : le dépôt entier, un module ou un flux. Sans précision : le dépôt entier.
 
-Appliquer `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md` (lancer `stacks/detect.sh`), annoncer la stack, puis lire `stacks/<stack>/INDEX.md` pour la nature **core** : elle donne les conventions de la techno à expliquer. Sans ressource, le préciser. Ne jamais `Read` une ressource inexistante.
+## Étapes
 
-## Méthode
+1. Lire dans cet ordre : `README`, `CLAUDE.md`, manifestes, arborescence (`git ls-files | head -100`), point d'entrée, configuration, puis la zone demandée.
+2. Suivre un flux de bout en bout, de l'entrée (route, commande, événement) à la sortie (base, API, rendu), en nommant chaque fichier traversé.
+3. Lire l'historique de la zone : `git log --oneline -20`, `git log --stat`.
+4. Rédiger l'explication dans le plan de l'annexe. Chaque affirmation cite un `fichier:ligne`.
+5. Proposer le skill qui permet d'agir ensuite (`/max:debug`, `/max:refactor`, `/max:dev`), sans le lancer.
 
-1. **Cadrer** la demande : tout le dépôt, un module ou un flux (« que se passe-t-il quand on valide une commande ? »). Sans précision, viser le dépôt entier.
-2. **Lire dans cet ordre** : `README`, `CLAUDE.md`, manifestes (`package.json`, `composer.json`…), arborescence (`ls`, `git ls-files | head`), point d'entrée, configuration, puis le chemin visé.
-3. **Suivre un flux de bout en bout** : de l'entrée (route, commande, événement) à la sortie (base, API, rendu), en nommant chaque fichier traversé.
-4. **Gros projet** : `max:codebase-surveyor` dresse la carte en lecture seule ; la synthèse reste dans la session principale.
-5. **Historique** : `git log --oneline -20` et `git log --stat` sur la zone, pour voir ce qui évolue et pourquoi.
+Sur un gros projet, l'agent `max:codebase-surveyor` dresse la carte ; la synthèse reste dans la session.
 
-## Ce que contient l'explication
+## Points d'arrêt
 
-- **En une phrase** : ce que fait le projet et pour qui.
-- **Carte** : dossiers principaux et leur rôle, avec un schéma simple des flux si utile.
-- **Point d'entrée et flux clés**, avec `fichier:ligne`.
-- **Conventions** : nommage, structure, outillage (linter, formateur), tests.
-- **Lancer et tester** : les vraies commandes lues dans le projet (Makefile, scripts, Compose). Rien n'est exécuté sans demande.
-- **Zones à risque** : code fragile, dette, couplages, absence de tests, fichiers générés à laisser tranquilles.
-- **Par où commencer** : deux ou trois fichiers à lire d'abord.
+- Un comportement n'a pas été lu dans le code : l'écrire « non vérifié ».
+- Une commande de lancement ou de test est citée : la donner, ne pas la lancer sans demande.
+- Aucune ressource pour la stack : le dire.
 
-## Forme de la réponse
+## Ce qu'il ne fait pas
 
-Courte et structurée : la phrase de synthèse, la carte, les flux demandés, les commandes, les risques. Distinguer nettement ce qui est **supposé** de ce qui a été **lu**. Pas de récit fichier par fichier.
+- Modifier, installer ou lancer quoi que ce soit : ni build, ni migration, ni serveur.
+- Raconter le dépôt fichier par fichier.
+- Recopier un secret, un nom de client ou une donnée réelle rencontrés à la lecture.
 
-## Limites
+## Annexe : plan de l'explication
 
-- Lecture seule stricte : ni modification, ni installation, ni lancement (build, migration, serveur) sans demande.
-- Aucun comportement inventé : un code non lu se déclare « non vérifié ».
-- Pour passer à l'action, indiquer le bon skill (`/max:debug`, `/max:refactor`, `/max:symfony`…) sans le lancer.
+| Section | Contenu |
+| :-- | :-- |
+| En une phrase | Ce que fait le projet, et pour qui |
+| Carte | Dossiers principaux, rôle de chacun, schéma des flux si utile |
+| Flux | Point d'entrée et flux demandés, avec `fichier:ligne` |
+| Conventions et commandes | Nommage, structure, outils, tests ; commandes lues dans le Makefile, les scripts ou Compose |
+| Risques et départ | Code fragile, dette, couplages, zones sans tests, fichiers générés ; deux ou trois fichiers à lire en premier |
+
+Distinguer partout ce qui est lu de ce qui est supposé.

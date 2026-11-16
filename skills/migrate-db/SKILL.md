@@ -1,51 +1,42 @@
 ---
 name: migrate-db
-description: Conçoit et vérifie des migrations de base de données sûres - réversibles, sans verrou long, en expand/contract pour les changements incompatibles, avec sauvegarde, essai sur une copie et plan de retour. Indépendant de la stack - charge stacks/<stack>/INDEX.md (core + dev). À utiliser quand l'utilisateur écrit ou relit une migration (Doctrine, Prisma, Alembic, Laravel, SQL), change un schéma, renomme ou supprime une colonne, migre des données, ou invoque /max:migrate-db.
+description: "Conçoit et vérifie une migration de base de données sûre - réversible, sans verrou long, en expand/contract pour un changement incompatible, essayée sur une copie, avec un plan de retour. À utiliser quand Maxime écrit ou relit une migration (Doctrine, Prisma, Alembic, Django, Laravel, SQL), change un schéma, renomme ou supprime une colonne, migre des données, ou invoque /max:migrate-db."
+argument-hint: "[changement de schéma]"
 ---
 
-# Migrations de base de données sans casse
+# Migrer une base
 
-Faire évoluer un schéma **sans couper le service** ni perdre de données. Une migration est du code de production : elle doit être réversible, testée et relue.
+## Préalables
 
-## Stack
+1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+2. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **dev**. Annoncer l'outil de migration du projet.
+3. Relever la cible : moteur et version, taille des tables touchées (`SELECT count(*)`), environnements, et si l'ancien code tourne encore pendant le déploiement.
 
-Appliquer `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md` (lancer `stacks/detect.sh`), annoncer la stack et l'outil de migration (Doctrine Migrations, Prisma, Alembic/Django, Laravel, Flyway…), puis lire `stacks/<stack>/INDEX.md` pour la nature **dev** (qui inclut `core`). Sans ressource, s'en tenir aux conventions lues dans le projet. Ne jamais `Read` une ressource inexistante.
+## Étapes
 
-## Cadrer
+1. Écrire le changement en une phrase : l'état avant, l'état après.
+2. Choisir le plan. Un changement compatible tient en une migration. Un changement incompatible (renommer, supprimer, changer un type) passe en expand/contract :
+   1. ajouter la nouvelle structure et écrire dans les deux ;
+   2. migrer les données par lots ;
+   3. basculer la lecture ;
+   4. retirer l'ancienne structure dans un déploiement ultérieur.
+3. Écrire la migration avec son `down`, un changement logique par migration.
+4. La jouer sur une copie de données réalistes : mesurer la durée et les verrous.
+5. Enchaîner `up`, `down`, `up` : le schéma final est identique.
+6. Lancer la suite de tests sur le nouveau schéma (`/max:test`).
+7. Rendre le plan de déploiement et le plan de retour : sauvegarde nommée, commande de retour, point de non-retour.
 
-1. **Le changement** : l'état avant et après, en une phrase.
-2. **La base visée** : moteur et version, taille des tables concernées (`SELECT count(*)`, poids sur disque), trafic, environnements (dev, recette, production).
-3. **Compatibilité** : l'ancien code continue-t-il de tourner pendant le déploiement ? Si oui, le changement doit convenir aux deux versions.
+Sur une grosse table : pas de colonne ajoutée avec un défaut non constant, pas d'`ALTER` de type, index créé avec `CONCURRENTLY` sous PostgreSQL. Vérifier dans la documentation du moteur et de sa version. `NOT NULL` et clés étrangères viennent en dernier, une fois les données remplies.
 
-## Règles de sûreté
+## Points d'arrêt
 
-- **Réversible** : écrire le `down`, ou expliquer pourquoi c'est impossible (suppression de données, par exemple).
-- **Petite et atomique** : une migration = un changement logique ; ne pas mêler schéma et gros transfert de données.
-- **Verrous** : sur une grosse table, éviter les opérations bloquantes (colonne ajoutée avec défaut non constant, `ALTER` de type, index sans `CONCURRENTLY` sous PostgreSQL). Vérifier dans la documentation du moteur et de sa version.
-- **Expand / contract** pour tout changement incompatible (renommer, supprimer, changer un type) :
-  1. *expand* : ajouter la nouvelle structure et écrire dans les deux ;
-  2. *migrer* les données par lots ;
-  3. basculer la lecture vers la nouvelle structure ;
-  4. *contract* : retirer l'ancienne structure lors d'un déploiement **ultérieur**.
-- **Données** : par lots, idempotente, reprenable ; jamais d'`UPDATE` sans `WHERE` borné sur une grosse table.
-- **Contraintes** : `NOT NULL` et clés étrangères en dernier, une fois les données remplies.
+- Le `down` est impossible (suppression de données) : le dire et faire valider.
+- Aucune copie de données n'est disponible : la migration reste non vérifiée, le dire.
+- La migration mêle schéma et gros transfert de données : la scinder.
+- La migration à corriger est déjà appliquée ailleurs : en écrire une nouvelle.
 
-## Vérifier
+## Ce qu'il ne fait pas
 
-1. Jouer la migration **sur une copie** de données réalistes ; mesurer durée et verrous.
-2. Enchaîner `up`, `down`, `up` : le schéma final doit être identique.
-3. Lancer la suite de tests sur le nouveau schéma (`/max:test`).
-4. Rédiger le **plan de retour** : sauvegarde nommée, commande de retour, point de non-retour.
-
-## Forme de la réponse
-
-1. Le changement, la base visée et l'outil de migration.
-2. Le plan (une ou plusieurs migrations, ordre de déploiement) et sa justification.
-3. Les risques : verrous, durée estimée, compatibilité avec l'ancien code.
-4. La vérification réellement effectuée (up/down/up, tests) et le plan de retour.
-
-## Limites
-
-- Aucune migration sur la production ou un environnement partagé, aucun `DROP`, `TRUNCATE` ou `DELETE` massif sans accord explicite et sauvegarde vérifiée.
-- Une migration déjà appliquée ailleurs ne se modifie pas : en écrire une nouvelle.
-- La relecture relève de `/max:review`, les tests de `/max:test`.
+- Lancer une migration sur la production ou un environnement partagé.
+- `DROP`, `TRUNCATE`, `DELETE` massif, ou `UPDATE` sans `WHERE` borné sur une grosse table.
+- Migrer des données en une seule passe non reprenable.

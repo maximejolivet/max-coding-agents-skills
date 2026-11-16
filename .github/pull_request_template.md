@@ -1,24 +1,24 @@
-## Contexte
+## Context
 
-Closes #<numéro> - <le besoin ou le problème, en quelques lignes>
+Closes #<issue> - <the problem or the need, in one paragraph>
 
-## Cause racine
+## Root cause
 
-<d'où vient le problème ; citer les commits, routes ou services en cause>
+<what caused it; name the commits, files or skills involved. For a feature, replace "Root cause" and "Fix" with a single "Change" section>
 
-## Correctif
+## Fix
 
-<ce qui change et pourquoi c'est juste ; ce qui est volontairement laissé tel quel>
+<what changed and why it is correct; what is left unchanged on purpose>
 
-## Vérification
+## Verification
 
-- [ ] <contrôle concret exécuté, avec son résultat>
-- [ ] linter, tests et CI (GitHub Actions) au vert
+- [ ] `sh tests/check.sh` passes
+- [ ] <scenario of tests/SCENARIOS.md replayed, with its result>
 
-### UAT manuelle
+### Manual test
 
-<le parcours exact à suivre pour constater que ça fonctionne>
+<exact steps to confirm>
 
-## Hors-scope
+## Out of scope
 
-<dette ou problèmes latents repérés, à traiter dans une issue séparée>
+<latent issues for a separate issue>

@@ -1,42 +1,76 @@
 ---
 name: ci
-description: Écrit, optimise et débogue les workflows GitHub Actions - lecture des logs d'un run en échec, cache, matrices, jobs parallèles, réutilisation de workflows, déclencheurs, permissions minimales et actions épinglées. Indépendant de la stack - charge stacks/<stack>/INDEX.md (deploy). À utiliser quand l'utilisateur écrit ou corrige un workflow, une CI qui échoue ou qui est lente, un pipeline de build, de test ou de déploiement, ou invoque /max:ci.
+description: "Écrit, accélère et débogue les workflows GitHub Actions - lecture des logs d'un run en échec, déclencheurs, permissions minimales, actions épinglées, cache, jobs parallèles, réutilisation. À utiliser quand Maxime écrit ou corrige un workflow, a une CI qui échoue ou qui est lente, monte un pipeline de build, de test ou de déploiement, ou invoque /max:ci."
+argument-hint: "[workflow ou run en échec]"
 ---
 
 # Workflows GitHub Actions
 
-Viser une CI fiable, rapide et économe en permissions. L'audit de sécurité des workflows appartient à `/max:security` (agent `actions-auditor`) ; ce skill, lui, écrit et répare.
+## Préalables
 
-## Stack
+1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+2. Lancer `ls .github/workflows/ 2>/dev/null; gh run list --limit 5`.
+3. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **deploy**. Elle donne les commandes de build et de test.
 
-Appliquer `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md` (lancer `stacks/detect.sh`), annoncer la stack, puis lire `stacks/<stack>/INDEX.md` pour la nature **deploy** (qui inclut `core`) : commandes de build et de test. Sans ressource, s'en tenir aux scripts et au runner lus dans le projet. Ne jamais `Read` une ressource inexistante.
+## Étapes
 
-## Diagnostiquer un run en échec
+### Déboguer un run
 
-1. `gh run list --limit 5`, puis `gh run view <id> --log-failed` : lire l'erreur **réelle**, pas seulement la dernière ligne.
-2. Classer la cause : projet (test, lint, build), environnement (version, dépendance, cache), workflow (syntaxe, permission, secret absent) ou intermittent (un `gh run rerun --failed` permet de le constater).
-3. Reproduire en local avec les mêmes commandes et versions avant de corriger. Face à un échec intermittent, chercher ce qui varie (ordre, durée, ressource partagée) plutôt que d'ajouter un retry.
+1. Lire l'erreur réelle : `gh run view <id> --log-failed`, pas seulement la dernière ligne.
+2. Classer la cause :
 
-## Écrire ou améliorer un workflow
+   | Origine | Exemples |
+   | :-- | :-- |
+   | Projet | test, lint, build |
+   | Environnement | version, dépendance, cache |
+   | Workflow | syntaxe, permission, secret absent |
+   | Intermittent | ordre, durée, ressource partagée |
 
-- **Déclencheurs** précis (`pull_request`, `push` sur `main`, `workflow_dispatch`) ; `concurrency` avec `cancel-in-progress` pour les PR.
-- **Permissions** minimales à la racine (`permissions: contents: read`), relevées job par job seulement au besoin.
-- **Actions épinglées** sur un SHA de commit (tag en commentaire), tenues à jour par Dependabot ou Renovate.
-- **Cache** des dépendances via celui des `actions/setup-*` ou `actions/cache` (clé sur le lockfile) ; mesurer le gain avant de le conserver.
-- **Vitesse** : jobs indépendants en parallèle, `needs:` seulement pour une vraie dépendance, matrices limitées aux versions réellement supportées, `timeout-minutes` sur chaque job.
-- **Réutilisation** : `workflow_call` ou action composite pour ce qui se répète, plutôt que du copier-coller.
-- **Secrets** : jamais en clair ni dans les logs ; jamais d'entrée non fiable (`${{ github.event.* }}`) interpolée directement dans un `run:` (passer par une variable d'environnement).
-- Valider la syntaxe avec `actionlint` s'il est présent ; sinon, relire à la main.
+3. Reproduire en local avec les mêmes commandes et les mêmes versions.
+4. Corriger la cause, puis observer le run suivant (`gh run watch`).
 
-## Forme de la réponse
+### Écrire ou améliorer
 
-1. Symptôme ou objectif, et cause établie (non supposée).
-2. Changement apporté au workflow, avec le gain ou la correction attendus.
-3. Vérification réelle : commande locale exécutée ou run observé (`gh run watch`).
-4. Points impossibles à vérifier en local (secrets, runners, environnements).
+1. Reprendre les commandes que le projet lance déjà en local.
+2. Appliquer les règles de l'annexe.
+3. Valider avec `actionlint` s'il est installé, sinon relire à la main.
+4. Rendre compte : le changement, le gain ou la correction attendus, ce qui a été vérifié, ce qui ne peut pas l'être en local (secrets, runners, environnements).
 
-## Limites
+## Points d'arrêt
 
-- Pas de `gh workflow run`, de relance de run ni de push sans accord ; toucher à un workflow de déploiement ou de release exige un accord explicite.
-- Ne jamais créer ni afficher un secret, et ne pas élargir les permissions pour « faire passer » un run.
-- L'audit de sécurité complet relève de `/max:security`, la PR de `/max:pull-request`.
+- L'échec est intermittent : chercher ce qui varie. Un retry n'est pas un correctif.
+- Relancer un run (`gh run rerun --failed`) ou en déclencher un (`gh workflow run`) : attendre l'accord.
+- Le workflow touché déploie ou publie une release : accord explicite avant toute modification.
+- Un SHA d'action n'est pas retrouvable : écrire `<sha de la release vX.Y>`, ne pas l'inventer.
+
+## Ce qu'il ne fait pas
+
+- Élargir les permissions pour faire passer un run.
+- Créer ou afficher un secret.
+- Auditer la sécurité de tous les workflows : `/max:security`.
+- Pousser ou ouvrir la PR : `/max:pull-request`.
+
+## Annexe : règles d'un workflow
+
+Sécurité :
+
+- `permissions: contents: read` à la racine, relevées job par job au besoin.
+- Chaque action épinglée sur un SHA de commit complet, le tag en commentaire ; mises à jour par Dependabot ou Renovate.
+- Aucun secret en clair ni dans les logs.
+- Aucune entrée non fiable (`${{ github.event.* }}`) interpolée dans un `run:` : passer par une variable `env:`.
+- OIDC (`id-token: write`) plutôt qu'une clé cloud durable.
+
+Vitesse :
+
+- Cache des dépendances par `actions/setup-*` ou `actions/cache`, clé sur le lockfile. Mesurer le gain avant de le garder.
+- Jobs indépendants en parallèle ; `needs:` seulement pour une vraie dépendance.
+- Matrice limitée aux versions réellement supportées.
+- `timeout-minutes` sur chaque job.
+- `concurrency` avec `cancel-in-progress` pour les PR.
+
+Structure :
+
+- Déclencheurs précis : `pull_request`, `push` sur la branche par défaut, `workflow_dispatch`.
+- `workflow_call` ou action composite pour ce qui se répète.
+- Tests : mêmes commandes que le runner local, `services:` avec `healthcheck` pour la base, rapport JUnit ou couverture en artefact si utile.
+- Image Docker : construite à chaque PR sans être publiée, publiée depuis la branche par défaut ou un tag ; secrets de build par `secrets:`, pas par `build-args`.
