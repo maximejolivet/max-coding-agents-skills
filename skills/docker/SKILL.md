@@ -110,11 +110,20 @@ up: ## Démarre l'environnement
 down: ## Arrête l'environnement
 	$(COMPOSE) down
 
+build: ## Reconstruit les images
+	$(COMPOSE) build
+
+logs: ## Suit les logs
+	$(COMPOSE) logs -f
+
 sh: ## Ouvre un shell dans le service applicatif
 	$(COMPOSE) exec app sh
 
 test: ## Lance les tests
 	$(COMPOSE) exec app <commande de test du projet>
+
+lint: ## Lance les linters
+	$(COMPOSE) exec app <commande de lint du projet>
 ```
 
 Les cibles `test` et `lint` appellent les commandes que le projet utilise déjà. Aucune cible destructrice (`down -v`, `prune`) sans nom explicite.
