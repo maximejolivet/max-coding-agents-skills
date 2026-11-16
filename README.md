@@ -72,6 +72,7 @@ Tape ensuite `/max:` : la liste des skills s'affiche.
 
 | Commande              | Ce qu'il fait                                                                                         |
 | :-------------------- | :---------------------------------------------------------------------------------------------------- |
+| `/max:dev`            | Développement dans la stack détectée, quelle qu'elle soit, puis renvoi vers `/max:review`.            |
 | `/max:symfony`        | Développement Symfony 6.4, 7.x et 8.x, puis renvoi vers `/max:review`.                                |
 | `/max:nuxt`           | Développement Nuxt 3 et 4, puis renvoi vers `/max:review`.                                            |
 | `/max:react`          | Développement React 18 et 19, puis renvoi vers `/max:review`.                                         |
