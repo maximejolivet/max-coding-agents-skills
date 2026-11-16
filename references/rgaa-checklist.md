@@ -1,31 +1,28 @@
-# RGAA 4.1.2 : liste des 106 critères
+# RGAA 4.1.2 : les 106 critères
 
-Le RGAA (Référentiel général d'amélioration de l'accessibilité), publié par la DINUM, est décliné ici dans sa version 4.1.2 : **13 thématiques, 106 critères**. Les intitulés ci-dessous sont ceux du référentiel, volontairement non reformulés pour ne pas en altérer le sens. Les tests détaillés, les cas particuliers et le glossaire n'y figurent pas : pour valider un critère, consulter le référentiel complet.
+Cocher un critère quand la réponse est « oui », le laisser vide pour « non », noter « NA » quand le contenu visé n'existe pas sur la page.
 
-- Source : <https://accessibilite.numerique.gouv.fr/>
-- Chaque critère est une question. Répondre « oui » = conforme (cocher) ; « non » = non conforme (laisser vide) ; « NA » = le contenu concerné n'existe pas sur la page.
+Les intitulés sont ceux du référentiel de la DINUM, gardés mot pour mot. Tests, cas particuliers et glossaire : <https://accessibilite.numerique.gouv.fr/>.
 
-## Calculer un score
-
-Une fois la liste remplie, le **taux de conformité** s'obtient ainsi :
+## Score
 
 ```text
 taux = critères conformes / (critères conformes + critères non conformes) × 100
 ```
 
-Les « NA » sont écartés. Le calcul se fait sur les 106 critères pris ensemble, puis thématique par thématique pour voir où agir en priorité.
+Les « NA » sortent du calcul. Calculer le taux sur les 106 critères, puis par thématique.
 
-| Taux | Niveau | Interprétation |
-| :--- | :----- | :------------- |
-| ≥ 90 % | Bon | Peu d'écarts, à corriger. |
-| ≥ 50 % | À améliorer | Écarts notables, à planifier. |
-| < 50 % | Insuffisant | Plus de la moitié des critères applicables échouent. |
+| Taux | Niveau |
+| :-- | :-- |
+| 90 % et plus | Bon : quelques écarts |
+| 50 % et plus | À améliorer : écarts à planifier |
+| Moins de 50 % | Insuffisant |
 
-Ces paliers sont des **repères maison**, comme ceux des Core Web Vitals : le RGAA n'en définit pas. Pour la déclaration d'accessibilité, seul le statut officiel compte :
+Ces paliers sont des repères de Max, pas du RGAA. Le statut officiel, pour la déclaration d'accessibilité :
 
-| Situation | Statut RGAA |
-| :-------- | :---------- |
-| Tous les critères applicables sont conformes | Totalement conforme |
+| Situation | Statut |
+| :-- | :-- |
+| Tous les critères applicables conformes | Totalement conforme |
 | Au moins un critère non conforme, mais pas tous | Partiellement conforme |
 | Aucun critère conforme | Non conforme |
 
