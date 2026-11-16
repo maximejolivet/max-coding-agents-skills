@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "max",
-      "description": "Installe la collection Max complète. Enregistre tous les skills du dossier skills/ sous le namespace max, invocables comme /max:<skill> - actuellement /max:review, /max:react, /max:nuxt, /max:symfony, /max:test, /max:docker, /max:kubernetes, /max:pull-request, /max:pr-review, /max:security, /max:commit, /max:versioning, /max:switch, /max:agent-workflow, /max:refactor, /max:debug, /max:issue, /max:release, /max:hotfix, /max:ci, /max:rebase, /max:perf, /max:a11y, /max:migrate-db et /max:explain, pour des projets hébergés sur GitHub.",
+      "description": "Installe la collection Max complète. Enregistre tous les skills du dossier skills/ sous le namespace max, invocables comme /max:<skill> - actuellement /max:review, /max:dev, /max:react, /max:nuxt, /max:symfony, /max:test, /max:docker, /max:kubernetes, /max:pull-request, /max:pr-review, /max:security, /max:commit, /max:versioning, /max:switch, /max:agent-workflow, /max:refactor, /max:debug, /max:issue, /max:release, /max:hotfix, /max:ci, /max:rebase, /max:perf, /max:a11y, /max:migrate-db et /max:explain, pour des projets hébergés sur GitHub.",
       "version": "1.0.15",
       "category": "development",
       "source": "./",
