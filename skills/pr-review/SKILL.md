@@ -19,7 +19,7 @@ argument-hint: "<numéro ou URL de PR>"
    gh issue view <issue> -R <owner>/<repo>
    ```
 
-3. Lire `${CLAUDE_SKILL_DIR}/../review/SKILL.md` : ses modes, sa gravité, sa maîtrise du bruit et sa détection de stack s'appliquent ici.
+3. Lire `${CLAUDE_SKILL_DIR}/../review/SKILL.md` : ses modes, sa gravité, sa maîtrise du bruit et sa détection de stack s'appliquent ici. Dans ce fichier, `${CLAUDE_SKILL_DIR}` n'est pas remplacé : `${CLAUDE_SKILL_DIR}/../../` désigne la racine du plugin, comme ici.
 
 ## Étapes
 
