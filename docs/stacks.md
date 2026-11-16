@@ -1,39 +1,41 @@
-# Ajouter une techno
+# Stacks : détection et ajout d'une techno
 
-Les skills ne contiennent aucune techno : ils détectent la stack, puis chargent `stacks/<techno>/INDEX.md`.
+Aucun skill transverse ne connaît de techno. Il repère la stack du projet, puis lit le fichier `stacks/<techno>/INDEX.md` qui lui correspond. Ajouter une techno revient donc à ajouter deux choses, jamais à modifier un skill.
 
-## Détection
+## Comment la stack est repérée
 
-`stacks/detect.sh` (lecture seule) lit les fichiers du projet et affiche `catégorie<TAB>identifiant<TAB>preuve` : `language`, `package-manager`, `framework`, `parent`, `test`, `tooling`, `runner`, `resource`. La procédure complète est dans `stacks/DETECT.md`. Règles clés :
+`stacks/detect.sh` inspecte les fichiers du projet sans rien exécuter ni installer. Il imprime des lignes `catégorie<TAB>identifiant<TAB>preuve`, avec ces catégories : `language`, `package-manager`, `framework`, `parent`, `test`, `tooling`, `runner`, `resource`. La procédure complète se trouve dans `stacks/DETECT.md`.
 
-- Le framework prime sur le langage.
-- Le plus spécifique d'abord, puis son parent (`nuxt` puis `vue`).
-- Plusieurs frameworks : chacun ne s'applique qu'à ses fichiers.
-- Monorepo : lancer le script sur chaque sous-dossier.
-- Runner : `make`, puis `docker compose`.
+Principes d'interprétation :
 
-## Ajouter une techno
+- le framework l'emporte sur le langage ;
+- on retient d'abord la techno la plus précise, puis son parent (`nuxt`, puis `vue`) ;
+- avec plusieurs frameworks, chacun ne couvre que ses propres fichiers ;
+- dans un monorepo, le script est relancé dans chaque sous-dossier ;
+- pour exécuter une commande, on essaie `make`, puis `docker compose`.
 
-1. Ajouter sa détection dans `stacks/detect.sh`.
+## Brancher une nouvelle techno
+
+1. Déclarer sa détection dans `stacks/detect.sh`.
 2. Créer `stacks/<techno>/INDEX.md`.
-3. Lancer `sh tests/check.sh`.
+3. Exécuter `sh tests/check.sh`.
 
-Aucun skill ne change.
+C'est tout : les skills la prennent en charge d'eux-mêmes.
 
-## Formes d'un dossier de techno
+## Deux organisations possibles
 
-- **Forme 1** : un seul `INDEX.md` découpé en sections (toutes les stacks fournies l'utilisent : Symfony, Nuxt, React, Next.js, Vue, Laravel, Django). Commencer par là.
-- **Forme 2** : `INDEX.md` (dispatcher) + `CORE.md`, `DEV.md`, `REVIEW.md`, `SECURITY.md`, `TEST.md`, `DEPLOY.md`, quand une section devient trop longue.
+- **Un seul fichier.** `INDEX.md` découpé en sections. C'est la forme de toutes les stacks livrées (Symfony, Nuxt, React, Next.js, Vue, Laravel, Django) ; à privilégier au départ.
+- **Plusieurs fichiers.** `INDEX.md` sert d'aiguillage vers `CORE.md`, `DEV.md`, `REVIEW.md`, `SECURITY.md`, `TEST.md` et `DEPLOY.md`. À envisager lorsqu'un seul fichier devient trop long.
 
-## Sections et natures
+## Les sections
 
-| Section        | Chargée pour la nature | Contenu                                    |
-| :------------- | :--------------------- | :----------------------------------------- |
-| `## core`      | toujours               | Conventions et pièges propres à la techno. Écrit **une seule fois**. |
-| `## dev`       | `dev`                  | Écrire du code idiomatique.                |
-| `## review`    | `review`               | Checklist de relecture.                    |
-| `## security`  | `security`             | Avis, configuration, points d'audit.       |
-| `## test`      | `test`                 | Outils et façon d'écrire les tests.        |
-| `## deploy`    | `deploy`               | Build, image, déploiement.                 |
+| Section       | Lue quand le skill a besoin de… | Contenu |
+| :------------ | :------------------------------ | :------ |
+| `## core`     | toujours                        | Conventions et pièges de la techno, rédigés une seule fois. |
+| `## dev`      | écrire du code                  | Façon idiomatique de coder. |
+| `## review`   | relire                          | Points de contrôle d'une revue. |
+| `## security` | auditer                         | Avis, configuration sensible, éléments à vérifier. |
+| `## test`     | tester                          | Outils et style de tests. |
+| `## deploy`   | construire et déployer          | Build, image, mise en production. |
 
-Ne mettre que les sections utiles. Une nature se charge avec `core` plus sa section.
+N'écris que les sections utiles : une nature demandée charge `core` plus sa propre section.
