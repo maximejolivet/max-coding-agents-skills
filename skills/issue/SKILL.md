@@ -1,70 +1,61 @@
 ---
 name: issue
-description: Rédige ou affine une issue GitHub exploitable - problème et valeur, critères d'acceptation vérifiables, périmètre et hors-périmètre, découpage en issues plus petites, étiquettes, puis création avec gh sur accord. Indépendant de la stack. À utiliser quand l'utilisateur veut créer, écrire, préciser ou découper une issue, un ticket, une user story ou un bug report avant de développer, ou invoque /max:issue.
+description: "Rédige ou affine une issue GitHub exploitable - problème et valeur, critères d'acceptation vérifiables, périmètre, découpage en issues plus petites, étiquettes, puis création avec gh sur accord. À utiliser quand Maxime veut créer, écrire, préciser ou découper une issue, un ticket ou un rapport de bug avant de développer, ou invoque /max:issue."
+argument-hint: "[demande ou numéro d'issue à affiner]"
 ---
 
-# Écrire une issue GitHub
+# Rédiger une issue
 
-Produire une issue que quelqu'un d'autre (ou `/max:symfony`, `/max:debug`, `/max:pull-request`) peut prendre en main sans poser de question. Une bonne issue expose un **problème** et ce qui prouvera sa résolution ; elle ne dicte pas la solution technique.
+## Préalables
 
-## Préparer
+1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session. Elle donne la langue et les modèles du dépôt.
+2. Lancer `gh issue list --search "<mots-clés>" --state all` : chercher un doublon.
+3. Lancer `ls .github/ISSUE_TEMPLATE 2>/dev/null; gh label list` : modèles et étiquettes existants.
 
-1. **Type** : bug, fonctionnalité, tâche technique ou question. À défaut d'indication, le déduire de la demande et l'annoncer.
-2. **Contexte du dépôt** : `gh repo view`, puis chercher les issues voisines (`gh issue list --search "<mots-clés>" --state all`) pour éviter un doublon. S'il en existe une, proposer de l'enrichir plutôt que d'en ouvrir une autre.
-3. **Modèles** : si `.github/ISSUE_TEMPLATE/` existe, l'utiliser tel quel ; sinon, la structure ci-dessous.
-4. **Informations manquantes** : poser en une seule fois les questions utiles (comportement attendu, étapes, environnement, urgence). Ne rien inventer : ce qui est inconnu s'écrit « à confirmer ».
+## Étapes
 
-## Structure
+1. Annoncer le type : bug, fonctionnalité, tâche technique ou question.
+2. Poser en une fois les questions utiles. Ce qui reste inconnu s'écrit « to be confirmed ».
+3. Rédiger avec le modèle du dépôt, sinon celui de l'annexe. Le titre est court, à l'impératif, sans le type en préfixe.
+4. Écrire les critères d'acceptation en cases à cocher, chacune vérifiable : « when X, then Y ».
+5. Montrer l'issue complète (titre, corps, étiquettes) et attendre l'accord.
+6. Créer : `gh issue create --title "<titre>" --body-file <fichier> [--label ...]`, le corps dans un fichier temporaire hors du dépôt.
+7. Donner l'URL et la suite : `/max:switch feat/<slug>`, puis `Closes #<n>` dans le commit.
 
-**Bug**
+Une issue décrit un problème et ce qui prouvera sa résolution, pas la solution. Elle tient en une PR relisible.
+
+## Points d'arrêt
+
+- Un doublon existe : proposer d'enrichir l'issue existante.
+- L'issue demande plusieurs PR ou plus de quelques jours : proposer des sous-issues ordonnées, découpées par valeur livrée, sous une issue parente (`- [ ] #123`).
+- Un critère est vague (« fast », « clean ») : le reformuler ou le retirer.
+- L'issue cite un client, un secret ou une donnée réelle : les retirer avant de montrer.
+
+## Ce qu'il ne fait pas
+
+- Créer, modifier, fermer ou commenter une issue sans accord.
+- Créer une étiquette, un jalon ou un projet.
+- Détailler l'implémentation : les skills de développement s'en chargent.
+
+## Annexe : modèles par défaut
+
+Bug :
 
 ```markdown
-## Comportement observé
-## Comportement attendu
-## Étapes pour reproduire
-## Environnement (version, navigateur, stack)
-## Logs ou captures
-## Critères d'acceptation
+## Observed behavior
+## Expected behavior
+## Steps to reproduce
+## Environment (version, browser, stack)
+## Logs or screenshots
+## Acceptance criteria
 ```
 
-**Fonctionnalité ou tâche**
+Fonctionnalité ou tâche :
 
 ```markdown
-## Contexte et valeur (pour qui, pourquoi)
+## Context and value (who, why)
 ## Description
-## Critères d'acceptation
-## Hors-périmètre
-## Notes techniques (facultatif : pistes, contraintes, liens)
+## Acceptance criteria
+## Out of scope
+## Technical notes (optional)
 ```
-
-- Titre court, à l'impératif, sans le type en préfixe (les étiquettes s'en chargent).
-- **Critères d'acceptation** : cases à cocher, chacune vérifiable par une personne ou un test (« quand X, alors Y »). Aucun critère vague (« rapide », « propre »).
-- Une issue = un résultat livrable en **une PR facile à relire**.
-
-## Découper
-
-Quand l'issue réclame plusieurs PR, plusieurs profils ou plus de quelques jours, proposer des sous-issues indépendantes et ordonnées, rattachées à une issue parente qui en liste les liens (`- [ ] #123`). Découper par valeur livrée plutôt que par couche technique, autant que possible.
-
-## Étiquettes et rattachement
-
-N'employer que les étiquettes existantes (`gh label list`), ainsi que les jalons et projets déjà en place. En créer exige un accord.
-
-## Création
-
-1. Présenter l'issue complète (titre, corps, étiquettes) et **attendre l'accord**.
-2. `gh issue create --title "<titre>" --body-file <fichier> [--label ...]`, avec le corps dans un fichier temporaire pour que le markdown multiligne traverse le shell.
-3. Donner l'URL et la suite : `/max:switch feat/<slug>` pour démarrer, `Closes #<n>` dans le commit ou la PR.
-
-## Forme de la réponse
-
-1. Type retenu et doublons éventuels.
-2. L'issue (titre, corps, étiquettes) ou la liste des issues découpées.
-3. Les points « à confirmer ».
-4. Après accord : l'URL créée.
-
-## Limites
-
-- Aucune issue n'est créée, modifiée, fermée ni commentée sans accord explicite.
-- Pas de plan d'implémentation détaillé : c'est l'affaire des skills de développement.
-- Ni planification de sprint ni choix Scrum/Kanban : c'est le rôle de l'agent `agile-planner`, lancé sur demande.
-- Aucune étiquette, aucun jalon ni projet créé sans accord.
