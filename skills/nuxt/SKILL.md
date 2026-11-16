@@ -9,8 +9,9 @@ argument-hint: "[issue, brief ou tâche]"
 ## Préalables
 
 1. Lancer `sh "${CLAUDE_SKILL_DIR}/../../stacks/detect.sh"` : la ligne `framework	nuxt` doit sortir.
-2. Lire `${CLAUDE_SKILL_DIR}/../dev/SKILL.md` : ses préalables, ses étapes, ses points d'arrêt et ses limites s'appliquent en entier.
-3. Lire `${CLAUDE_SKILL_DIR}/../../stacks/nuxt/INDEX.md`, sections `core` et `dev`, puis `${CLAUDE_SKILL_DIR}/../../stacks/vue/INDEX.md` (parent).
+2. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+3. Lire `${CLAUDE_SKILL_DIR}/../dev/SKILL.md` : ses préalables, ses étapes, ses points d'arrêt et ses limites s'appliquent en entier. Dans ce fichier, `${CLAUDE_SKILL_DIR}` n'est pas remplacé : `${CLAUDE_SKILL_DIR}/../../` désigne la racine du plugin, comme ici.
+4. Lire `${CLAUDE_SKILL_DIR}/../../stacks/nuxt/INDEX.md`, sections `core` et `dev`, puis `${CLAUDE_SKILL_DIR}/../../stacks/vue/INDEX.md` (parent).
 
 ## Étapes
 
