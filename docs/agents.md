@@ -19,7 +19,7 @@ Un sous-agent est un relecteur ou un auditeur **sans droit d'écriture**, défin
 
 ## Délégation
 
-Un petit changement (une centaine de lignes sur quelques fichiers) est relu directement par `/max:review`. Au-delà, ou dès que plusieurs sujets se croisent, il confie chaque angle à l'agent adapté et n'appelle que ceux dont le périmètre est touché.
+Un petit changement (environ 150 lignes sur 3 fichiers au plus) est relu directement par `/max:review`. Au-delà, ou dès que plusieurs sujets se croisent, il confie chaque angle à l'agent adapté et n'appelle que ceux dont le périmètre est touché.
 
 ## Format d'un agent
 

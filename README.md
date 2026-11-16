@@ -113,7 +113,7 @@ Tape ensuite `/max:` : la liste des skills s'affiche.
 /max:switch delete   # après le merge : retire la branche
 ```
 
-La sortie du passage en « Ready for review » et le merge te reviennent.
+Le passage en « Ready for review » et le merge te reviennent.
 
 ## Sous le capot
 
