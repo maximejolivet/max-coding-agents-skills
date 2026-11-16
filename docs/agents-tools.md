@@ -1,21 +1,21 @@
-# Agents et outils
+# Outils des agents
 
-Les outils de chaque agent sont déclarés dans le champ `tools` du frontmatter de `agents/<nom>.md`. Pour le rôle de chaque agent et le skill qui le lance, voir [agents.md](agents.md). Pour aller plus loin sur les agents, les skills et les outils, voir la [sélection de dépôts sur l'IA](https://github.com/maximejolivet/maximejolivet/blob/master/IA.md).
+Chaque agent déclare ses outils dans la ligne `tools` du frontmatter de `agents/<nom>.md`. Ce tableau en donne le relevé ; le rôle de chacun est expliqué dans [agents.md](agents.md).
 
-| Agent | Rôle | Lancé par | Outils | Modèle |
-| :--- | :--- | :--- | :--- | :--- |
-| `actions-auditor` | Audite les workflows GitHub Actions : actions non épinglées, permissions du token, déclencheurs dangereux, injection de script, secrets. | `/max:security` | Read, Grep, Glob, Bash | (défaut) |
-| `agile-planner` | Choisit Scrum ou Kanban d'après les user stories et remplit la page de gestion de projet dans Notion. | sur demande | Read, Grep, Glob, Bash + 7 outils Notion (ci-dessous) | `sonnet` |
-| `codebase-surveyor` | Explore le code existant avant un changement : structure, éléments réutilisables, idiomes locaux, risques. | `/max:symfony`, `/max:nuxt`, `/max:react`, `/max:refactor`, `/max:debug` | Read, Grep, Glob, Bash | `sonnet` |
-| `correctness-reviewer` | Relit un diff sous l'angle de la correction : cause racine, cas limites, régressions. | `/max:review` | Read, Grep, Glob, Bash | (défaut) |
-| `dependencies-auditor` | Cherche les vulnérabilités connues : lockfiles Composer et JS, avis de la stack, alertes Dependabot. | `/max:security` | Read, Grep, Glob, Bash, WebFetch | (défaut) |
-| `docker-auditor` | Audite Docker et Compose : images de base, privilèges, socket, secrets, ports, scans d'image. | `/max:security` | Read, Grep, Glob, Bash | (défaut) |
-| `docs-updater` | Compare les `.md` au code réel et rend les corrections exactes à appliquer, sans rien modifier. | sur demande | Read, Grep, Glob, Bash | `sonnet` |
-| `frontend-reviewer` | Relit le code front : hydratation, réactivité, effets, accessibilité, taille du paquet, SEO. | `/max:review` (si front) | Read, Grep, Glob, Bash | (défaut) |
-| `security-reviewer` | Relit un diff sous l'angle applicatif : validation des entrées, accès, injections, XSS/CSRF, secrets. | `/max:review` | Read, Grep, Glob, Bash | (défaut) |
-| `standards-reviewer` | Lance les linters et relit standards, performance (N+1) et couverture de tests. | `/max:review` | Read, Grep, Glob, Bash | (défaut) |
+| Agent                  | Outils déclarés                         | Modèle   | Spécificité |
+| :--------------------- | :-------------------------------------- | :------- | :---------- |
+| `actions-auditor`      | Read, Grep, Glob, Bash                  | défaut   | Examine `.github/workflows`. |
+| `agile-planner`        | Read, Grep, Glob, Bash + 7 outils Notion | `sonnet` | Seul agent qui écrit, et uniquement dans Notion. |
+| `codebase-surveyor`    | Read, Grep, Glob, Bash                  | `sonnet` | Résume la structure d'un gros projet. |
+| `correctness-reviewer` | Read, Grep, Glob, Bash                  | défaut   | Relit la logique du diff. |
+| `dependencies-auditor` | Read, Grep, Glob, Bash, WebFetch        | défaut   | Seul à pouvoir consulter le web, pour les avis de sécurité. |
+| `docker-auditor`       | Read, Grep, Glob, Bash                  | défaut   | Lance un scanner d'image s'il est présent. |
+| `docs-updater`         | Read, Grep, Glob, Bash                  | `sonnet` | Rend des corrections, n'en applique aucune. |
+| `frontend-reviewer`    | Read, Grep, Glob, Bash                  | défaut   | Intervient si le diff touche du front. |
+| `security-reviewer`    | Read, Grep, Glob, Bash                  | défaut   | Sécurité applicative du diff. |
+| `standards-reviewer`   | Read, Grep, Glob, Bash                  | défaut   | Exécute les linters du projet. |
 
-## Outils Notion de `agile-planner`
+## Outils Notion d'`agile-planner`
 
 - `mcp__claude_ai_Notion__notion-search`
 - `mcp__claude_ai_Notion__notion-fetch`
@@ -25,9 +25,9 @@ Les outils de chaque agent sont déclarés dans le champ `tools` du frontmatter 
 - `mcp__claude_ai_Notion__notion-update-page`
 - `mcp__claude_ai_Notion__notion-get-self`
 
-## À retenir
+## Ce qu'il faut retenir
 
-- Aucun agent n'a `Edit`, `Write` ni `Agent` : ils sont en lecture seule et n'en lancent jamais d'autres.
-- `Bash` est restreint par consigne dans le prompt de chaque agent : sondes en lecture seule (`git`, `grep`, `ls`), linters et audits (`composer audit`, `npm audit`, `trivy`) sans correctif automatique ; jamais de modification, de commit ni de push. `standards-reviewer` lance les linters du projet, `dependencies-auditor` les audits de lockfiles.
-- `agile-planner` est le seul à écrire, et uniquement dans Notion, jamais dans le dépôt.
-- `dependencies-auditor` est le seul à avoir `WebFetch`, pour consulter les avis de sécurité.
+- Aucun agent ne reçoit `Edit`, `Write` ni `Agent` : ils ne modifient pas les fichiers et ne délèguent pas.
+- `Bash` est encadré par le prompt de chaque agent : sondes en lecture (`git`, `grep`, `ls`), linters et audits (`composer audit`, `npm audit`, `trivy`) sans correction automatique, jamais de commit ni de push.
+- Le droit de sortie de `dependencies-auditor` (`WebFetch`) et celui d'écriture d'`agile-planner` (Notion) sont les deux seules exceptions au socle commun.
+- Pour explorer d'autres agents, skills et outils, voir la [sélection de dépôts IA](depots-tools.md).
