@@ -1,79 +1,74 @@
 # Onboarding développeur
 
-Ce guide s'adresse à qui travaille **sur** ce dépôt : ajouter un skill, un agent ou une techno, corriger la doc. Pour **utiliser** les skills dans ses projets, voir [getting-started.md](getting-started.md).
+Ce guide est pour toi si tu veux **modifier** ce dépôt : créer un skill, un agent, brancher une techno ou corriger la documentation. Pour simplement **utiliser** le plugin, va plutôt voir [getting-started.md](getting-started.md).
 
-Les règles détaillées sont ailleurs : [skill-anatomy.md](skill-anatomy.md) (format d'un skill), [agents.md](agents.md) (sous-agents), [stacks.md](stacks.md) (technos) et `CLAUDE.md` (conventions du dépôt). Ce document dit dans quel ordre les lire.
+Ordre de lecture conseillé : cette page, puis [skill-anatomy.md](skill-anatomy.md), [agents.md](agents.md), [stacks.md](stacks.md), et enfin `CLAUDE.md` à la racine.
 
-## 1. Le modèle mental
+## 1. Trois couches
 
-Trois couches composables :
+| Couche | Dossier | Responsabilité |
+| :----- | :------ | :------------- |
+| Skills | `skills/<nom>/SKILL.md` | Le *comment* : déroulé, orchestration, forme de la sortie. |
+| Agents | `agents/<nom>.md` | Le *qui* : relecteurs et auditeurs en lecture seule. |
+| Stacks | `stacks/<techno>/INDEX.md` | Le *quoi vérifier* : savoir propre à une techno. |
 
-| Couche  | Emplacement                      | Rôle                                              | En un mot  |
-| :------ | :------------------------------- | :------------------------------------------------ | :--------- |
-| Skills  | `skills/<nom>/SKILL.md`          | Le workflow, l'orchestration et le format de sortie | *Comment* |
-| Agents  | `agents/<nom>.md`                | Relecteurs et auditeurs en lecture seule          | *Qui*      |
-| Stacks  | `stacks/<techno>/INDEX.md`       | Les connaissances propres à une techno            | *Quoi vérifier* |
+Quatre règles à garder en tête :
 
-Quatre règles à intégrer tôt :
+1. **Le skill orchestre.** Il lance les agents ensemble et fusionne leurs retours ; un agent ne lance jamais d'autre agent.
+2. **Pas de techno dans un skill transverse** (`review`, `security`, `pr-review`, `test`, `docker`, `kubernetes`). Elle va dans `stacks/`.
+3. **Un `core` unique par techno.** On le référence depuis les autres sections, on ne le recopie pas.
+4. **Renvoyer plutôt que dupliquer**, y compris dans la documentation.
 
-- **Le skill orchestre.** Un agent n'en lance jamais d'autres : seul schéma admis, le lancement en parallèle par le skill, puis la fusion des constats.
-- **Aucune techno en dur** dans un skill générique (`review`, `security`, `pr-review`, `test`, `docker`, `kubernetes`). Tout passe par `stacks/`.
-- **Le `core` d'une techno n'existe qu'une fois.** Ne pas le recopier dans `review`, `security` ou `pr-review` : on le référence.
-- **Ne pas dupliquer, renvoyer.** Même règle pour la doc.
+`CLAUDE.md` règle le comportement de Claude Code sur ce dépôt ; il n'est pas destiné à être copié ailleurs. Ce qui se réutilise, ce sont les skills.
 
-`CLAUDE.md` configure Claude Code pour travailler sur ce dépôt ; ce n'est pas un fichier à copier dans d'autres projets. Ce qui se réutilise, ce sont les skills.
-
-## 2. Mise en route
+## 2. Poser l'environnement
 
 ```bash
 git clone git@github.com:maximejolivet/claude-skills-max.git
 cd claude-skills-max
 ```
 
-Pas de build ni de dépendances : `tests/check.sh` est un script `sh`. Il faut Claude Code, et la CLI `gh` pour les skills `pull-request` et `pr-review`.
+Rien à compiler ni à installer : `tests/check.sh` est un script shell. Il te faut Claude Code, et `gh` pour tester `pull-request` et `pr-review`.
 
-Pour essayer le plugin sur ton clone sans réinstaller :
+Pour essayer tes modifications sans réinstaller le plugin :
 
 ```bash
 claude --plugin-dir ~/Sites/claude-skills-max
-/reload-plugins   # après chaque modification
+/reload-plugins    # à relancer après chaque édition
 ```
 
-## 3. La boucle de vérification
+## 3. Vérifier ton travail
 
-Deux niveaux, comme pour les skills eux-mêmes : on vérifie avant de dire que c'est fini.
+Deux niveaux complémentaires :
 
-```bash
-sh tests/check.sh
-```
+- **Automatique.** `sh tests/check.sh` contrôle frontmatter, références `max:<nom>` et `stacks/<id>/INDEX.md`, versions identiques, détection sur projets factices. La CI l'exécute à chaque PR (`.github/workflows/check.yml`) ; lance-le avant chaque commit.
+- **Manuel.** Quand le comportement d'un skill ou d'un agent change vraiment, déroule les scénarios de `tests/SCENARIOS.md` dans une session réelle. Le script ne voit pas ce qu'un skill fait en pratique.
 
-Contrôle la cohérence : frontmatter des skills et agents, références `max:<nom>` et `stacks/<id>/INDEX.md`, versions alignées, détection de stack sur des projets factices. Il tourne aussi en CI (`.github/workflows/check.yml`) sur chaque PR. À lancer avant chaque commit.
+## 4. Quel fichier pour quelle tâche
 
-Pour un changement de **comportement** important d'un skill ou d'un agent, suivre les scénarios de `tests/SCENARIOS.md` dans une vraie session (`claude --plugin-dir …`) : `check.sh` ne voit pas ce qu'un skill fait réellement.
+| Je veux…                               | Je modifie                                         | Je n'oublie pas |
+| :------------------------------------- | :------------------------------------------------- | :-------------- |
+| Créer un skill                         | `skills/<nom>/SKILL.md`                            | Tableau du `README.md` + `description` de `marketplace.json`. |
+| Créer un agent                         | `agents/<nom>.md` et le skill appelant             | `docs/agents.md`, `docs/agents-tools.md`, `README.md`. |
+| Supporter une techno                   | `stacks/detect.sh`, `stacks/<techno>/INDEX.md`     | Aucun skill à toucher. |
+| Ajuster une règle d'une techno         | La section concernée de son `INDEX.md`             | Le `core` reste écrit une seule fois. |
+| Sortir une version                     | `version` dans `marketplace.json` et `plugin.json` | Badge du `README.md`. |
 
-## 4. Quelle tâche, quel fichier
+## 5. Du changement à la PR
 
-| Je veux…                         | Je touche                                              | Je mets aussi à jour                                    |
-| :------------------------------- | :----------------------------------------------------- | :------------------------------------------------------ |
-| Ajouter un skill                 | `skills/<nom>/SKILL.md`                                | Tableau du `README.md`, `description` de `marketplace.json` |
-| Ajouter un agent                 | `agents/<nom>.md` + le skill qui le lance              | `docs/agents.md`, `README.md`                           |
-| Ajouter une techno               | `stacks/detect.sh` + `stacks/<techno>/INDEX.md`        | Aucun skill ne change                                   |
-| Changer une règle propre à une techno | la section concernée de `stacks/<techno>/INDEX.md` | Le `core` reste écrit une seule fois                    |
-| Publier une nouvelle version     | `version` dans `marketplace.json` **et** `plugin.json` | Le badge de version du `README.md`                      |
-
-## 5. Flux de contribution
-
-1. Créer `feat/<slug>` ou `fix/<slug>` depuis `main` à jour (`/max:switch`).
+1. `/max:switch` : branche `feat/<slug>` ou `fix/<slug>` depuis `main`.
 2. Modifier, puis `sh tests/check.sh`.
-3. Committer au format `type(scope): emoji description` (`/max:commit`).
-4. Incrémenter la version (`/max:versioning`).
+3. `/max:commit` : `type(scope): emoji description`.
+4. `/max:versioning` : +0.0.1.
 5. `/max:review`, puis `/max:pull-request` : PR en Draft vers `main`.
-6. Après le merge : supprimer la branche liée (`/max:switch delete`) ou nettoyer les branches mergées (`/max:switch clean`).
+6. Après le merge : `/max:switch delete` ou `/max:switch clean`.
 
-## 6. Pièges fréquents
+## 6. Erreurs courantes
 
-- Un skill générique qui nomme une techno : déplacer le contenu dans `stacks/`.
-- Un `core` recopié dans `review` ou `security` : le référencer à la place.
-- `version` différente entre `marketplace.json` et `plugin.json` : `check.sh` échoue.
-- Une `description` qui ne dit pas **quand** utiliser le skill : il ne se déclenchera pas à la bonne demande.
-- Un agent qui modifie des fichiers ou en lance d'autres : ils sont en lecture seule et ne délèguent pas.
+| Symptôme | Cause probable |
+| :------- | :------------- |
+| Un skill transverse mentionne une techno | Déplacer ce contenu dans `stacks/`. |
+| Le même `core` apparaît dans `review` et `security` | Garder une version, référencer l'autre. |
+| `check.sh` échoue sur les versions | `marketplace.json` et `plugin.json` ne portent pas le même numéro. |
+| Le skill ne se déclenche pas quand il le devrait | Sa `description` ne précise pas *quand* l'utiliser. |
+| Un agent modifie des fichiers ou en appelle d'autres | Retirer `Edit`/`Write`/`Agent` : un agent lit seulement. |

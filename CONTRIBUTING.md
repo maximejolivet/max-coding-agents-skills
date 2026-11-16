@@ -1,49 +1,49 @@
-# Contribuer
+# Contribuer à Max
 
-Merci de contribuer à Max. Ce fichier résume le flux ; la visite guidée du dépôt est dans [docs/developer-onboarding.md](docs/developer-onboarding.md).
+Bienvenue. Cette page donne l'essentiel pour proposer un changement ; pour une visite complète du dépôt, passe par [docs/developer-onboarding.md](docs/developer-onboarding.md).
 
-## Avant de commencer
+## Principes
 
-- Les skills et agents sont en français, sauf les noms techniques.
-- Un skill générique ne contient aucune techno en dur : les spécificités vont dans `stacks/`.
-- Le `core` d'une techno n'est écrit qu'une fois.
-- Plateforme cible : GitHub (`gh`, GitHub Actions).
+- Tout le contenu est rédigé en français ; seuls les noms techniques restent tels quels.
+- Un skill transverse n'écrit jamais une techno en toutes lettres : ce savoir appartient à `stacks/`.
+- Les règles communes à une techno (`core`) sont écrites à un seul endroit.
+- La cible est GitHub : CLI `gh` et GitHub Actions.
 
-## Flux
+## Déroulé d'une contribution
 
-1. Créer une branche `feat/<slug>` ou `fix/<slug>` depuis `main` à jour (`/max:switch`).
-2. Modifier, puis lancer `sh tests/check.sh`.
-3. Committer au format `type(scope): emoji description`, scope obligatoire (`feat(review): ✨ …`). Le skill `/max:commit` le rédige.
-4. Ouvrir une PR en Draft vers `main` (`/max:pull-request`), avec le lien vers l'issue (`Closes #n`).
-5. Incrémenter la version de `0.0.1` (`/max:versioning`).
-6. Après le merge : nettoyer les branches mergées (`/max:switch`).
+1. Ouvre une branche `feat/<slug>` ou `fix/<slug>` à partir de `main` à jour (`/max:switch`).
+2. Fais ton changement, puis exécute `sh tests/check.sh`.
+3. Commite en `type(scope): emoji description`, scope toujours renseigné, par exemple `feat(review): ✨ …` (`/max:commit` s'en charge).
+4. Monte la version de 0.0.1 (`/max:versioning`).
+5. Ouvre une PR en Draft vers `main` avec `Closes #n` (`/max:pull-request`).
+6. Une fois mergé, nettoie tes branches locales (`/max:switch`).
 
-Ne pas pousser directement sur `main`.
+Aucun push direct sur `main`.
 
-## Ce que je modifie, ce que je mets à jour
+## Où intervenir
 
-| Je veux…            | Je touche                                                   | Je mets aussi à jour                                        |
-| :------------------ | :---------------------------------------------------------- | :---------------------------------------------------------- |
-| Ajouter un skill    | `skills/<nom>/SKILL.md` (frontmatter `name`, `description`) | Tableau du `README.md`, `description` de `marketplace.json` |
-| Ajouter un agent    | `agents/<nom>.md` et le skill qui le lance                  | `docs/agents.md`, `README.md`                               |
-| Ajouter une techno  | `stacks/detect.sh` et `stacks/<techno>/INDEX.md`            | Aucun skill ne change                                       |
-| Publier une version | `version` dans `marketplace.json` **et** `plugin.json`      | Le badge de version du `README.md`                          |
+| Objectif            | Fichiers à modifier                                       | À mettre à jour en même temps                               |
+| :------------------ | :-------------------------------------------------------- | :---------------------------------------------------------- |
+| Nouveau skill       | `skills/<nom>/SKILL.md`                                   | Tableau du `README.md`, `description` de `marketplace.json` |
+| Nouvel agent        | `agents/<nom>.md`, et le skill qui l'appelle              | `docs/agents.md`, `docs/agents-tools.md`, `README.md`       |
+| Nouvelle techno     | `stacks/detect.sh`, `stacks/<techno>/INDEX.md`            | Rien d'autre : les skills restent inchangés                 |
+| Nouvelle version    | `version` dans `marketplace.json` **et** `plugin.json`    | Badge de version du `README.md`                             |
 
-Formats : [docs/skill-anatomy.md](docs/skill-anatomy.md), [docs/agents.md](docs/agents.md), [docs/stacks.md](docs/stacks.md).
+Détails de format : [skill-anatomy](docs/skill-anatomy.md), [agents](docs/agents.md), [stacks](docs/stacks.md).
 
-## Vérifier
+## Contrôles
 
 ```bash
 sh tests/check.sh
 ```
 
-Contrôle le frontmatter des skills et agents, les références `max:<nom>` et `stacks/<id>/INDEX.md`, l'alignement des versions et la détection de stack. Il tourne aussi en CI sur chaque PR : à lancer avant chaque commit.
+Le script valide le frontmatter, les références `max:<nom>` et `stacks/<id>/INDEX.md`, l'égalité des versions et la détection de stack. La CI le rejoue sur chaque PR, mais lance-le avant de committer.
 
-Pour un changement de comportement important d'un skill ou d'un agent, suivre les scénarios concernés de `tests/SCENARIOS.md` dans une vraie session.
+Si ton changement modifie sensiblement le comportement d'un skill ou d'un agent, joue aussi les scénarios correspondants de `tests/SCENARIOS.md` dans une vraie session.
 
-## Tester en local
+## Essayer en local
 
 ```bash
 claude --plugin-dir ~/Sites/claude-skills-max
-/reload-plugins   # applique les modifs sans redémarrer
+/reload-plugins    # recharge après chaque modification
 ```

@@ -1,38 +1,56 @@
-# Skills et outils
+# Outils des skills
 
-Un skill (`skills/<nom>/SKILL.md`) ne déclare pas de champ `tools` : il utilise les outils de la session Claude Code. Ce tableau résume ce que chaque skill mobilise d'après son `SKILL.md` : les commandes qu'il lance, les sous-agents qu'il orchestre et le recours à `stacks/`. Les sous-agents et leurs outils sont dans [agents-tools.md](agents-tools.md).
+Un skill n'a pas de champ `tools` : il emploie ceux de la session Claude Code. Ce relevé, tiré des `SKILL.md`, indique ce que chacun exécute, quels sous-agents il mobilise et s'il lit `stacks/`. Les outils des agents sont dans [agents-tools.md](agents-tools.md).
 
-| Skill | Rôle | Commandes | Sous-agents | `stacks/` |
-| :--- | :--- | :--- | :--- | :---: |
-| `/max:commit` | Rédige un message de commit sémantique. | `git` | – | – |
-| `/max:switch` | Change de branche sans perdre de travail, nettoie ou supprime les branches mergées (`delete`, `clean`). | `git`, `gh` | – | – |
-| `/max:versioning` | Incrémente et aligne la version du plugin. | `git`, `sh tests/check.sh` | – | – |
-| `/max:pull-request` | Branche, commit ciblé, push, PR en Draft. | `git`, `gh` | – | – |
-| `/max:pr-review` | Relit la PR de quelqu'un d'autre et prépare la review. | `gh`, `jq`, `make`, `docker compose` | – | oui |
-| `/max:review` | Relit un diff avant le merge, verdict classé par gravité. | `git`, `gh`, `make`, `docker compose` | `correctness-reviewer`, `security-reviewer`, `standards-reviewer`, `frontend-reviewer` | oui |
-| `/max:security` | Audite dépendances, Docker et workflows Actions. | `composer`, `npm`/`yarn`/`pnpm`, `trivy`, `make`, `docker` | `dependencies-auditor`, `docker-auditor`, `actions-auditor` | oui |
-| `/max:test` | Écrit, lance et diagnostique les tests. | `make`, `docker compose`, `composer` | – | oui |
-| `/max:docker` | Dockerfile, Compose, Makefile et CI. | `docker`, `docker compose`, `make` | – | oui |
-| `/max:kubernetes` | Manifestes, Kustomize, Helm, déploiement Actions. | `kubectl get`/`diff`/`--dry-run=server` (lecture seule), `helm lint`/`template`/`diff` | – | oui |
-| `/max:symfony` | Développement Symfony, puis renvoi vers `/max:review`. | `composer`, `make`, `docker compose` | `codebase-surveyor` | oui |
-| `/max:nuxt` | Développement Nuxt, puis renvoi vers `/max:review`. | `npm`/`yarn`/`pnpm` | `codebase-surveyor` | oui |
-| `/max:react` | Développement React, puis renvoi vers `/max:review`. | selon le projet | `codebase-surveyor` | oui |
-| `/max:refactor` | Refactoring et migration par lots, vérifiés et annulables. | linter, types, build, tests via le runner du projet | `codebase-surveyor` (cartographie, lecture seule) | oui |
-| `/max:release` | Version, changelog, tag et GitHub Release sur accord. | `git`, `gh` | – | oui |
-| `/max:hotfix` | Correctif urgent sur la version en production, backport. | `git`, `gh`, runner de tests | – | oui |
-| `/max:ci` | Workflows GitHub Actions : écriture et débogage. | `gh run`, `actionlint` si présent | – | oui |
-| `/max:rebase` | Rebase et conflits en sécurité. | `git` | – | – |
-| `/max:perf` | Optimisation mesurée. | profileurs, Lighthouse, `EXPLAIN` selon la stack | `codebase-surveyor` (lecture seule) | oui |
-| `/max:a11y` | Accessibilité RGAA / WCAG. | `axe`, `pa11y`, Lighthouse si présents | – | oui |
-| `/max:migrate-db` | Migrations de base de données sûres. | outil de migration du projet | – | oui |
-| `/max:explain` | Explication d'un dépôt, lecture seule. | `git`, `ls` | `codebase-surveyor` | oui |
-| `/max:issue` | Rédige ou découpe une issue GitHub, création sur accord. | `gh issue list`/`create` | – | oui |
-| `/max:debug` | Débogage par la cause racine : repro, isolation, bisect, test de non-régression, correctif minimal. | `git bisect`, débogueur, runner de tests du projet | `codebase-surveyor` (lecture seule) | oui |
-| `/max:agent-workflow` | Conçoit un workflow agentique (découpage, mécanisme, boucle de vérification, garde-fous, contexte). | – | – | – |
+## Git et GitHub
 
-## À retenir
+| Skill               | Commandes                          | Sous-agents | `stacks/` |
+| :------------------ | :--------------------------------- | :---------- | :-------: |
+| `/max:switch`       | `git`, `gh`                        | –           | non |
+| `/max:commit`       | `git`                              | –           | non |
+| `/max:versioning`   | `git`, `sh tests/check.sh`         | –           | non |
+| `/max:pull-request` | `git`, `gh`                        | –           | non |
+| `/max:rebase`       | `git`                              | –           | non |
+| `/max:release`      | `git`, `gh`                        | –           | oui |
+| `/max:hotfix`       | `git`, `gh`, runner de tests       | –           | oui |
+| `/max:issue`        | `gh issue list`, `gh issue create` | –           | oui |
 
-- Les skills génériques (`review`, `security`, `pr-review`, `test`, `docker`, `kubernetes`) détectent la stack puis chargent `stacks/<techno>/INDEX.md` ; les commandes réellement lancées dépendent donc du projet.
-- Les skills de développement (`symfony`, `nuxt`, `react`) renvoient vers `/max:review`, qui prépare `/max:pull-request`.
-- Les sous-agents ne sont lancés que par un skill, en parallèle ; un agent n'en lance jamais d'autres.
-- La colonne « Commandes » est un relevé des `SKILL.md`, à relire si un skill change. Les écritures (`git push`, `gh pr create`, `helm upgrade`, `docker system prune`…) ne se font que sur demande ou après accord.
+## Relecture et audit
+
+| Skill            | Commandes                                                   | Sous-agents | `stacks/` |
+| :--------------- | :---------------------------------------------------------- | :---------- | :-------: |
+| `/max:review`    | `git`, `gh`, `make`, `docker compose`                       | `correctness-reviewer`, `security-reviewer`, `standards-reviewer`, `frontend-reviewer` | oui |
+| `/max:pr-review` | `gh`, `jq`, `make`, `docker compose`                        | –           | oui |
+| `/max:security`  | `composer`, `npm`/`yarn`/`pnpm`, `trivy`, `make`, `docker`  | `dependencies-auditor`, `docker-auditor`, `actions-auditor` | oui |
+| `/max:test`      | `make`, `docker compose`, `composer`                        | –           | oui |
+| `/max:a11y`      | `axe`, `pa11y`, Lighthouse s'ils sont installés             | –           | oui |
+| `/max:perf`      | profileurs, Lighthouse, `EXPLAIN` selon la stack            | `codebase-surveyor` | oui |
+
+## Développement et diagnostic
+
+| Skill             | Commandes                                         | Sous-agents | `stacks/` |
+| :---------------- | :------------------------------------------------ | :---------- | :-------: |
+| `/max:symfony`    | `composer`, `make`, `docker compose`              | `codebase-surveyor` | oui |
+| `/max:nuxt`       | `npm`/`yarn`/`pnpm`                               | `codebase-surveyor` | oui |
+| `/max:react`      | selon le projet                                   | `codebase-surveyor` | oui |
+| `/max:refactor`   | linter, types, build et tests du projet           | `codebase-surveyor` | oui |
+| `/max:debug`      | `git bisect`, débogueur, runner de tests          | `codebase-surveyor` | oui |
+| `/max:migrate-db` | outil de migration du projet                      | –           | oui |
+| `/max:explain`    | `git`, `ls`                                       | `codebase-surveyor` | oui |
+
+## Infrastructure et méthode
+
+| Skill                 | Commandes                                                              | Sous-agents | `stacks/` |
+| :-------------------- | :--------------------------------------------------------------------- | :---------- | :-------: |
+| `/max:docker`         | `docker`, `docker compose`, `make`                                     | –           | oui |
+| `/max:kubernetes`     | `kubectl get`/`diff`/`--dry-run=server` (lecture), `helm lint`/`template`/`diff` | – | oui |
+| `/max:ci`             | `gh run`, `actionlint` si présent                                      | –           | oui |
+| `/max:agent-workflow` | –                                                                      | –           | non |
+
+## Points d'attention
+
+- Les skills transverses (`review`, `security`, `pr-review`, `test`, `docker`, `kubernetes`) lisent la stack avant d'agir : les commandes réellement lancées dépendent donc du projet.
+- Les skills `symfony`, `nuxt` et `react` finissent en renvoyant vers `/max:review`, lequel prépare `/max:pull-request`.
+- Seul un skill démarre des sous-agents, et il les démarre ensemble.
+- Les actions qui écrivent à l'extérieur (`git push`, `gh pr create`, `helm upgrade`, `docker system prune`…) attendent ton accord.
+- Ce tableau recopie les `SKILL.md` à un instant donné : à vérifier quand un skill évolue.
