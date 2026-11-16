@@ -19,7 +19,7 @@ Ce dépôt est le plugin Claude Code `max` : ses skills s'appellent par `/max:<s
 - Le `core` d'une techno est écrit une seule fois ; `review`, `security` et `pr-review` s'y réfèrent sans le recopier.
 - Pour une nouvelle techno : l'ajouter à `detect.sh` et créer `stacks/<techno>/INDEX.md`. Aucun skill n'est modifié.
 - Pour un nouveau skill : créer `skills/<nom>/SKILL.md`, ajouter une ligne au tableau du `README.md` et le citer dans la `description` de `marketplace.json`.
-- La `version` doit être la même dans `marketplace.json`, `plugin.json` et le badge du `README.md`. Chaque PR l'augmente de `0.0.1` (skill `versioning`), faute de quoi Claude Code ne propose pas la mise à jour. Version courante : `1.0.14`.
+- La `version` doit être la même dans `marketplace.json`, `plugin.json` et le badge du `README.md`. Chaque PR l'augmente de `0.0.1` (skill `versioning`), faute de quoi Claude Code ne propose pas la mise à jour. Version courante : `1.0.15`.
 - Cible : GitHub (`gh`, Actions). Branches `feat/<slug>` ou `fix/<slug>` créées depuis un `main` à jour, commits `type(scope): emoji description` (skill `commit`), PR en Draft vers `main`, nettoyage local une fois mergée.
 
 ## Travailler sur le dépôt
