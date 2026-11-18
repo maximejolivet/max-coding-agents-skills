@@ -11,7 +11,7 @@
 **Des skills spécialisés pour agents de code IA : développer, relire, tester, livrer et sécuriser une application, de la première ligne de code à la production.**
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
-[![Version](https://img.shields.io/badge/version-1.0.20-lightgrey)](.claude-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-1.0.21-lightgrey)](.claude-plugin/plugin.json)
 [![Licence MIT](https://img.shields.io/badge/licence-MIT-green)](LICENSE)
 [![Check](https://img.shields.io/github/actions/workflow/status/maximejolivet/max-coding-agents-skills/check.yml?label=check)](https://github.com/maximejolivet/max-coding-agents-skills/actions/workflows/check.yml)
 [![Dernier commit](https://img.shields.io/github/last-commit/maximejolivet/max-coding-agents-skills)](https://github.com/maximejolivet/max-coding-agents-skills/commits/main)
@@ -29,7 +29,7 @@
 
 ## À propos
 
-Max est un plugin [Claude Code](https://claude.com/claude-code) pour les projets hébergés sur GitHub. Il réunit 26 skills, 9 sous-agents en lecture seule et les règles de 7 technos.
+Max est un plugin [Claude Code](https://claude.com/claude-code) pour les projets hébergés sur GitHub. Il réunit 27 skills, 9 sous-agents en lecture seule et les règles de 7 technos.
 
 - **Un cycle complet.** Chaque étape a son skill et renvoie vers la suivante, du développement à la pull request.
 - **Adapté au projet.** Max détecte la stack et applique les conventions du dépôt avant ses propres défauts.
@@ -97,6 +97,7 @@ Max est conçu pour Claude Code et n'a pas encore été validé sur Codex :
 | `/max:nuxt` | Développe en Nuxt (3 et 4). |
 | `/max:react` | Développe en React (18 et 19). |
 | `/max:debug` | Trouve la cause racine d'un bug : reproduction, hypothèses, bisect, test de non-régression. |
+| `/max:maintenance` | Qualifie une demande corrective ou évolutive, cadre l'intervention et prépare le compte rendu. |
 | `/max:refactor` | Refactorise ou migre par lots annulables, vérifiés un à un. |
 | `/max:migrate-db` | Conçoit une migration de base réversible, sans verrou long, avec un plan de retour. |
 | `/max:explain` | Explique un dépôt inconnu en lecture seule : carte, flux, commandes, zones à risque. |
@@ -167,7 +168,7 @@ Symfony, Laravel, Django, Nuxt, Vue, React et Next.js ont leurs règles. Une aut
 | `dependencies-auditor` | `/max:security` | Vulnérabilités connues des dépendances. |
 | `docker-auditor` | `/max:security`, si Docker est présent | Images, privilèges, secrets, ports. |
 | `actions-auditor` | `/max:security`, si des workflows existent | Épinglage, permissions, déclencheurs, injections. |
-| `codebase-surveyor` | `/max:dev`, `/max:debug`, `/max:refactor`, `/max:perf`, `/max:explain` | Exploration d'un gros projet. |
+| `codebase-surveyor` | `/max:dev`, `/max:debug`, `/max:maintenance`, `/max:refactor`, `/max:perf`, `/max:explain` | Exploration d'un gros projet. |
 | `docs-updater` | Sur demande, dans ce dépôt | Écarts entre la documentation et le code. |
 
 ## Structure du dépôt
@@ -188,7 +189,7 @@ max-coding-agents-skills/
 │   ├── dependencies-auditor.md    # /max:security : lockfiles, avis, Dependabot
 │   ├── docker-auditor.md          # /max:security : images, privilèges, secrets, ports
 │   ├── actions-auditor.md         # /max:security : workflows GitHub Actions
-│   ├── codebase-surveyor.md       # dev, debug, refactor, perf, explain : exploration d'un gros projet
+│   ├── codebase-surveyor.md       # dev, debug, maintenance, refactor, perf, explain : exploration d'un gros projet
 │   └── docs-updater.md            # sur demande : écarts entre la documentation et le code
 ├── commands/                      # vide pour l'instant
 ├── docs/
@@ -209,6 +210,7 @@ max-coding-agents-skills/
 │   ├── nuxt/SKILL.md              # développement Nuxt
 │   ├── react/SKILL.md             # développement React
 │   ├── debug/SKILL.md             # débogage par la cause racine
+│   ├── maintenance/SKILL.md       # maintenance corrective et évolutive
 │   ├── refactor/SKILL.md          # refactoring et migration par lots
 │   ├── migrate-db/SKILL.md        # migrations de base de données sûres
 │   ├── explain/SKILL.md           # comprendre un dépôt inconnu, lecture seule
