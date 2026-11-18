@@ -7,8 +7,10 @@ description: "Monte la version du plugin Max - lit la version actuelle, ajoute 0
 
 ## Préalables
 
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
 1. Lancer `grep -q '"name": "max"' .claude-plugin/plugin.json`. S'il échoue, s'arrêter : ce skill ne vaut que pour le dépôt du plugin. Sur un dépôt client, la version relève de `/max:release`.
-2. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+2. Lire `<max>/references/regles.md`, une fois par session.
 3. Lancer `grep -n '"version"' .claude-plugin/plugin.json .claude-plugin/marketplace.json` : ne jamais modifier une version sans l'avoir lue.
 
 ## Étapes

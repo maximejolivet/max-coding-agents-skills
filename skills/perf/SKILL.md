@@ -8,9 +8,11 @@ argument-hint: "[page, requête ou commande lente]"
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
-2. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **dev**.
-3. Pour une page web : lire `${CLAUDE_SKILL_DIR}/../../references/core-web-vitals-checklist.md`.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session.
+2. Détecter la stack : suivre `<max>/stacks/DETECT.md`, nature **dev**.
+3. Pour une page web : lire `<max>/references/core-web-vitals-checklist.md`.
 
 ## Étapes
 

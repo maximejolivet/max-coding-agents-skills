@@ -8,7 +8,9 @@ argument-hint: "[tâche ou workflow à concevoir]"
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session.
 2. Lire ce que le projet a déjà : `CLAUDE.md`, `.claude/`, `skills/`, `agents/`, scripts, CI. Étendre l'existant plutôt que le doubler.
 3. Fixer en une ligne chacun : l'objectif (un résultat observable), le critère de réussite vérifiable, le périmètre, la fréquence, le coût d'une erreur.
 

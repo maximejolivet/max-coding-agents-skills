@@ -7,7 +7,9 @@ description: "Audite la sécurité des dépendances et de l'infrastructure d'un 
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session.
 2. Lister ce qui existe :
 
    ```bash
@@ -16,7 +18,7 @@ description: "Audite la sécurité des dépendances et de l'infrastructure d'un 
    ls .github/workflows/*.y*ml .github/dependabot.yml 2>/dev/null
    ```
 
-3. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **security**. Son tableau « Défauts par langage » donne la commande d'audit de chaque écosystème.
+3. Détecter la stack : suivre `<max>/stacks/DETECT.md`, nature **security**. Son tableau « Défauts par langage » donne la commande d'audit de chaque écosystème.
 
 ## Étapes
 
@@ -25,7 +27,7 @@ description: "Audite la sécurité des dépendances et de l'infrastructure d'un 
 
    | Domaines présents | Mode |
    | :-- | :-- |
-   | Un seul | Passe unique : lire la section `## Contrôles` de l'agent du domaine dans `${CLAUDE_SKILL_DIR}/../../agents/` et l'appliquer |
+   | Un seul | Passe unique : lire la section `## Contrôles` de l'agent du domaine dans `<max>/agents/` et l'appliquer |
    | Deux ou plus | Délégation : un agent par domaine, lancés dans le même tour avec l'outil Agent |
 
    | Agent (`subagent_type`) | Lancer quand |

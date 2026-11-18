@@ -52,6 +52,14 @@ for p in $(grep -rhoE 'stacks/[a-z][a-z0-9-]*/INDEX\.md' skills agents stacks RE
   else ko "$p est référencé mais absent ou vide"; fi
 done
 
+section "Chemins portables des skills"
+for f in skills/*/SKILL.md; do
+  dir=$(basename "$(dirname "$f")")
+  if grep -q 'CLAUDE_SKILL_DIR' "$f"; then ko "$dir : CLAUDE_SKILL_DIR ne fonctionne pas sur Codex"
+  elif grep -qF 'cd -P "<dossier de ce SKILL.md>/../.."' "$f"; then ok "$dir"
+  else ko "$dir : la racine <max> n'est pas résolue dans les préalables"; fi
+done
+
 section "Versions alignées"
 v1=$(grep -m1 '"version"' .claude-plugin/plugin.json | sed 's/.*: *"\(.*\)".*/\1/')
 v2=$(grep -m1 '"version"' .claude-plugin/marketplace.json | sed 's/.*: *"\(.*\)".*/\1/')

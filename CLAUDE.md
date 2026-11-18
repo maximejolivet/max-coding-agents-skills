@@ -2,11 +2,11 @@
 
 ```bash
 sh tests/check.sh                               # à lancer avant chaque commit
-claude --plugin-dir ~/Sites/claude-skills-max   # essayer les skills en place
+claude --plugin-dir ~/.claude/max-coding-agents-skills   # essayer les skills en place
 /reload-plugins                                 # après chaque modification
 ```
 
-Ce dépôt est le plugin Claude Code `max` : l'environnement de développement de Maxime, développeur freelance qui travaille seul sur les dépôts GitHub de plusieurs clients. Aucun build. Version courante : `1.0.17`.
+Ce dépôt est le plugin Claude Code `max` : l'environnement de développement de Maxime, développeur web full-stack qui travaille seul sur les dépôts GitHub de plusieurs clients. Aucun build. Version courante : `1.0.18`.
 
 ## Structure
 
@@ -39,6 +39,7 @@ Manifestes : `.claude-plugin/marketplace.json` et `.claude-plugin/plugin.json`. 
 ## Contraintes de `tests/check.sh`
 
 - Skill : `name` égal au nom du dossier, `description` non vide, cité `/max:<nom>` dans le README et dans `marketplace.json`.
+- Chemins d'un skill : première ligne des préalables qui résout `<max>`, aucun `${CLAUDE_SKILL_DIR}`.
 - Agent : `name`, `description` et `tools` présents, aucun outil d'écriture.
 - Tout `max:<nom>` et tout `stacks/<id>/INDEX.md` cités existent.
 - Même version dans `plugin.json` et `marketplace.json`. Chaque PR ajoute `0.0.1` (`/max:versioning`), y compris dans le badge du README et ici.

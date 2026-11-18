@@ -8,8 +8,10 @@ argument-hint: "[changement de schéma]"
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
-2. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **dev**. Annoncer l'outil de migration du projet.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session.
+2. Détecter la stack : suivre `<max>/stacks/DETECT.md`, nature **dev**. Annoncer l'outil de migration du projet.
 3. Relever la cible : moteur et version, taille des tables touchées (`SELECT count(*)`), environnements, et si l'ancien code tourne encore pendant le déploiement.
 
 ## Étapes

@@ -4,7 +4,7 @@
 grep -E '"(vue|vite|pinia|vue-router|typescript)"' package.json
 ```
 
-Lire `## core`, puis la section de la nature (tableau : `stacks/DETECT.md`). Vue 3 seulement : Vue 2 est en fin de vie. Parent de Nuxt.
+Lire `## core`, puis la section de la nature (tableau : `<max>/stacks/DETECT.md`). Vue 3 seulement : Vue 2 est en fin de vie. Parent de Nuxt.
 
 ---
 

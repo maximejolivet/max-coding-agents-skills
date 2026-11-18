@@ -7,7 +7,9 @@ description: "Met une branche à jour par rebase ou fusion sans perdre de travai
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session. Elle donne la branche par défaut (`<défaut>`).
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session. Elle donne la branche par défaut (`<défaut>`).
 2. Lancer `git status -sb` : l'arbre doit être propre. Sinon `/max:commit`, ou un stash par `/max:switch`.
 3. Lancer `git log origin/<branche>..` et `gh pr view` : savoir si quelqu'un d'autre travaille sur la branche.
 
