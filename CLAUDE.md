@@ -6,7 +6,7 @@ claude --plugin-dir ~/.claude/max-coding-agents-skills   # essayer les skills en
 /reload-plugins                                 # après chaque modification
 ```
 
-Ce dépôt est le plugin Claude Code `max` : l'environnement de développement de Maxime, développeur web full-stack qui travaille seul sur les dépôts GitHub de plusieurs clients. Aucun build. Version courante : `1.0.18`.
+Ce dépôt est le plugin Claude Code `max` : l'environnement de développement de Maxime, développeur web full-stack qui travaille seul sur les dépôts GitHub de plusieurs clients. Aucun build. Version courante : `1.0.20`.
 
 ## Structure
 
@@ -38,11 +38,13 @@ Manifestes : `.claude-plugin/marketplace.json` et `.claude-plugin/plugin.json`. 
 
 ## Contraintes de `tests/check.sh`
 
-- Skill : `name` égal au nom du dossier, `description` non vide, cité `/max:<nom>` dans le README et dans `marketplace.json`.
-- Chemins d'un skill : première ligne des préalables qui résout `<max>`, aucun `${CLAUDE_SKILL_DIR}`.
-- Agent : `name`, `description` et `tools` présents, aucun outil d'écriture.
-- Tout `max:<nom>` et tout `stacks/<id>/INDEX.md` cités existent.
-- Même version dans `plugin.json` et `marketplace.json`. Chaque PR ajoute `0.0.1` (`/max:versioning`), y compris dans le badge du README et ici.
+- Skill : `name` égal au nom du dossier, `description` sans chevrons qui cite `/max:<nom>` et contient « À utiliser », plan de `docs/skill-anatomy.md`. Cité `/max:<nom>` dans le README, `marketplace.json` et `tests/SCENARIOS.md`.
+- Chemins d'un skill : première ligne des préalables qui résout `<max>`, `references/regles.md` lu dans les préalables, aucun `${CLAUDE_SKILL_DIR}`.
+- Agent : `name`, `description` et `tools` présents, outils de lecture seule uniquement, plan `Entrée`, `Étapes`, `Contrôles` (facultatif), `Sortie`, `Limites`, aucun `max:<nom>` dans le corps. Cité dans le README et `docs/agents.md`.
+- Références : tout `max:<nom>`, `<max>/<chemin>`, `stacks/<id>/INDEX.md` et lien Markdown relatif cités existent. Tout fichier de `references/` est cité par un skill ou un agent.
+- Stack : `INDEX.md` avec `## core` et les seules natures connues, framework émis par `detect.sh` et listé dans `stacks/DETECT.md`, nature d'un skill conforme au tableau de `stacks/DETECT.md`.
+- Dépôt : scripts en `#!/bin/sh` sans erreur shellcheck, garde-fou git exercé, actions épinglées par SHA, aucun secret, CRLF, marqueur de conflit ni bloc de code non refermé.
+- Même version dans `plugin.json` et `marketplace.json`. Chaque PR ajoute `0.0.1` (`/max:versioning`), y compris dans le badge du README et ici. Le nombre de skills et de sous-agents du README suit le dépôt.
 
 ## Flux
 
