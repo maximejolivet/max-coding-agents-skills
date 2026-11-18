@@ -7,7 +7,9 @@ description: "Écrit et relit Dockerfile, fichiers Compose et Makefile pour des 
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session.
 2. Lancer :
 
    ```bash
@@ -15,7 +17,7 @@ description: "Écrit et relit Dockerfile, fichiers Compose et Makefile pour des 
    ls .github/workflows/*.y*ml 2>/dev/null
    ```
 
-3. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **deploy**.
+3. Détecter la stack : suivre `<max>/stacks/DETECT.md`, nature **deploy**.
 4. Dire en une phrase ce qui existe et ce qui va changer.
 
 ## Étapes

@@ -8,7 +8,9 @@ argument-hint: "<numéro ou URL de PR>"
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session.
 2. Charger la PR (le dépôt se lit dans l'URL ; `GH_HOST=<hôte>` sur GitHub Enterprise) :
 
    ```bash
@@ -19,7 +21,7 @@ argument-hint: "<numéro ou URL de PR>"
    gh issue view <issue> -R <owner>/<repo>
    ```
 
-3. Lire `${CLAUDE_SKILL_DIR}/../review/SKILL.md` : ses modes, sa gravité, sa maîtrise du bruit et sa détection de stack s'appliquent ici. Dans ce fichier, `${CLAUDE_SKILL_DIR}` n'est pas remplacé : `${CLAUDE_SKILL_DIR}/../../` désigne la racine du plugin, comme ici.
+3. Lire `<max>/skills/review/SKILL.md` : ses modes, sa gravité, sa maîtrise du bruit et sa détection de stack s'appliquent ici. Ses chemins `<max>/…` partent de la même racine.
 
 ## Étapes
 
@@ -36,7 +38,7 @@ argument-hint: "<numéro ou URL de PR>"
 
 - Des checks sont en attente : les noter non vérifiés.
 - Quelque chose n'a pas pu être vérifié : ne pas recommander `approve`.
-- Le diff touche `.github/workflows/` : relire aussi le workflow avec les contrôles de `${CLAUDE_SKILL_DIR}/../../agents/actions-auditor.md`.
+- Le diff touche `.github/workflows/` : relire aussi le workflow avec les contrôles de `<max>/agents/actions-auditor.md`.
 - L'API répond 422 (« Line could not be resolved ») : la ligne n'appartient pas au diff du fichier, corriger l'ancrage.
 - L'accord donné pour une revue ne vaut pas pour la suivante.
 

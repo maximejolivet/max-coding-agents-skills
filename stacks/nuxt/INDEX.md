@@ -5,7 +5,7 @@ grep -E '"(nuxt|vue|nitropack|typescript)"' package.json
 ls nuxt.config.* app pages components composables server 2>/dev/null
 ```
 
-Lire `## core`, puis la section de la nature (tableau : `stacks/DETECT.md`), puis `stacks/vue/INDEX.md` (parent). Valable pour Nuxt 3 et 4.
+Lire `## core`, puis la section de la nature (tableau : `<max>/stacks/DETECT.md`), puis `<max>/stacks/vue/INDEX.md` (parent). Valable pour Nuxt 3 et 4.
 
 ---
 
@@ -108,7 +108,7 @@ npx nuxt typecheck
 
 ### Composants, performance, accessibilité
 
-- Les points de `stacks/vue/INDEX.md` > `review`.
+- Les points de `<max>/stacks/vue/INDEX.md` > `review`.
 - Composant lourd sans préfixe `Lazy` ni `defineAsyncComponent`, images non optimisées, paquet importé en entier.
 - Page stable sans `swr` ni `prerender`.
 - Page publique sans `useHead` / `useSeoMeta`.

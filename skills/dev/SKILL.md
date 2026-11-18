@@ -8,8 +8,10 @@ argument-hint: "[issue, brief ou tâche]"
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
-2. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **dev**. Lire aussi `## security` si la demande touche l'authentification, les droits ou des données privées.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session.
+2. Détecter la stack : suivre `<max>/stacks/DETECT.md`, nature **dev**. Lire aussi `## security` si la demande touche l'authentification, les droits ou des données privées.
 3. Lancer les commandes placées en tête de la ressource de stack : version, gestionnaire de paquets, structure.
 4. Lire la demande : l'issue (`gh issue view <n>`) ou le brief. En tirer le comportement attendu, les contraintes, les fichiers à voir en premier. Sans demande écrite : demander l'intention en une ligne.
 

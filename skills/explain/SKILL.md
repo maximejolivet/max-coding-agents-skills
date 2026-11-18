@@ -8,8 +8,10 @@ argument-hint: "[dépôt, module ou flux]"
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session. Ce skill en est l'exception prévue : l'explication est complète, avec des titres, sans préambule ni formule finale.
-2. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **core**.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session. Ce skill en est l'exception prévue : l'explication est complète, avec des titres, sans préambule ni formule finale.
+2. Détecter la stack : suivre `<max>/stacks/DETECT.md`, nature **core**.
 3. Fixer la question : le dépôt entier, un module ou un flux. Sans précision : le dépôt entier.
 
 ## Étapes

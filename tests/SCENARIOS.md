@@ -1,7 +1,7 @@
 # Scénarios manuels
 
 ```bash
-claude --plugin-dir ~/Sites/claude-skills-max    # puis /reload-plugins après chaque édition
+claude --plugin-dir ~/.claude/max-coding-agents-skills    # puis /reload-plugins après chaque édition
 ```
 
 `tests/check.sh` vérifie la cohérence des fichiers. Il ne voit pas ce qu'un skill fait : ces scénarios le montrent, dans une vraie session, sur un dépôt d'essai.
@@ -128,6 +128,7 @@ Aucun scénario ne se joue sur le dépôt d'un client.
 | 56 | Gros projet, suite verte | `/max:refactor` + un renommage répandu | Suite lancée avant ; plan en lots ; accord avant exécution ; commit par lot seulement sur demande |
 | 57 | Zone sans tests | `/max:refactor` | Tests de caractérisation d'abord, ou lots réduits avec recette manuelle |
 | 58 | Grosse tâche | `/max:agent-workflow` | Critère vérifiable ; mécanisme par étape ; limite d'essais ; rien d'écrit avant accord ; `settings.json` intact |
+| 59 | Skills reliés dans `~/.agents/skills`, session Codex dans un dépôt d'essai | `$review` | `<max>` résolu vers le clone de Max ; `references/regles.md` lu ; `detect.sh` lancé sur le dépôt d'essai |
 
 ## Garde-fous à constater dans tous les scénarios
 

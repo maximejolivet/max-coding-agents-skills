@@ -8,7 +8,9 @@ argument-hint: "[branche | feat/slug | delete [branche|#PR] [--remote] [--force]
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session. Elle donne la branche par défaut, notée `<défaut>` ci-dessous, et le nommage des branches du dépôt.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session. Elle donne la branche par défaut, notée `<défaut>` ci-dessous, et le nommage des branches du dépôt.
 2. Lancer `git status -sb` et `git branch --show-current`.
 3. S'il reste du travail non commité, demander quoi en faire : le committer (`/max:commit`), le mettre de côté (`git stash push -u -m "<branche>: <résumé>"`), ou l'emporter si `git switch` l'accepte sans conflit.
 

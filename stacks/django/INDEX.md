@@ -5,7 +5,7 @@ python -m django --version 2>/dev/null
 ls manage.py pyproject.toml requirements*.txt 2>/dev/null
 ```
 
-Lire `## core`, puis la section de la nature (tableau : `stacks/DETECT.md`).
+Lire `## core`, puis la section de la nature (tableau : `<max>/stacks/DETECT.md`).
 
 ---
 

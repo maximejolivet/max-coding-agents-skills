@@ -7,7 +7,9 @@ description: "Mène un correctif urgent sur une version en production - contourn
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session. Elle donne la branche par défaut (`<défaut>`).
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session. Elle donne la branche par défaut (`<défaut>`).
 2. Lancer `git tag --sort=-v:refname | head` et `gh release list` : trouver la version déployée.
 3. Relever qui est touché, depuis quand, et s'il existe un contournement immédiat (couper un drapeau, revenir au tag précédent).
 

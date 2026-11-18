@@ -8,7 +8,9 @@ argument-hint: "[demande ou numéro d'issue à affiner]"
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session. Elle donne la langue et les modèles du dépôt.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session. Elle donne la langue et les modèles du dépôt.
 2. Lancer `gh issue list --search "<mots-clés>" --state all` : chercher un doublon.
 3. Lancer `ls .github/ISSUE_TEMPLATE 2>/dev/null; gh label list` : modèles et étiquettes existants.
 

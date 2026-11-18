@@ -8,9 +8,11 @@ argument-hint: "[workflow ou run en échec]"
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session.
 2. Lancer `ls .github/workflows/ 2>/dev/null; gh run list --limit 5`.
-3. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **deploy**. Elle donne les commandes de build et de test.
+3. Détecter la stack : suivre `<max>/stacks/DETECT.md`, nature **deploy**. Elle donne les commandes de build et de test.
 
 ## Étapes
 
