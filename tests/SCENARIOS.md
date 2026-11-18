@@ -68,6 +68,7 @@ Aucun scénario ne se joue sur le dépôt d'un client.
 | 25 | Projet Symfony | `/max:symfony` + une tâche | Déroulé de `/max:dev` suivi ; commandes « Vérifier » de la ressource lancées par le runner |
 | 26 | Projet qui n'est pas Nuxt | `/max:nuxt` | Le skill le dit et renvoie vers `/max:dev` |
 | 27 | Tâche qui demande une dépendance ou un changement de schéma | `/max:dev` | Arrêt et demande d'accord avant de l'ajouter |
+| 60 | Projet React | `/max:react` + une tâche | Déroulé de `/max:dev` suivi ; version de React et bibliothèques en place relevées avant le code ; bloc « Vérifier » lancé par le gestionnaire du lockfile |
 
 ## F. Tests et bugs
 
