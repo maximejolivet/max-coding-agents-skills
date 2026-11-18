@@ -68,7 +68,7 @@ Aucun scénario ne se joue sur le dépôt d'un client.
 | 25 | Projet Symfony | `/max:symfony` + une tâche | Déroulé de `/max:dev` suivi ; commandes « Vérifier » de la ressource lancées par le runner |
 | 26 | Projet qui n'est pas Nuxt | `/max:nuxt` | Le skill le dit et renvoie vers `/max:dev` |
 | 27 | Tâche qui demande une dépendance ou un changement de schéma | `/max:dev` | Arrêt et demande d'accord avant de l'ajouter |
-| 60 | Projet React | `/max:react` + une tâche | Déroulé de `/max:dev` suivi ; version de React et bibliothèques en place relevées avant le code ; bloc « Vérifier » lancé par le gestionnaire du lockfile |
+| 64 | Projet React | `/max:react` + une tâche | Déroulé de `/max:dev` suivi ; version de React et bibliothèques en place relevées avant le code ; bloc « Vérifier » lancé par le gestionnaire du lockfile |
 
 ## F. Tests et bugs
 
@@ -130,6 +130,13 @@ Aucun scénario ne se joue sur le dépôt d'un client.
 | 57 | Zone sans tests | `/max:refactor` | Tests de caractérisation d'abord, ou lots réduits avec recette manuelle |
 | 58 | Grosse tâche | `/max:agent-workflow` | Critère vérifiable ; mécanisme par étape ; limite d'essais ; rien d'écrit avant accord ; `settings.json` intact |
 | 59 | Skills reliés dans `~/.agents/skills`, session Codex dans un dépôt d'essai | `$review` | `<max>` résolu vers le clone de Max ; `references/regles.md` lu ; `detect.sh` lancé sur le dépôt d'essai |
+
+| # | Contexte | Action | Attendu |
+| :-: | :-- | :-- | :-- |
+| 60 | Application livrée, écart à un test ou à une spécification | `/max:maintenance` + le ticket | Type corrective avec sa preuve ; gravité annoncée ; fiche montrée et accord attendu avant tout code ; déroulé de `/max:debug` |
+| 61 | Application livrée, demande d'un nouveau comportement sur une zone sans tests | `/max:maintenance` + la demande | Type évolutive avec sa preuve ; tests de caractérisation d'abord ; déroulé de `/max:dev` ; compte rendu montré, rien d'envoyé |
+| 62 | Panne bloquante en production | `/max:maintenance` + le symptôme | Gravité bloquant ; passage à `/max:hotfix` ; compte rendu préparé après le correctif |
+| 63 | Demande à la frontière entre anomalie et évolution | `/max:maintenance` | Deux lectures exposées avec leurs preuves ; arrêt jusqu'à la décision de Maxime |
 
 ## Garde-fous à constater dans tous les scénarios
 

@@ -6,7 +6,7 @@ claude --plugin-dir ~/.claude/max-coding-agents-skills   # essayer les skills en
 /reload-plugins                                 # après chaque modification
 ```
 
-Ce dépôt est le plugin Claude Code `max` : l'environnement de développement de Maxime, développeur web full-stack qui travaille seul sur les dépôts GitHub de plusieurs clients. Aucun build. Version courante : `1.0.20`.
+Ce dépôt est le plugin Claude Code `max` : l'environnement de développement de Maxime, développeur web full-stack qui travaille seul sur les dépôts GitHub de plusieurs clients. Aucun build. Version courante : `1.0.21`.
 
 ## Structure
 

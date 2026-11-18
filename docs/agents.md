@@ -20,7 +20,7 @@ Un agent est un fichier `agents/<nom>.md`, appelé `max:<nom>`. Il lit et rappor
 | :-- | :-- | :-- | :-- |
 | `docker-auditor` | `/max:security` | Read, Grep, Glob, Bash | défaut |
 | `actions-auditor` | `/max:security` ; lu par `/max:pr-review` | Read, Grep, Glob, Bash | défaut |
-| `codebase-surveyor` | `/max:dev`, `/max:debug`, `/max:refactor`, `/max:perf`, `/max:explain` | Read, Grep, Glob, Bash | `sonnet` |
+| `codebase-surveyor` | `/max:dev`, `/max:debug`, `/max:maintenance`, `/max:refactor`, `/max:perf`, `/max:explain` | Read, Grep, Glob, Bash | `sonnet` |
 | `docs-updater` | Maxime, dans ce dépôt seulement | Read, Grep, Glob, Bash | `sonnet` |
 
 `/max:symfony`, `/max:nuxt` et `/max:react` passent par `/max:dev`. `dependencies-auditor` est le seul à sortir du dépôt, pour lire les avis de sécurité.

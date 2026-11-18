@@ -30,7 +30,7 @@ Règles de choix :
 | `security` | `core` + `security` |
 | `test` | `core` + `test` |
 | `docker`, `kubernetes`, `ci` | `core` + `deploy` |
-| `dev`, `symfony`, `nuxt`, `react`, `debug`, `refactor`, `perf`, `a11y`, `migrate-db` | `core` + `dev` |
+| `dev`, `symfony`, `nuxt`, `react`, `debug`, `maintenance`, `refactor`, `perf`, `a11y`, `migrate-db` | `core` + `dev` |
 | `explain` | `core` |
 
 ## Catégories de sortie
