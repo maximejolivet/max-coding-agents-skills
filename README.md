@@ -11,7 +11,7 @@
 **Des skills spécialisés pour agents de code IA : développer, relire, tester, livrer et sécuriser une application, de la première ligne de code à la production.**
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
-[![Version](https://img.shields.io/badge/version-1.0.18-lightgrey)](.claude-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-1.0.20-lightgrey)](.claude-plugin/plugin.json)
 [![Licence MIT](https://img.shields.io/badge/licence-MIT-green)](LICENSE)
 [![Check](https://img.shields.io/github/actions/workflow/status/maximejolivet/max-coding-agents-skills/check.yml?label=check)](https://github.com/maximejolivet/max-coding-agents-skills/actions/workflows/check.yml)
 [![Dernier commit](https://img.shields.io/github/last-commit/maximejolivet/max-coding-agents-skills)](https://github.com/maximejolivet/max-coding-agents-skills/commits/main)
