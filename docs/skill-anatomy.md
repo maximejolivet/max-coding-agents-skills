@@ -43,7 +43,9 @@ Le même plan pour tous les skills. « Quand l'utiliser » vit dans la `descript
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session.
 2. <commande à lancer ou fichier à lire>
 
 ## Étapes
@@ -63,13 +65,13 @@ Le même plan pour tous les skills. « Quand l'utiliser » vit dans la `descript
 <formats de sortie, tableaux, modèles - seulement s'il en faut>
 ```
 
-Chemins : `${CLAUDE_SKILL_DIR}` est le dossier du skill. Le reste du plugin s'atteint par `${CLAUDE_SKILL_DIR}/../../`.
+Chemins : `<max>` est la racine de Max, résolue par la première ligne des préalables. Cette ligne vaut pour Claude Code et Codex, y compris quand le skill est installé par lien symbolique. Ne pas employer `${CLAUDE_SKILL_DIR}` : Codex ne la documente pas.
 
 | Besoin | Ligne à écrire |
 | :-- | :-- |
-| Charger une stack | Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **review** |
-| Lire la liste de contrôle d'un agent | Lire la section `## Contrôles` de `${CLAUDE_SKILL_DIR}/../../agents/<nom>.md` |
-| Reprendre le déroulé d'un autre skill | Lire `${CLAUDE_SKILL_DIR}/../<autre>/SKILL.md` |
+| Charger une stack | Détecter la stack : suivre `<max>/stacks/DETECT.md`, nature **review** |
+| Lire la liste de contrôle d'un agent | Lire la section `## Contrôles` de `<max>/agents/<nom>.md` |
+| Reprendre le déroulé d'un autre skill | Lire `<max>/skills/<autre>/SKILL.md` |
 
 ## Règles d'écriture
 

@@ -5,7 +5,7 @@ composer show laravel/framework 2>/dev/null | head -5
 php artisan --version 2>/dev/null
 ```
 
-Lire `## core`, puis la section de la nature (tableau : `stacks/DETECT.md`).
+Lire `## core`, puis la section de la nature (tableau : `<max>/stacks/DETECT.md`).
 
 ---
 

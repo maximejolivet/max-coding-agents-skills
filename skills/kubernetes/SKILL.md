@@ -7,7 +7,9 @@ description: "Écrit, relit et débogue des manifestes Kubernetes, des overlays 
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session.
 2. Lancer :
 
    ```bash
@@ -17,7 +19,7 @@ description: "Écrit, relit et débogue des manifestes Kubernetes, des overlays 
    ```
 
 3. Annoncer le contexte et le namespace visés avant toute commande `kubectl`.
-4. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **deploy**.
+4. Détecter la stack : suivre `<max>/stacks/DETECT.md`, nature **deploy**.
 
 ## Étapes
 

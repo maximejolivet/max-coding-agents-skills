@@ -5,7 +5,7 @@ grep -E '"(next|react|typescript)"' package.json
 ls next.config.* app pages middleware.* proxy.* 2>/dev/null
 ```
 
-Lire `## core`, puis la section de la nature (tableau : `stacks/DETECT.md`), puis `stacks/react/INDEX.md` (parent).
+Lire `## core`, puis la section de la nature (tableau : `<max>/stacks/DETECT.md`), puis `<max>/stacks/react/INDEX.md` (parent).
 
 ---
 

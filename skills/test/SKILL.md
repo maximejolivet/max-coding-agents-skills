@@ -7,8 +7,10 @@ description: "Écrit, lance et diagnostique des tests automatisés - unitaires, 
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
-2. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **test**. Elle donne l'outil de test et le runner.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session.
+2. Détecter la stack : suivre `<max>/stacks/DETECT.md`, nature **test**. Elle donne l'outil de test et le runner.
 3. Ouvrir deux ou trois tests proches de celui à écrire et reprendre leurs conventions : emplacement, nommage, assertions, fabrication des données.
 4. Lancer la suite, ou la partie concernée, pour connaître l'état de départ. Un test déjà rouge n'est pas dû au changement en cours.
 

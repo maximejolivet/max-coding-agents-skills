@@ -5,7 +5,7 @@ composer show symfony/framework-bundle 2>/dev/null | head -5
 bin/console about 2>/dev/null | head -20     # version, fin de maintenance, fin de vie
 ```
 
-Lire `## core`, puis la section de la nature (tableau : `stacks/DETECT.md`). Valable pour 6.4, 7.x et 8.x.
+Lire `## core`, puis la section de la nature (tableau : `<max>/stacks/DETECT.md`). Valable pour 6.4, 7.x et 8.x.
 
 ---
 

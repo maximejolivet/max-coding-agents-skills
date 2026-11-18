@@ -5,7 +5,7 @@ grep -E '"(react|react-dom|typescript|vite|next|react-router|@tanstack/react-que
 ls vite.config.* next.config.* tsconfig.json src app 2>/dev/null
 ```
 
-Lire `## core`, puis la section de la nature (tableau : `stacks/DETECT.md`). Sur un projet Next.js, lire d'abord `stacks/nextjs/INDEX.md`. Valable pour React 18 et 19.
+Lire `## core`, puis la section de la nature (tableau : `<max>/stacks/DETECT.md`). Sur un projet Next.js, lire d'abord `<max>/stacks/nextjs/INDEX.md`. Valable pour React 18 et 19.
 
 ---
 

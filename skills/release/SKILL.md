@@ -7,7 +7,9 @@ description: "Prépare une release GitHub - version choisie d'après les commits
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session. Elle donne la branche par défaut (`<défaut>`) et la langue des notes.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session. Elle donne la branche par défaut (`<défaut>`) et la langue des notes.
 2. Lancer `git switch <défaut>`, `git pull --ff-only origin <défaut>`, `git status -sb` : partir d'une branche à jour et propre.
 3. Lancer `git describe --tags --abbrev=0` pour le dernier tag, et `gh run list --branch <défaut> --limit 3` pour l'état de la CI.
 

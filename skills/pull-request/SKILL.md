@@ -7,7 +7,9 @@ description: "Ouvre une pull request GitHub en Draft - branche dédiée, index c
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session. Elle donne la branche par défaut (`<défaut>`), le modèle de PR du dépôt et la langue.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session. Elle donne la branche par défaut (`<défaut>`), le modèle de PR du dépôt et la langue.
 2. Lancer `git status -sb` et `gh auth status`.
 3. Si `/max:review` vient de tourner : reprendre son verdict, ses contrôles exécutés et ses notes hors-scope, sans les recalculer.
 

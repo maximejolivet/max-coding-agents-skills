@@ -8,7 +8,9 @@ argument-hint: "[numéro ou URL de PR | branche | fichier]"
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session. Elle donne la branche par défaut (`<défaut>`).
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session. Elle donne la branche par défaut (`<défaut>`).
 2. Fixer le périmètre, dans cet ordre :
 
    | Donné par Maxime | Commande |
@@ -18,7 +20,7 @@ argument-hint: "[numéro ou URL de PR | branche | fichier]"
    | Rien, sur une branche | `git diff <défaut>...HEAD` |
    | Rien, sur `<défaut>` | `git diff`, `git diff --cached` |
 
-3. Détecter la stack : suivre `${CLAUDE_SKILL_DIR}/../../stacks/DETECT.md`, nature **review**.
+3. Détecter la stack : suivre `<max>/stacks/DETECT.md`, nature **review**.
 4. Mesurer : `git diff --shortstat <défaut>...HEAD`, ou la liste des fichiers de la PR.
 
 ## Étapes
@@ -30,7 +32,7 @@ argument-hint: "[numéro ou URL de PR | branche | fichier]"
    | Jusqu'à 150 lignes environ, sur 3 fichiers au plus | Passe unique |
    | Au-delà, ou plusieurs préoccupations mêlées (données, accès, interface) | Délégation |
 
-2. **Passe unique.** Lire la section `## Contrôles` de chaque agent concerné dans `${CLAUDE_SKILL_DIR}/../../agents/`, puis l'appliquer au diff et à son contexte : fonction, appelants, route, formulaire.
+2. **Passe unique.** Lire la section `## Contrôles` de chaque agent concerné dans `<max>/agents/`, puis l'appliquer au diff et à son contexte : fonction, appelants, route, formulaire.
 3. **Délégation.** Lancer les agents retenus dans le même tour, avec l'outil Agent et le brief de l'annexe.
 
    | Agent (`subagent_type`) | Lancer quand |

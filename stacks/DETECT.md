@@ -1,8 +1,8 @@
 # Détection de la stack
 
 ```bash
-sh "${CLAUDE_SKILL_DIR}/../../stacks/detect.sh"            # racine courante
-sh "${CLAUDE_SKILL_DIR}/../../stacks/detect.sh" <dossier>  # sous-projet d'un monorepo
+sh "<max>/stacks/detect.sh"            # racine courante
+sh "<max>/stacks/detect.sh" <dossier>  # sous-projet d'un monorepo
 ```
 
 Le script lit le projet sans rien exécuter ni installer. Une ligne par constat : `catégorie<TAB>identifiant<TAB>preuve`.
@@ -12,7 +12,7 @@ Le script lit le projet sans rien exécuter ni installer. Une ligne par constat 
 1. Lancer le script à la racine. Dans un monorepo (`apps/`, `packages/`, `services/`), le lancer sur chaque sous-dossier touché par la tâche.
 2. Annoncer la stack en une ligne : « Stack : Symfony 7 (PHP, composer, PHPUnit), Docker, GitHub Actions ».
 3. Retenir le runner : la première ligne `runner` (`make`, puis `docker compose`). Les commandes du projet passent par lui.
-4. Pour chaque ligne `resource` qui donne un chemin, lire `stacks/<id>/INDEX.md` : la section `## core`, plus celle de la nature du skill (tableau ci-dessous).
+4. Pour chaque ligne `resource` qui donne un chemin, lire `<max>/stacks/<id>/INDEX.md` : la section `## core`, plus celle de la nature du skill (tableau ci-dessous).
 5. Pour une ligne `resource` à `aucune`, ou une section absente : appliquer le repli. Ne jamais lire une ressource absente.
 
 Règles de choix :

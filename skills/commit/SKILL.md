@@ -7,7 +7,9 @@ description: "Rédige un message de commit dans la convention du dépôt, ou à 
 
 ## Préalables
 
-1. Lire `${CLAUDE_SKILL_DIR}/../../references/regles.md`, une fois par session.
+Racine de Max, notée `<max>` : lancer `(cd -P "<dossier de ce SKILL.md>/../.." && pwd)`.
+
+1. Lire `<max>/references/regles.md`, une fois par session.
 2. Lancer `git status -sb` et `git diff --staged` : le message décrit ce qui est réellement dans l'index.
 3. Lancer `ls commitlint.config.* .commitlintrc* 2>/dev/null; git log --oneline -15` pour relever la convention du dépôt.
 

@@ -1,7 +1,7 @@
 # Modifier Max
 
 ```bash
-git clone git@github.com:maximejolivet/claude-skills-max.git && cd claude-skills-max
+git clone git@github.com:maximejolivet/max-coding-agents-skills.git && cd max-coding-agents-skills
 sh tests/check.sh
 claude --plugin-dir "$PWD"      # puis /reload-plugins après chaque édition
 ```
